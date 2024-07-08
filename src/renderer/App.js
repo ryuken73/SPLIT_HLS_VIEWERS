@@ -258,24 +258,28 @@ function App() {
     <div className="App">
       <header className="App-header">
         <Box width="100%" height="97%">
-          <GridVideos
-            setPlayer={setLeftSmallPlayerRef.current}
-            cctvsSelected={cctvsSelectedArray}
-            preLoadMapRef={preLoadMapRef}
-            toggleAutoPlay={toggleAutoPlay}
-            autoPlay={autoPlay}
-            gridDimension={gridDimension}
-            enableOverlayGlobal={enableOverlayGlobal}
-            toggleOverlayGlobal={toggleOverlayGlobal}
-            currentActiveIndex={gridNumNormalized}
-            cctvPlayersRef={cctvPlayersRef}
-            cctvLastLoadedTime={cctvLastLoadedTime}
-            setLastLoadedTime={setLastLoadedTime}
-            refreshMode={refreshMode}
-            refreshInterval={refreshInterval}
-            reloadPlayerComponent={reloadPlayerComponent}
-            currentCCTVIndex={currentCCTVIndex}
-          ></GridVideos>
+          {cctvsSelectedArray.length === 0 ? (
+            <div>use keyboard "c" to config HLS player to show.</div>
+          ) : (
+            <GridVideos
+              setPlayer={setLeftSmallPlayerRef.current}
+              cctvsSelected={cctvsSelectedArray}
+              preLoadMapRef={preLoadMapRef}
+              toggleAutoPlay={toggleAutoPlay}
+              autoPlay={autoPlay}
+              gridDimension={gridDimension}
+              enableOverlayGlobal={enableOverlayGlobal}
+              toggleOverlayGlobal={toggleOverlayGlobal}
+              currentActiveIndex={gridNumNormalized}
+              cctvPlayersRef={cctvPlayersRef}
+              cctvLastLoadedTime={cctvLastLoadedTime}
+              setLastLoadedTime={setLastLoadedTime}
+              refreshMode={refreshMode}
+              refreshInterval={refreshInterval}
+              reloadPlayerComponent={reloadPlayerComponent}
+              currentCCTVIndex={currentCCTVIndex}
+            ></GridVideos>
+          )}
           <ModalBox
             open={modalOpen}
             modalOpenRef={modalOpenRef}
