@@ -1,11 +1,11 @@
 {
-  "name": "electron-react-boilerplate",
-  "version": "4.6.0",
-  "description": "A foundation for scalable desktop apps",
+  "name": "split-cctv-viewer",
+  "version": "0.0.1",
+  "description": "split cctv viewer",
   "license": "MIT",
   "author": {
     "name": "Electron React Boilerplate Maintainers",
-    "email": "electronreactboilerplate@gmail.com",
+    "email": "ryuken01@sbs.co.kr",
     "url": "https://github.com/electron-react-boilerplate"
   },
   "main": "./dist/main/main.js",
