@@ -10,17 +10,18 @@ import { EffectFade } from 'swiper';
 import { useHotkeys } from 'react-hotkeys-hook';
 import useLocalStorage from './hooks/useLocalStorage';
 // import useAutoPlay from './hooks/useAutoPlay';
+import MessagePanel from './MessagePanel';
 import SwiperControl from './SwiperControl';
-import { 
-  getRealIndex, 
-  mirrorModalPlayer, 
-  mirrorModalPlayerMP4, 
-  getNonPausedPlayerIndex 
+import {
+  getRealIndex,
+  mirrorModalPlayer,
+  mirrorModalPlayerMP4,
+  getNonPausedPlayerIndex
 } from './lib/sourceUtil';
 import { replace } from './lib/arrayUtil';
 import "swiper/css";
 import MP4Player from './MP4Player';
- 
+
 const KEY_OPTIONS = 'hlsCCTVOptions';
 const KEY_SELECT_SAVED = 'selectedSavedCCTVs';
 const KEY_NOT_SELECT_SAVED = 'notSelectedSavedCCTVs';
@@ -250,13 +251,13 @@ function App() {
       ...savedOptions,
       [key]: value
     }
-    saveOptions(options)    
+    saveOptions(options)
   },[saveOptions, savedOptions])
 
   return (
     <div className="App">
       <header className="App-header">
-        <Box width="100%" height="100%">
+        <Box width="100%" height="97%">
           <GridVideos
             setPlayer={setLeftSmallPlayerRef.current}
             cctvsSelected={cctvsSelectedArray}
@@ -275,24 +276,24 @@ function App() {
             reloadPlayerComponent={reloadPlayerComponent}
             currentCCTVIndex={currentCCTVIndex}
           ></GridVideos>
-          <ModalBox 
-            open={modalOpen} 
+          <ModalBox
+            open={modalOpen}
             modalOpenRef={modalOpenRef}
-            currentCCTVIndex={gridNumNormalized} 
+            currentCCTVIndex={gridNumNormalized}
             gridDimension={gridDimension}
-            keepMounted={true} 
-            autoPlay={autoPlay} 
-            setOpen={setModalOpen} 
-            contentWidth="80%" 
+            keepMounted={true}
+            autoPlay={autoPlay}
+            setOpen={setModalOpen}
+            contentWidth="80%"
             contentHeight="auto"
           >
-            <Swiper 
-              loop={true} 
+            <Swiper
+              loop={true}
               speed={1500}
               // effect="fade"
               // modules={[EffectFade]}
             >
-              <SwiperControl 
+              <SwiperControl
                 swiperRef={swiperRef}
               />
               {modalPlayers.map((player, index) => (
@@ -308,8 +309,8 @@ function App() {
               ))}
             </Swiper>
           </ModalBox>
-          <ConfigDialog 
-            open={dialogOpen} 
+          <ConfigDialog
+            open={dialogOpen}
             // cctvs={cctvs}
             cctvsNotSelected={cctvsNotSelectedArray}
             cctvsSelected={cctvsSelectedArray}
@@ -327,6 +328,7 @@ function App() {
             refreshInterval={refreshInterval}
           ></ConfigDialog>
         </Box>
+        <MessagePanel />
       </header>
     </div>
   );

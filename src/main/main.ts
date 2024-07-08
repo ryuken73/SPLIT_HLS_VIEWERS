@@ -31,6 +31,12 @@ ipcMain.on('ipc-example', async (event, arg) => {
   event.reply('ipc-example', msgTemplate('pong'));
 });
 
+ipcMain.on('getMemoryInfo', async (event) => {
+  const memInfo = await process.getProcessMemoryInfo();
+  console.log(memInfo);
+  event.reply('getMemoryInfoResult', memInfo);
+});
+
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');
   sourceMapSupport.install();
