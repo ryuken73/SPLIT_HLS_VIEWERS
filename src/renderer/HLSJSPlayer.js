@@ -117,6 +117,7 @@ function HLSJSPlayer(props) {
     playerRef.current.addEventListener('loadedmetadata', onLoadDataHandler);
     return () => {
       // eslint-disable-next-line react-hooks/exhaustive-deps
+      if(playerRef.current === null) return;
       playerRef.current.removeEventListener('loadedmetadata', onLoadDataHandler);
     }
   }, [cctvIndex, onLoadDataHandler, setPlayer])
@@ -189,7 +190,7 @@ function HLSJSPlayer(props) {
         <div>
           {numDisplayContent}
         </div>
-        <div>
+        <div style={{color: 'yellow'}}>
           {source.title}
         </div>
       </NumDisplay>
@@ -197,7 +198,7 @@ function HLSJSPlayer(props) {
         <div>
           {numDisplayContent}
         </div>
-        <div>
+        <div style={{color: 'yellow'}}>
           {source.title}
         </div>
       </NumDisplay>
