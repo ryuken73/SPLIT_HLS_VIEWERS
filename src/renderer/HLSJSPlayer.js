@@ -90,9 +90,10 @@ function HLSJSPlayer(props) {
   // const isActive = !autoRefresh ? true : cctvIndex === currentIndexRef.current;
   const isActive = !autoRefresh ? true : cctvIndex === currentCCTVIndex;
 
+
   const onLoadDataHandler = React.useCallback((event) => {
     console.log('^^^',event)
-    event.target.play(); 
+    event.target.play();
   }, [])
 
   React.useEffect(() => {
@@ -184,8 +185,22 @@ function HLSJSPlayer(props) {
   return (
     <Conatiner>
       <Cover isActive={isActive} paused={paused} autoPlay={autoPlay}></Cover>
-      <NumDisplay onClick={reloadPlayer} isActive={isActive} show={autoRefresh} position={'topLeft'}>{numDisplayContent}</NumDisplay>
-      <NumDisplay isActive={isActive} show={autoRefresh} position={'topRight'}>{numDisplayContent}</NumDisplay>
+      <NumDisplay onClick={reloadPlayer} isActive={isActive} show={autoRefresh} position={'topLeft'}>
+        <div>
+          {numDisplayContent}
+        </div>
+        <div>
+          {source.title}
+        </div>
+      </NumDisplay>
+      <NumDisplay isActive={isActive} show={autoRefresh} position={'topRight'}>
+        <div>
+          {numDisplayContent}
+        </div>
+        <div>
+          {source.title}
+        </div>
+      </NumDisplay>
       <NumDisplay isActive={isActive} show={autoRefresh} position={'bottomLeft'}>{numDisplayContent}</NumDisplay>
       <NumDisplay isActive={isActive} show={autoRefresh} position={'bottomRight'}>{numDisplayContent}</NumDisplay>
       <CustomPlayer
