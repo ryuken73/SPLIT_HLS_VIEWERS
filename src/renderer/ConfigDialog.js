@@ -81,7 +81,7 @@ const ConfigDialog = props => {
         }
     },[cctvsNotSelected, cctvsSelected])
 
-    console.log('re-render filter :', columnItems, preload)
+    // console.log('re-render filter :', columnItems, preload)
 
     const onCloseFilterDialog = () => {
         setDialogOpen(false);
@@ -126,13 +126,13 @@ const ConfigDialog = props => {
         //     setCCTVsSelectedAray(selected => {
         //         return [...selected, cctvsNotSelected];
         //     });
-        // } 
+        // }
         // if(fromColumnName === 'dragOn'){
         //     setCCTVsSelectedAray([]);
         //     setCCTVsNotSelectedArray(notSelected => {
         //         return [...notSelected, cctvsSelected];
         //     });
-        // } 
+        // }
     },[cctvsNotSelected, cctvsSelected, setCCTVsNotSelectedArray, setCCTVsSelectedAray])
 
     const handleChangeGridDimension = React.useCallback(event => {
@@ -185,15 +185,15 @@ const ConfigDialog = props => {
                         </Box>
                         {displayGrid &&
                             <Row>
-                                <input 
-                                    onChange={onChangeMode} 
-                                    type="checkbox" 
+                                <input
+                                    onChange={onChangeMode}
+                                    type="checkbox"
                                     checked={!refreshInputDisabled}
                                 />
                                 <Box sx={{}}>auto refresh</Box>
                                 {!refreshInputDisabled && (
-                                    <input 
-                                        disabled={refreshInputDisabled} 
+                                    <input
+                                        disabled={refreshInputDisabled}
                                         style={{height: '85%', marginLeft: '5px'}}
                                         onChange={onChangeInterval}
                                         value={refreshInterval}
@@ -201,7 +201,7 @@ const ConfigDialog = props => {
                                 )}
                             </Row>
                         }
-                        {displayGrid && 
+                        {displayGrid &&
                             <RadioGroup
                                 aria-labelledby="demo-controlled-radio-buttons-group"
                                 name="controlled-radio-buttons-group"
@@ -245,7 +245,7 @@ const ConfigDialog = props => {
                     checkedCCTVId={checkedCCTVId}
                     checkedInSelected={checkedInSelected}
                     setCCTVsSelectedArray={setCCTVsSelectedAray}
-                    setCCTVsNotSelectedArray={setCCTVsNotSelectedArray} 
+                    setCCTVsNotSelectedArray={setCCTVsNotSelectedArray}
                 ></AddManualUrl>
             </Dialog>
         </DragDropContext>

@@ -9,7 +9,7 @@ const Container = styled.div`
     height: 500px;
     width: 45%;
     border: 1px solid;
-    overflow: auto; 
+    overflow: auto;
     border-radius: 3px;
     display: flex;
     flex-direction: column;
@@ -38,14 +38,14 @@ const Column = props => {
         // setColumnItems(cctvsInColumn);
     // },[cctvIds, cctvs])
     const {
-        columnName, 
+        columnName,
         columnItems,
         checkedCCTVId,
         setCheckedCCTVId,
         setCCTVs,
         moveAllCCTVs
     } = props;
-    console.log(columnName, columnItems)
+    // console.log(columnName, columnItems)
 
     const onClickLink = React.useCallback(() => {
         moveAllCCTVs(columnName)
@@ -80,11 +80,11 @@ const Column = props => {
                         isDraggingOver={snapshot.isDraggingOver}
                     >
                         {columnItems.map((cctv, index) => (
-                            <DragItem 
-                                key={cctv.cctvId} 
+                            <DragItem
+                                key={cctv.cctvId}
                                 id={cctv.cctvId}
                                 itemText={cctv.title}
-                                index={index} 
+                                index={index}
                                 colorDefault={itemColorDefault}
                                 checked={cctv.cctvId === checkedCCTVId}
                                 setChecked={setCheckedCCTV}

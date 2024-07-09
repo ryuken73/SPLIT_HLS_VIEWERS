@@ -10,7 +10,7 @@ export const setUniqAreasFromSources = (cctvs, setFunction) => {
     setFunction && setFunction(uniqAreas);
     return uniqAreas;
 }
-      
+
 export const groupCCTVsByArea = (uniqAreas, cctvs, setFunction) => {
     const grouped = new Map();
     uniqAreas.forEach(area => {
@@ -27,12 +27,12 @@ export const orderByArea = cctvs => {
     const uniqAreas = setUniqAreasFromSources(cctvs);
     const orderedByAreaMap = groupCCTVsByArea(uniqAreas, cctvs);
     return [...orderedByAreaMap.values()].flat();
-}  
+}
 
 export const mirrorModalPlayer = (playerNode, modalPlayer) => {
   try {
     const videoElement =  playerNode.querySelector('video');
-    console.log('### videoElement:', videoElement, modalPlayer);
+    // console.log('### videoElement:', videoElement, modalPlayer);
     // console.log('2-1s. start captureStream')
     const mediaStream = videoElement.captureStream();
     const modalVideoPlayer = modalPlayer.tech().el();
@@ -49,7 +49,7 @@ export const mirrorModalPlayer = (playerNode, modalPlayer) => {
 
 const stopStream = stream => {
   try {
-    console.log('stopStream:', stream);
+    // console.log('stopStream:', stream);
     stream.getTracks().forEach((track) => track.stop());
     return true
   } catch(err) {
@@ -61,7 +61,7 @@ const stopStream = stream => {
 export const mirrorModalPlayerMP4 = (playerNode, modalPlayer, mediaStreamRef) => {
   try {
     const videoElement =  playerNode.querySelector('video');
-    console.log('### videoElement:', videoElement, modalPlayer);
+    // console.log('### videoElement:', videoElement, modalPlayer);
     // console.log('2-1s. start captureStream')
     mediaStreamRef.current = null;
     // stopStream(mediaStreamRef.current);
@@ -109,10 +109,10 @@ export const isPlayerPlaying = (player, cctvIndex, checkType) => {
         const paused = typeof(player.paused) === 'function' ? player.paused() : player.paused;
         const currentTime = typeof(player.currentTime) === 'function' ? player.currentTime() : player.currentTime;
         const readyState = typeof(player.readyState) === 'function' ? player.readyState() : player.readyState;
-        console.log('getNon currentTime:', currentTime)
-        console.log('getNon paused:', paused)
-        console.log('getNon ended:', ended)
-        console.log('getNon readyState:', readyState);
+        // console.log('getNon currentTime:', currentTime)
+        // console.log('getNon paused:', paused)
+        // console.log('getNon ended:', ended)
+        // console.log('getNon readyState:', readyState);
         const playing = (
             currentTime > 0 &&
             !paused &&
@@ -132,27 +132,27 @@ export const isPlayerPlaying = (player, cctvIndex, checkType) => {
 
 export const getNonPausedPlayerIndex = (nextPlayerIndex, cctvPlayersRef, reloadPlayerComponent=()=>{}) => {
     let nextIndex = nextPlayerIndex;
-    console.log('1.getNonPausedPlayerIndex: nextIndex=', nextIndex);
+    // console.log('1.getNonPausedPlayerIndex: nextIndex=', nextIndex);
     let loopCount = 0;
     while(true){
-        console.log('2.getNonPausedPlayerIndex(first in while):', nextIndex, cctvPlayersRef.current[nextIndex])
+        // console.log('2.getNonPausedPlayerIndex(first in while):', nextIndex, cctvPlayersRef.current[nextIndex])
         const player = cctvPlayersRef.current[nextIndex];
         if(player === undefined){
-            console.log('x.!getNonPausedPlayerIndex player is undefined');
+            // console.log('x.!getNonPausedPlayerIndex player is undefined');
             reloadPlayerComponent(nextIndex)
             nextIndex = (nextIndex + 1) % cctvPlayersRef.current.length;
             continue;
         }
         // const paused = typeof(player.paused) === 'boolean' ? player.paused :player.paused();
         const paused = !isPlayerPlaying(cctvPlayersRef.current[nextIndex], nextIndex);
-        console.log('2-X.getNonPausedPlayerIndex paused:', paused);
+        // console.log('2-X.getNonPausedPlayerIndex paused:', paused);
         // console.log('2-1.getNonPausedPlayerIndex isPlaying:', isPlaying);
         if(!paused){
         // if(isPlaying){
             break;
         }
         reloadPlayerComponent(nextIndex)
-        console.log('3.!getNonPausedPlayerIndex paused Index:', nextIndex)
+        // console.log('3.!getNonPausedPlayerIndex paused Index:', nextIndex)
         nextIndex = (nextIndex + 1) % cctvPlayersRef.current.length;
         loopCount++;
         if(nextIndex === nextPlayerIndex || loopCount === cctvPlayersRef.current.length) {
@@ -160,7 +160,7 @@ export const getNonPausedPlayerIndex = (nextPlayerIndex, cctvPlayersRef, reloadP
             break;
         }
     }
-    console.log('4.getNonPausedPlayerIndex return nextIndex:', nextIndex)
+    // console.log('4.getNonPausedPlayerIndex return nextIndex:', nextIndex)
     return nextIndex;
 }
 
@@ -168,4 +168,4 @@ export const getYoutubeId = url => {
     const addr = new URL(url);
     return addr.searchParams.get('v');
 }
-    
+

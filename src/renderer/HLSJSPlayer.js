@@ -92,12 +92,12 @@ function HLSJSPlayer(props) {
 
 
   const onLoadDataHandler = React.useCallback((event) => {
-    console.log('^^^',event)
+    // console.log('^^^',event)
     event.target.play();
   }, [])
 
   React.useEffect(() => {
-    console.log('HLSJS Player mount')
+    // console.log('HLSJS Player mount')
     return () => console.log('HLSJS Player umount')
   }, [])
 
@@ -146,7 +146,7 @@ function HLSJSPlayer(props) {
 
   const reloadPlayer = React.useCallback(() => {
     setReloadTrigger(reloadTrigger => {
-      console.log('force reload Player:', cctvIndex)
+      // console.log('force reload Player:', cctvIndex)
 
       setLastLoadedTime(lastLoadedTime => {
         const now = Date.now();
@@ -157,7 +157,7 @@ function HLSJSPlayer(props) {
   }, [cctvIndex, setLastLoadedTime])
 
   React.useEffect(() => {
-    console.log('reload while get next player: ', lastLoaded, cctvIndex);
+    // console.log('reload while get next player: ', lastLoaded, cctvIndex);
     setReloadTrigger(reloadTrigger => {
       return !reloadTrigger;
     })

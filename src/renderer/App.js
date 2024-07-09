@@ -66,7 +66,7 @@ function App() {
   const cctvPlayersRef = React.useRef([]);
   const swiperRef = React.useRef(null);
 
-  console.log('gridNumNormalized=', gridNumNormalized, currentCCTVIndex, cctvIndexRef.current)
+  // console.log('gridNumNormalized=', gridNumNormalized, currentCCTVIndex, cctvIndexRef.current)
 
   const getNextPlayer = React.useCallback(() => {
     const modalOpen = modalOpenRef.current;
@@ -76,24 +76,24 @@ function App() {
     } else {
       nextNum = (modalPlayerNumRef.current + 1) % 2;
     }
-    console.log('!!! nextNum for player =', nextNum);
+    // console.log('!!! nextNum for player =', nextNum);
     modalPlayerNumRef.current=nextNum;
     return modalPlayers[nextNum]
   }, [modalPlayers])
 
   const initModalPlayersIndex = React.useCallback((cctvIndex, player, modalIndex) => {
-    console.log('^^^^', cctvIndex, player, modalIndex)
+    // console.log('^^^^', cctvIndex, player, modalIndex)
     setModalPlayers(players => {
       const newPlayers = [...players];
       newPlayers[modalIndex] = player;
-      console.log('!!!', newPlayers)
+      // console.log('!!!', newPlayers)
       return newPlayers
     })
   }, []);
 
   const getSourceElement = React.useCallback((cctvIndex) => {
     // const realIndex = getRealIndex(cctvIndex, gridDimension, cctvsSelectedArray)
-    console.log(cctvIndex)
+    // console.log(cctvIndex)
     const cctv = cctvsSelectedArray[cctvIndex];
     const cctvId = cctv.cctvId;
     const preloadMap = preLoadMapRef.current;
@@ -106,14 +106,14 @@ function App() {
   }, [cctvsSelectedArray, gridDimension])
 
   const maximizeGrid = React.useCallback((cctvIndex) => {
-    console.log('1s. start maximizeGrid')
+    // console.log('1s. start maximizeGrid')
     const [cctv, preloadElement] = getSourceElement(cctvIndex);
     const modalPlayer = getNextPlayer();
-    console.log('!!!', modalOpenRef.current, preloadElement, modalPlayer);
-    console.log('2s. start mirrorModalPlayer')
+    // console.log('!!!', modalOpenRef.current, preloadElement, modalPlayer);
+    // console.log('2s. start mirrorModalPlayer')
     // const ret = mirrorModalPlayer(preloadElement, modalPlayer);
     const ret = mirrorModalPlayerMP4(preloadElement, modalPlayer, mediaStreamRef);
-    console.log('2e. start-end mirrorModalPlayer ret=', ret);
+    // console.log('2e. start-end mirrorModalPlayer ret=', ret);
     if(!ret) return false;
     setEnableOverlayModal(enableOverlayGlobal);
     setOverContentlayModal(overlayContents => {
@@ -125,7 +125,7 @@ function App() {
     // setModalOpen(true);
     // modalOpenRef.current = true;
     cctvIndexRef.current = cctvIndex;
-    console.log('1e. start-end maximizeGrid')
+    // console.log('1e. start-end maximizeGrid')
     return true;
   },[getSourceElement, getNextPlayer, enableOverlayGlobal])
 
@@ -142,18 +142,18 @@ function App() {
     const ret = maximizeGrid(targetCCTVIndex);
     if(!ret) return false;
     if(modalOpen){
-      console.log('start slide next!')
+      // console.log('start slide next!')
       setTimeout(() => {
         swiperRef.current.slideNext();
       },200)
     } else {
-      console.log('start slide to 0')
+      // console.log('start slide to 0')
       // swiper.slideTo(0);
       swiperRef.current.slideToLoop(0);
       setModalOpen(true);
       modalOpenRef.current = true;
     }
-    console.log('!!!!current modalOpen = ', modalOpen, swiperRef.current.activeIndex, swiperRef.current.realIndex)
+    // console.log('!!!!current modalOpen = ', modalOpen, swiperRef.current.activeIndex, swiperRef.current.realIndex)
     return true;
   }, [gridNum2CCTVIndex, maximizeGrid, swiperRef])
 
@@ -169,7 +169,7 @@ function App() {
   // useAutoPlay({autoPlay, autoInterval, maximizeGrid, cctvIndexRef});
 
   const reloadPlayerComponent = React.useCallback((cctvIndex) => {
-    console.log('getNon: reload Player:', cctvIndex)
+    // console.log('getNon: reload Player:', cctvIndex)
     setLastLoadedTime(lastLoadedTime => {
       const now = Date.now();
       return replace(lastLoadedTime).index(cctvIndex).value(now);

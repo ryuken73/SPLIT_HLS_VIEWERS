@@ -13,7 +13,7 @@ const AntSwitch = withStyles((theme) => ({
     },
     switchBase: {
       padding: 2,
-        color: theme.palette.common.white,  
+        color: theme.palette.common.white,
         '&$checked': {
         transform: 'translateX(12px)',
         color: theme.palette.common.white,
@@ -45,7 +45,7 @@ function BasicSwitch(props) {
         setChecked(defaultChecked)
     },[defaultChecked])
     const handleChange = event => {
-        console.log(event.currentTarget.checked);
+        // console.log(event.currentTarget.checked);
         setChecked(event.currentTarget.checked);
         onChange(event.currentTarget.checked);
     }

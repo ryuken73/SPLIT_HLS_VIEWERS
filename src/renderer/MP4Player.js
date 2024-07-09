@@ -57,11 +57,11 @@ const CHECK_INTERNAL_SEC = 2;
 
 const MP4Player = (props) => {
     const {
-      source={}, 
-      cctvIndex, 
-      currentIndexRef, 
-      autoRefresh=false, 
-      setPlayer, 
+      source={},
+      cctvIndex,
+      currentIndexRef,
+      autoRefresh=false,
+      setPlayer,
       lastLoaded,
       refreshMode,
       refreshInterval,
@@ -99,7 +99,7 @@ const MP4Player = (props) => {
         setCurrentCountDown(getRandomCountdown(refreshInterval))
       }
       const timer = setInterval(() => {
-        console.log('current time=', cctvIndex);
+        // console.log('current time=', cctvIndex);
         setCurrentCountDown(currentCountDown => {
             return currentCountDown - CHECK_INTERNAL_SEC;
         })
@@ -111,7 +111,7 @@ const MP4Player = (props) => {
 
     if(autoRefresh) {
       const countdown = Math.ceil(currentCountDown);
-      console.log('####', countdown)
+      // console.log('####', countdown)
       if(countdown <= 0){
         setCurrentCountDown(RELOAD_COUNTDOWN);
         reloadPlayerComponent(cctvIndex);
@@ -120,7 +120,7 @@ const MP4Player = (props) => {
     }
 
     React.useEffect(() => {
-      console.log('reload mp4 player:', lastLoaded)
+      // console.log('reload mp4 player:', lastLoaded)
       if(videoRef.current === null){
         return;
       }
@@ -128,11 +128,11 @@ const MP4Player = (props) => {
     }, [lastLoaded]);
 
     const handleLoadedMetadata = React.useCallback(event => {
-      console.log(lastLoaded)
+      // console.log(lastLoaded)
       if(videoRef.current === null){
         return;
       }
-      console.log('loadedMetadata mp4', videoRef.current.duration);
+      // console.log('loadedMetadata mp4', videoRef.current.duration);
       if(!isNaN(videoRef.current.duration)){
           videoRef.current.play();
       }
@@ -153,7 +153,7 @@ const MP4Player = (props) => {
             // videoRef.current.removeEventListener('ended', reloadPlayer)
         }
       }
-    }, [handleLoadedMetadata]) 
+    }, [handleLoadedMetadata])
 
     React.useLayoutEffect(() => {
       if(autoRefresh === false){
