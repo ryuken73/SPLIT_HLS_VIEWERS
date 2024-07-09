@@ -1,6 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
 
+const MAX_MEMORY_MB = 1024;
+
 const Container = styled.div`
   display: flex;
   height: 100%;
@@ -8,9 +10,12 @@ const Container = styled.div`
   font-size: 15px;
   align-items: center;
   justify-content: center;
+  border: 1px solid white;
+  box-sizing: border-box;
 `
 const MemUsage = styled.div`
   margin-left: auto;
+  margin-right: 10px;
 `
 function MessagePanel() {
   const [currentMem, setCurrentMem] = React.useState('0');
@@ -34,11 +39,13 @@ function MessagePanel() {
       window.electron.ipcRenderer.off('getMemoryInfoResult', handleMemInfo);
     }
   }, [handleMemInfo]);
+  const usagePercent = ((currentMem / MAX_MEMORY_MB) * 100).toFixed(1);
   return (
     <Container>
-      <MemUsage>{currentMem}MB</MemUsage>
+      <MemUsage>{currentMem}MB ({usagePercent}%)</MemUsage>
     </Container>
   )
 }
 
 export default React.memo(MessagePanel)
+
