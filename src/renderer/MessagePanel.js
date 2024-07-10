@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import BlinkingDot from './BlinkingDot';
 
 const MAX_MEMORY_MB = 1024;
 
@@ -42,6 +43,7 @@ function MessagePanel() {
   const usagePercent = ((currentMem / MAX_MEMORY_MB) * 100).toFixed(1);
   return (
     <Container>
+      <BlinkingDot />
       <MemUsage>{currentMem}MB ({usagePercent}%)</MemUsage>
     </Container>
   )
