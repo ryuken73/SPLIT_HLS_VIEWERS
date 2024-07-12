@@ -185,7 +185,7 @@ function HLSJSPlayer(props) {
 
   return (
     <Conatiner>
-      <Cover isActive={isActive} paused={paused} autoPlay={autoPlay}></Cover>
+      {/* <Cover isActive={isActive} paused={paused} autoPlay={autoPlay}></Cover> */}
       <NumDisplay onClick={reloadPlayer} isActive={isActive} show={autoRefresh} position={'topLeft'}>
         <div>
           {numDisplayContent}

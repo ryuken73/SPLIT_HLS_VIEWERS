@@ -104,6 +104,7 @@ export const getYoutubePlaylistUrl = videoId => {
 }
 
 export const isPlayerPlaying = (player, cctvIndex, checkType) => {
+  if(player === null) return;
     try {
         const ended = typeof(player.ended) === 'function' ? player.ended() : player.ended;
         const paused = typeof(player.paused) === 'function' ? player.paused() : player.paused;

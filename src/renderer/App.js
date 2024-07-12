@@ -37,7 +37,7 @@ function App() {
   const INITIAL_REFRESH_INTERVAL = savedOptions.refreshInterval === undefined ? 1 : savedOptions.refreshInterval
 
   const [dialogOpen, setDialogOpen] = React.useState(false);
-  const [modalOpen, setModalOpen] = React.useState(false);
+  const [modalOpen, setModalOpen] = React.useState(true);
   const [modalPlayers, setModalPlayers] = React.useState([null, null])
   const [gridDimension, setGridDimension] = React.useState(INITIAL_GRID_DIMENSION);
   const [autoPlay, setAutoPlay] = React.useState(false);
@@ -107,14 +107,18 @@ function App() {
 
   const maximizeGrid = React.useCallback((cctvIndex) => {
     // console.log('1s. start maximizeGrid')
+
     const [cctv, preloadElement] = getSourceElement(cctvIndex);
-    const modalPlayer = getNextPlayer();
+    // const modalPlayer = getNextPlayer();
+
     // console.log('!!!', modalOpenRef.current, preloadElement, modalPlayer);
     // console.log('2s. start mirrorModalPlayer')
     // const ret = mirrorModalPlayer(preloadElement, modalPlayer);
-    const ret = mirrorModalPlayerMP4(preloadElement, modalPlayer, mediaStreamRef);
+
+    // const ret = mirrorModalPlayerMP4(preloadElement, modalPlayer, mediaStreamRef);
+
     // console.log('2e. start-end mirrorModalPlayer ret=', ret);
-    if(!ret) return false;
+    // if(!ret) return false;
     setEnableOverlayModal(enableOverlayGlobal);
     setOverContentlayModal(overlayContents => {
       const newOverlayContents = [...overlayContents];
@@ -133,6 +137,7 @@ function App() {
     const {gridNum, cctvIndex} = targetIndex;
     const targetCCTVIndex = cctvIndex === undefined ? gridNum2CCTVIndex(gridNum) : cctvIndex;
     const modalOpen = modalOpenRef.current;
+    console.log(swiperRef.current)
     if(swiperRef.current === null){
       return;
     }
@@ -140,6 +145,7 @@ function App() {
       return;
     }
     const ret = maximizeGrid(targetCCTVIndex);
+    console.log(ret)
     if(!ret) return false;
     if(modalOpen){
       // console.log('start slide next!')
@@ -155,7 +161,9 @@ function App() {
     }
     // console.log('!!!!current modalOpen = ', modalOpen, swiperRef.current.activeIndex, swiperRef.current.realIndex)
     return true;
-  }, [gridNum2CCTVIndex, maximizeGrid, swiperRef])
+    },
+    [gridNum2CCTVIndex, maximizeGrid, swiperRef],
+  );
 
   useHotkeys('1', () => safeSlide({gridNum: '0'}), [safeSlide])
   useHotkeys('2', () => safeSlide({gridNum: '1'}), [safeSlide])
@@ -262,6 +270,10 @@ function App() {
             <div>use keyboard "c" to config HLS player to show.</div>
           ) : (
             <GridVideos
+              modalOpen={modalOpen}
+              modalOpenRef={modalOpenRef}
+              setModalOpen={setModalOpen}
+              swiperRef={swiperRef}
               setPlayer={setLeftSmallPlayerRef.current}
               cctvsSelected={cctvsSelectedArray}
               preLoadMapRef={preLoadMapRef}
@@ -278,41 +290,8 @@ function App() {
               refreshInterval={refreshInterval}
               reloadPlayerComponent={reloadPlayerComponent}
               currentCCTVIndex={currentCCTVIndex}
-            ></GridVideos>
+             />
           )}
-          <ModalBox
-            open={modalOpen}
-            modalOpenRef={modalOpenRef}
-            currentCCTVIndex={gridNumNormalized}
-            gridDimension={gridDimension}
-            keepMounted={true}
-            autoPlay={autoPlay}
-            setOpen={setModalOpen}
-            contentWidth="80%"
-            contentHeight="auto"
-          >
-            <Swiper
-              loop={true}
-              speed={1500}
-              // effect="fade"
-              // modules={[EffectFade]}
-            >
-              <SwiperControl
-                swiperRef={swiperRef}
-              />
-              {modalPlayers.map((player, index) => (
-                <SwiperSlide key={index}>
-                  <MP4Player
-                    setPlayer={initModalPlayersIndex}
-                    playerNum={index}
-                    autoRefresh={false}
-                    overlayContent={overlayContentModal[index]}
-                  >
-                  </MP4Player>
-                </SwiperSlide>
-              ))}
-            </Swiper>
-          </ModalBox>
           <ConfigDialog
             open={dialogOpen}
             // cctvs={cctvs}

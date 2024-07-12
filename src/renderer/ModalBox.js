@@ -15,7 +15,7 @@ const ModalContainer = styled.div`
 
 function SimpleModal(props) {
   const {children } = props;
-  // console.log('### modal:', props)
+  console.log('### modal:', props)
   const {open, setOpen, modalOpenRef} = props;
 
   const handleClose = () => {
