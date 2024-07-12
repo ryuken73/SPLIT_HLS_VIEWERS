@@ -137,7 +137,6 @@ function App() {
     const {gridNum, cctvIndex} = targetIndex;
     const targetCCTVIndex = cctvIndex === undefined ? gridNum2CCTVIndex(gridNum) : cctvIndex;
     const modalOpen = modalOpenRef.current;
-    console.log(swiperRef.current)
     if(swiperRef.current === null){
       return;
     }
@@ -149,9 +148,11 @@ function App() {
     if(!ret) return false;
     if(modalOpen){
       // console.log('start slide next!')
-      setTimeout(() => {
+      // setTimeout(() => {
         swiperRef.current.slideNext();
-      },200)
+        // swiperRef.current.slideToLoop(targetCCTVIndex);
+        // swiperRef.current.slideTo(targetCCTVIndex);
+      // },200)
     } else {
       // console.log('start slide to 0')
       // swiper.slideTo(0);
@@ -165,16 +166,34 @@ function App() {
     [gridNum2CCTVIndex, maximizeGrid, swiperRef],
   );
 
-  useHotkeys('1', () => safeSlide({gridNum: '0'}), [safeSlide])
-  useHotkeys('2', () => safeSlide({gridNum: '1'}), [safeSlide])
-  useHotkeys('3', () => safeSlide({gridNum: '2'}), [safeSlide])
-  useHotkeys('4', () => safeSlide({gridNum: '3'}), [safeSlide])
-  useHotkeys('5', () => safeSlide({gridNum: '4'}), [safeSlide])
-  useHotkeys('6', () => safeSlide({gridNum: '5'}), [safeSlide])
-  useHotkeys('7', () => safeSlide({gridNum: '6'}), [safeSlide])
-  useHotkeys('8', () => safeSlide({gridNum: '7'}), [safeSlide])
-  useHotkeys('9', () => safeSlide({gridNum: '8'}), [safeSlide])
   // useAutoPlay({autoPlay, autoInterval, maximizeGrid, cctvIndexRef});
+  const saveLastIndex = React.useCallback((index) => {
+    cctvIndexRef.current = index;
+  }, []);
+
+  const moveToSlide = React.useCallback((index) => {
+      swiperRef.current.slideTo(index);
+      saveLastIndex(index);
+    },
+    [saveLastIndex],
+  );
+
+  const handlePressKeyboard = React.useCallback((_, handler) => {
+      const pressed = parseInt(handler.keys[0], 10);
+      const targetIndex = gridNum2CCTVIndex(pressed - 1);
+      moveToSlide(targetIndex);
+    },
+    [gridNum2CCTVIndex, moveToSlide],
+  );
+  useHotkeys('1', handlePressKeyboard);
+  useHotkeys('2', handlePressKeyboard);
+  useHotkeys('3', handlePressKeyboard);
+  useHotkeys('4', handlePressKeyboard);
+  useHotkeys('5', handlePressKeyboard);
+  useHotkeys('6', handlePressKeyboard);
+  useHotkeys('7', handlePressKeyboard);
+  useHotkeys('8', handlePressKeyboard);
+  useHotkeys('9', handlePressKeyboard);
 
   const reloadPlayerComponent = React.useCallback((cctvIndex) => {
     // console.log('getNon: reload Player:', cctvIndex)
@@ -184,33 +203,21 @@ function App() {
     })
   }, [setLastLoadedTime])
 
-  // React.useEffect(() => {
-  //   let timer;
-  //   timer = setInterval(() => {
-  //     for(let i=0;i<9;i++){
-  //       reloadPlayerComponent(i)
-  //     }
-  //   }, 10000)
-  //   return () => {
-  //     clearInterval(timer);
-  //   }
-  // }, [reloadPlayerComponent])
-
-  const runAutoPlay = React.useCallback((startAutoPlay=false, autoInterval) => {
-    if(startAutoPlay){
-      document.title=`CCTV[auto - every ${autoInterval}s]`
-      let firstIndex = cctvIndexRef.current;
-      // maximizeGrid(firstIndex);
-      safeSlide({cctvIndex: firstIndex});
-      autoplayTimer.current = setInterval(() => {
-        // const nextIndex = (cctvIndexRef.current + 1) % 9;
-        const nextPlayerIndex = (cctvIndexRef.current + 1) % (cctvPlayersRef.current.length);
-        const nextIndex = getNonPausedPlayerIndex(nextPlayerIndex, cctvPlayersRef, reloadPlayerComponent);
-        // console.log('!!! nextIndex=', nextIndex, cctvPlayersRef.current[nextIndex].paused())
-        const ret = safeSlide({gridNum: nextIndex});
-        // maximizeGrid(nextIndex);
-        // swiper.slideNext();
-      },autoInterval*1000)
+  const runAutoPlay = React.useCallback(
+    // eslint-disable-next-line default-param-last, @typescript-eslint/no-shadow
+    (startAutoPlay = false, autoInterval) => {
+      if (startAutoPlay) {
+        document.title = `CCTV[auto - every ${autoInterval}s]`;
+        const firstIndex = cctvIndexRef.current;
+        moveToSlide(firstIndex);
+        autoplayTimer.current = setInterval(() => {
+          const nextPlayerIndex = (cctvIndexRef.current + 1) % (cctvPlayersRef.current.length);
+          const nextIndex = getNonPausedPlayerIndex(nextPlayerIndex, cctvPlayersRef, reloadPlayerComponent);
+          // console.log('!!! nextIndex=', nextIndex, cctvPlayersRef.current[nextIndex].paused())
+          const ret = safeSlide({gridNum: nextIndex});
+          // maximizeGrid(nextIndex);
+          // swiper.slideNext();
+        },autoInterval*1000)
     } else {
       document.title="CCTV"
       clearInterval(autoplayTimer.current);
@@ -221,15 +228,16 @@ function App() {
   }, [safeSlide, reloadPlayerComponent, cctvIndexRef])
 
   const toggleAutoPlay = React.useCallback(() => {
-    setAutoPlay(autoPlay => {
-      if(autoPlay){
+    // eslint-disable-next-line @typescript-eslint/no-shadow
+    setAutoPlay((autoPlay) => {
+      if (autoPlay) {
         runAutoPlay(false);
       } else {
         runAutoPlay(true, autoInterval);
       }
       return !autoPlay;
     })
-  },[autoInterval, runAutoPlay])
+  }, [autoInterval, runAutoPlay]);
 
   const toggleOverlayGlobal = React.useCallback(() => {
     if(modalOpen) {

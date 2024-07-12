@@ -107,7 +107,7 @@ function GridVideos(props) {
       }}
       swiper={{
         loop: true,
-        speed: 1500
+        speed: 1500,
       }}
     >
       <SwiperControl swiperRef={swiperRef} />

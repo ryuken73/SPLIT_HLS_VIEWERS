@@ -70,7 +70,7 @@
 }
 
 .swiper-wrapper {
-  /* transition-timing-function: linear ; */
+  transition-timing-function: linear ;
   /* transition-timing-function: cubic-bezier(.29,.29,.24,1.01); */
-  transition-timing-function: easeInOutBack;
+  /* transition-timing-function: easeInOutBack; */
 }
