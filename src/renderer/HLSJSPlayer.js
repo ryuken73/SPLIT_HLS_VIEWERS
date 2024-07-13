@@ -9,17 +9,10 @@ const Conatiner = styled.div`
   position: relative;
   overflow: hidden;
   width: 100%;
-  height: 100%;
+  /* height: 100%; */
   background-color: black;
+  aspect-ratio: 16/9;
 `;
-const Cover = styled.div`
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  /* background-color: maroon; */
-  background-color: ${props => props.isActive ? 'red': props.paused ? 'black' : 'maroon'};
-  display: ${props => !props.autoPlay && 'none'};
-`
 const NumDisplay = styled.div`
   display: ${props => !props.show && 'none'};
   position: absolute;
@@ -41,7 +34,7 @@ const NumDisplay = styled.div`
 const CustomPlayer = styled(ReactHlsPlayer)`
   width: 100%;
   height: 100%;
-  aspect-ratio: ${props => props.aspectRatio};
+  /* aspect-ratio: ${props => props.aspectRatio}; */
   object-fit: cover;
 `
 
@@ -185,7 +178,6 @@ function HLSJSPlayer(props) {
 
   return (
     <Conatiner>
-      {/* <Cover isActive={isActive} paused={paused} autoPlay={autoPlay}></Cover> */}
       <NumDisplay onClick={reloadPlayer} isActive={isActive} show={autoRefresh} position={'topLeft'}>
         <div>
           {numDisplayContent}
@@ -212,7 +204,7 @@ function HLSJSPlayer(props) {
         hlsConfig={hlsConfig}
         muted={true}
         width="100%"
-        height="100%"
+        // height="100%"
         aspectRatio={aspectRatio}
       ></CustomPlayer>
     </Conatiner>

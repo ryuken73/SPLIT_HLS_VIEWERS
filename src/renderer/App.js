@@ -8,14 +8,13 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { EffectFade } from 'swiper';
 // Import Swiper styles
 import { useHotkeys } from 'react-hotkeys-hook';
+import styled from 'styled-components';
 import useLocalStorage from './hooks/useLocalStorage';
 // import useAutoPlay from './hooks/useAutoPlay';
 import MessagePanel from './MessagePanel';
 import SwiperControl from './SwiperControl';
 import {
   getRealIndex,
-  mirrorModalPlayer,
-  mirrorModalPlayerMP4,
   getNonPausedPlayerIndex
 } from './lib/sourceUtil';
 import { replace } from './lib/arrayUtil';
@@ -26,6 +25,39 @@ const KEY_OPTIONS = 'hlsCCTVOptions';
 const KEY_SELECT_SAVED = 'selectedSavedCCTVs';
 const KEY_NOT_SELECT_SAVED = 'notSelectedSavedCCTVs';
 const INITIAL_LOAD_TIME = (new Array(9)).fill(Date.now());
+
+const Container = styled.div`
+  background-color: #282c34;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+`;
+const TopPanel = styled.div`
+  min-height: 100px;
+  background: black;
+  border: 1px solid white;
+  box-sizing: border-box;
+`
+const MiddlePanel = styled.div`
+  height: 100%;
+  position: relative;
+  border-left: 1px solid white;
+  border-right: 1px solid white;
+`
+const CenterArea = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+`
+const BottomPanel = styled.div`
+  margin-top: auto;
+  min-height: 20px;
+  margin-bottom: 4px;
+  color: white;
+  z-index: 10;
+  background: black;
+`
 
 function App() {
   const [savedOptions, saveOptions] = useLocalStorage(KEY_OPTIONS,{});
@@ -271,9 +303,10 @@ function App() {
   },[saveOptions, savedOptions])
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <Box width="100%" height="97%">
+    <Container>
+      <TopPanel />
+      <MiddlePanel>
+        <CenterArea>
           {cctvsSelectedArray.length === 0 ? (
             <div>use keyboard "c" to config HLS player to show.</div>
           ) : (
@@ -298,7 +331,7 @@ function App() {
               refreshInterval={refreshInterval}
               reloadPlayerComponent={reloadPlayerComponent}
               currentCCTVIndex={currentCCTVIndex}
-             />
+            />
           )}
           <ConfigDialog
             open={dialogOpen}
@@ -317,11 +350,13 @@ function App() {
             refreshMode={refreshMode}
             setRefreshInterval={setRefreshInterval}
             refreshInterval={refreshInterval}
-          ></ConfigDialog>
-        </Box>
-        <MessagePanel />
-      </header>
-    </div>
+           />
+          </CenterArea>
+        </MiddlePanel>
+        <BottomPanel>
+          <MessagePanel />
+        </BottomPanel>
+    </Container>
   );
 }
 
