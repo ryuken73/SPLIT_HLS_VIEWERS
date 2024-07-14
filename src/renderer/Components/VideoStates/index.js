@@ -19,7 +19,7 @@ const Container = styled.div`
 
 function VideoStates(props) {
   // eslint-disable-next-line react/prop-types
-  const { cctvSelected, currentCCTVIndex } = props;
+  const { cctvSelected, currentCCTVIndex, cctvPlayersRef } = props;
   return (
     <Vcenter>
       <Container>
@@ -29,6 +29,7 @@ function VideoStates(props) {
             cctv={cctv}
             cctvIndex={cctvIndex}
             currentCCTVIndex={currentCCTVIndex}
+            player={cctvPlayersRef.current[cctvIndex]}
           />
         ))}
       </Container>

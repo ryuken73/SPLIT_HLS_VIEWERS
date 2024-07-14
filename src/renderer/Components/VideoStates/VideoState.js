@@ -21,11 +21,14 @@ const Title = styled.div`
 
 function VideoState(props) {
   // eslint-disable-next-line react/prop-types
-  const { cctv, cctvIndex, currentCCTVIndex } = props;
+  const { cctv, cctvIndex, currentCCTVIndex, player } = props;
   const isActive = cctvIndex === currentCCTVIndex;
   // eslint-disable-next-line react/prop-types
+  const onClick = React.useCallback(() => {
+    player.pause();
+  }, [player])
   return (
-    <Container isActive={isActive}>
+    <Container isActive={isActive} onClick={onClick}>
       <Title>{cctv.title}</Title>
     </Container>
   )
