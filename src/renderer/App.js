@@ -9,9 +9,10 @@ import MessagePanel from './MessagePanel';
 import VideoStates from './Components/VideoStates';
 import {
   getRealIndex,
-  getNonPausedPlayerIndex
+  getNonPausedPlayerIndex,
+  isPlayerPlaying
 } from './lib/sourceUtil';
-import { replace } from './lib/arrayUtil';
+import { moveTo, replace } from './lib/arrayUtil';
 import "swiper/css";
 import MP4Player from './MP4Player';
 
@@ -123,38 +124,6 @@ function App() {
     [getSourceElement],
   );
 
-  const safeSlide = React.useCallback((targetIndex) => {
-    const {gridNum, cctvIndex} = targetIndex;
-    const targetCCTVIndex = cctvIndex === undefined ? gridNum2CCTVIndex(gridNum) : cctvIndex;
-    const modalOpen = modalOpenRef.current;
-    if(swiperRef.current === null){
-      return;
-    }
-    if(swiperRef.current.animating){
-      return;
-    }
-    const ret = maximizeGrid(targetCCTVIndex);
-    console.log(ret)
-    if(!ret) return false;
-    if(modalOpen){
-      // console.log('start slide next!')
-      // setTimeout(() => {
-        swiperRef.current.slideNext();
-        // swiperRef.current.slideToLoop(targetCCTVIndex);
-        // swiperRef.current.slideTo(targetCCTVIndex);
-      // },200)
-    } else {
-      // console.log('start slide to 0')
-      // swiper.slideTo(0);
-      swiperRef.current.slideToLoop(0);
-      setModalOpen(true);
-      modalOpenRef.current = true;
-    }
-    // console.log('!!!!current modalOpen = ', modalOpen, swiperRef.current.activeIndex, swiperRef.current.realIndex)
-    return true;
-    },
-    [gridNum2CCTVIndex, maximizeGrid, swiperRef],
-  );
 
   // useAutoPlay({autoPlay, autoInterval, maximizeGrid, cctvIndexRef});
   const saveLastIndex = React.useCallback((index) => {
@@ -194,6 +163,39 @@ function App() {
     })
   }, [setLastLoadedTime])
 
+  const safeSlide = React.useCallback((targetIndex) => {
+    const {gridNum, cctvIndex} = targetIndex;
+    const targetCCTVIndex = cctvIndex === undefined ? gridNum2CCTVIndex(gridNum) : cctvIndex;
+    const modalOpen = modalOpenRef.current;
+    if(swiperRef.current === null){
+      return;
+    }
+    if(swiperRef.current.animating){
+      return;
+    }
+    const ret = maximizeGrid(targetCCTVIndex);
+    console.log(ret)
+    if(!ret) return false;
+    if(modalOpen){
+      // console.log('start slide next!')
+      // setTimeout(() => {
+        swiperRef.current.slideNext();
+        // swiperRef.current.slideToLoop(targetCCTVIndex);
+        // swiperRef.current.slideTo(targetCCTVIndex);
+      // },200)
+    } else {
+      // console.log('start slide to 0')
+      // swiper.slideTo(0);
+      swiperRef.current.slideToLoop(0);
+      // setModalOpen(true);
+      // modalOpenRef.current = true;
+    }
+    // console.log('!!!!current modalOpen = ', modalOpen, swiperRef.current.activeIndex, swiperRef.current.realIndex)
+    return true;
+    },
+    [gridNum2CCTVIndex, maximizeGrid, swiperRef],
+  );
+
   const runAutoPlay = React.useCallback(
     // eslint-disable-next-line default-param-last, @typescript-eslint/no-shadow
     (startAutoPlay = false, autoInterval) => {
@@ -202,21 +204,75 @@ function App() {
         const firstIndex = cctvIndexRef.current;
         moveToSlide(firstIndex);
         autoplayTimer.current = setInterval(() => {
-          const nextPlayerIndex = (cctvIndexRef.current + 1) % (cctvPlayersRef.current.length);
-          const nextIndex = getNonPausedPlayerIndex(nextPlayerIndex, cctvPlayersRef, reloadPlayerComponent);
+          let nextPlayerIndex = (cctvIndexRef.current + 1) % (cctvPlayersRef.current.length);
+          // let nextPlayerIndex = (cctvIndexRef.current + 1) % (cctvPlayersRef.current.length);
+          // const nextIndex = getNonPausedPlayerIndex(nextPlayerIndex, cctvPlayersRef, reloadPlayerComponent);
+          let loopingCount = 0;
+          while (true) {
+            const nextPlayer = cctvPlayersRef.current[nextPlayerIndex];
+            if (isPlayerPlaying(nextPlayer, nextPlayerIndex)) {
+              break;
+            } else {
+              reloadPlayerComponent(nextPlayerIndex);
+              nextPlayerIndex++;
+              // setCCTVsSelectedAray((cctvsSelected) => {
+              //   const lastIndex = cctvsSelected.length - 1;
+              //   const newArray = moveTo(cctvsSelected)
+              //     .fromIndex(nextPlayerIndex)
+              //     .toIndex(lastIndex);
+              //     console.log(newArray);
+              //   return newArray;
+              // });
+            }
+            loopingCount ++;
+            if(loopingCount > 10){
+              console.error('max loop count exceed! just slideNext()')
+              break;
+            }
+          }
+          // swiperRef.current.slideNext();
+          swiperRef.current.slideTo(nextPlayerIndex);
+          // swiperRef.current.slideToLoop(next);
+          setCurrentCCTVIndex(nextPlayerIndex);
+          cctvIndexRef.current = nextPlayerIndex;
           // console.log('!!! nextIndex=', nextIndex, cctvPlayersRef.current[nextIndex].paused())
-          const ret = safeSlide({gridNum: nextIndex});
-          // maximizeGrid(nextIndex);
+          // const ret = safeSlide({gridNum: nextIndex});
           // swiper.slideNext();
-        },autoInterval*1000)
+        }, autoInterval * 1000);
     } else {
-      document.title="CCTV"
-      clearInterval(autoplayTimer.current);
+      document.title = 'CCTV';
+        clearInterval(autoplayTimer.current);
     }
     return () => {
       clearInterval(autoplayTimer.current);
     }
-  }, [safeSlide, reloadPlayerComponent, cctvIndexRef])
+    },
+    [moveToSlide, reloadPlayerComponent],
+  );
+
+  // const runAutoPlay = React.useCallback(
+  //   // eslint-disable-next-line default-param-last, @typescript-eslint/no-shadow
+  //   (startAutoPlay = false, autoInterval) => {
+  //     if (startAutoPlay) {
+  //       document.title = `CCTV[auto - every ${autoInterval}s]`;
+  //       const firstIndex = cctvIndexRef.current;
+  //       moveToSlide(firstIndex);
+  //       autoplayTimer.current = setInterval(() => {
+  //         const nextPlayerIndex = (cctvIndexRef.current + 1) % (cctvPlayersRef.current.length);
+  //         const nextIndex = getNonPausedPlayerIndex(nextPlayerIndex, cctvPlayersRef, reloadPlayerComponent);
+  //         // console.log('!!! nextIndex=', nextIndex, cctvPlayersRef.current[nextIndex].paused())
+  //         const ret = safeSlide({gridNum: nextIndex});
+  //         // maximizeGrid(nextIndex);
+  //         // swiper.slideNext();
+  //       },autoInterval*1000)
+  //   } else {
+  //     document.title="CCTV"
+  //     clearInterval(autoplayTimer.current);
+  //   }
+  //   return () => {
+  //     clearInterval(autoplayTimer.current);
+  //   }
+  // }, [safeSlide, reloadPlayerComponent, cctvIndexRef])
 
   const toggleAutoPlay = React.useCallback(() => {
     // eslint-disable-next-line @typescript-eslint/no-shadow
