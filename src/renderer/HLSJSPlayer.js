@@ -9,9 +9,10 @@ const Conatiner = styled.div`
   position: relative;
   overflow: hidden;
   width: 100%;
-  /* height: 100%; */
   background-color: black;
   aspect-ratio: 16/9;
+  /* border: 5px solid black; */
+  /* box-sizing: border-box; */
 `;
 const NumDisplay = styled.div`
   display: ${props => !props.show && 'none'};

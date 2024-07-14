@@ -1,18 +1,12 @@
 import './App.css';
 import React from 'react';
-import GridVideos from './GridVideos';
-import ModalBox from './ModalBox';
-import ConfigDialog from './ConfigDialog';
-import Box from '@mui/material/Box';
-import { Swiper, SwiperSlide } from "swiper/react";
-import { EffectFade } from 'swiper';
-// Import Swiper styles
 import { useHotkeys } from 'react-hotkeys-hook';
 import styled from 'styled-components';
+import ConfigDialog from './ConfigDialog';
+import GridVideos from './GridVideos';
 import useLocalStorage from './hooks/useLocalStorage';
-// import useAutoPlay from './hooks/useAutoPlay';
 import MessagePanel from './MessagePanel';
-import SwiperControl from './SwiperControl';
+import VideoStates from './Components/VideoStates';
 import {
   getRealIndex,
   getNonPausedPlayerIndex
@@ -31,12 +25,16 @@ const Container = styled.div`
   height: 100vh;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 `;
 const TopPanel = styled.div`
   min-height: 100px;
+  width: 100%;
   background: black;
   border: 1px solid white;
   box-sizing: border-box;
+  z-index: 10;
+  color: white;
 `
 const MiddlePanel = styled.div`
   height: 100%;
@@ -47,8 +45,11 @@ const MiddlePanel = styled.div`
 const CenterArea = styled.div`
   position: absolute;
   top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  /* left: 50%; */
+  right: 5%;
+  transform: translate(5%, -50%);
+  border: 5px solid white;
+  box-sizing: border-box;
 `
 const BottomPanel = styled.div`
   margin-top: auto;
@@ -113,15 +114,15 @@ function App() {
     return modalPlayers[nextNum]
   }, [modalPlayers])
 
-  const initModalPlayersIndex = React.useCallback((cctvIndex, player, modalIndex) => {
-    // console.log('^^^^', cctvIndex, player, modalIndex)
-    setModalPlayers(players => {
-      const newPlayers = [...players];
-      newPlayers[modalIndex] = player;
-      // console.log('!!!', newPlayers)
-      return newPlayers
-    })
-  }, []);
+  // const initModalPlayersIndex = React.useCallback((cctvIndex, player, modalIndex) => {
+  //   // console.log('^^^^', cctvIndex, player, modalIndex)
+  //   setModalPlayers(players => {
+  //     const newPlayers = [...players];
+  //     newPlayers[modalIndex] = player;
+  //     // console.log('!!!', newPlayers)
+  //     return newPlayers
+  //   })
+  // }, []);
 
   const getSourceElement = React.useCallback((cctvIndex) => {
     // const realIndex = getRealIndex(cctvIndex, gridDimension, cctvsSelectedArray)
@@ -134,8 +135,10 @@ function App() {
   }, [cctvsSelectedArray])
 
   const gridNum2CCTVIndex = React.useCallback((gridNum) => {
-    return getRealIndex(gridNum, gridDimension, cctvsSelectedArray)
-  }, [cctvsSelectedArray, gridDimension])
+      return getRealIndex(gridNum, gridDimension, cctvsSelectedArray);
+    },
+    [cctvsSelectedArray, gridDimension],
+  );
 
   const maximizeGrid = React.useCallback((cctvIndex) => {
     // console.log('1s. start maximizeGrid')
@@ -206,6 +209,7 @@ function App() {
   const moveToSlide = React.useCallback((index) => {
       swiperRef.current.slideTo(index);
       saveLastIndex(index);
+      setCurrentCCTVIndex(index);
     },
     [saveLastIndex],
   );
@@ -304,7 +308,12 @@ function App() {
 
   return (
     <Container>
-      <TopPanel />
+      <TopPanel>
+        <VideoStates
+          cctvSelected={cctvsSelectedArray}
+          currentCCTVIndex={currentCCTVIndex}
+        />
+      </TopPanel>
       <MiddlePanel>
         <CenterArea>
           {cctvsSelectedArray.length === 0 ? (
