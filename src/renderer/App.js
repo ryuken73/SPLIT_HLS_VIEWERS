@@ -82,8 +82,6 @@ function App() {
   const [cctvLastLoadedTime, setLastLoadedTime] = React.useState(INITIAL_LOAD_TIME);
   const [refreshMode, setRefreshMode] = React.useState(INITIAL_REFRESH_MODE);
   const [refreshInterval, setRefreshInterval] = React.useState(INITIAL_REFRESH_INTERVAL);
-  const modalPlayerNumRef = React.useRef(0);
-  const mediaStreamRef = React.useRef(null);
 
   useHotkeys('c', () => setDialogOpen(true));
   const cctvIndexRef = React.useRef(0);
@@ -96,19 +94,6 @@ function App() {
   const swiperRef = React.useRef(null);
 
   // console.log('gridNumNormalized=', gridNumNormalized, currentCCTVIndex, cctvIndexRef.current)
-
-  const getNextPlayer = React.useCallback(() => {
-    const modalOpen = modalOpenRef.current;
-    let nextNum;
-    if(!modalOpen){
-      nextNum = 0;
-    } else {
-      nextNum = (modalPlayerNumRef.current + 1) % 2;
-    }
-    // console.log('!!! nextNum for player =', nextNum);
-    modalPlayerNumRef.current=nextNum;
-    return modalPlayers[nextNum]
-  }, [modalPlayers])
 
   const getSourceElement = React.useCallback((cctvIndex) => {
     // const realIndex = getRealIndex(cctvIndex, gridDimension, cctvsSelectedArray)
@@ -130,25 +115,7 @@ function App() {
     // console.log('1s. start maximizeGrid')
 
     const [cctv, preloadElement] = getSourceElement(cctvIndex);
-    // const modalPlayer = getNextPlayer();
-
-    // console.log('!!!', modalOpenRef.current, preloadElement, modalPlayer);
-    // console.log('2s. start mirrorModalPlayer')
-    // const ret = mirrorModalPlayer(preloadElement, modalPlayer);
-
-    // const ret = mirrorModalPlayerMP4(preloadElement, modalPlayer, mediaStreamRef);
-
-    // console.log('2e. start-end mirrorModalPlayer ret=', ret);
-    // if(!ret) return false;
-    // setEnableOverlayModal(enableOverlayGlobal);
-    // setOverContentlayModal(overlayContents => {
-    //   const newOverlayContents = [...overlayContents];
-    //   newOverlayContents[modalPlayerNumRef.current] = cctv.title;
-    //   return newOverlayContents
-    // })
-      setCurrentCCTVIndex(cctvIndex);
-    // setModalOpen(true);
-    // modalOpenRef.current = true;
+    setCurrentCCTVIndex(cctvIndex);
     cctvIndexRef.current = cctvIndex;
     // console.log('1e. start-end maximizeGrid')
     return true;
@@ -271,7 +238,9 @@ function App() {
   const setCCTVsNotSelectedArrayNSave = React.useCallback((cctvsArray) => {
     setCCTVsNotSelectedArray(cctvsArray);
     saveNotSelectedCCTVs(cctvsArray);
-  },[saveNotSelectedCCTVs])
+    },
+    [saveNotSelectedCCTVs],
+  );
 
   const setOptionsNSave = React.useCallback((key, value) => {
     key === 'gridDimension' && setGridDimension(value);
@@ -291,6 +260,7 @@ function App() {
         <VideoStates
           cctvSelected={cctvsSelectedArray}
           currentCCTVIndex={currentCCTVIndex}
+          cctvPlayersRef={cctvPlayersRef}
         />
       </TopPanel>
       <MiddlePanel>
