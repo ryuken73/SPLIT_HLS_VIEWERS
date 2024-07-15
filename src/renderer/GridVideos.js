@@ -59,10 +59,32 @@ function GridVideos(props) {
     },
     [cctvPlayersRef],
   );
+  const onClick = React.useCallback((event) => {
+    const targetIndex = parseInt(event.target.id, 10)
+    const swipers = document.getElementsByClassName('swiper-slide');
+    swipers[targetIndex].style.width = '0';
+    swiperRef.current.update();
+    },
+    [swiperRef],
+  );
+  const onClick1 = React.useCallback((event) => {
+    const targetIndex = parseInt(event.target.id, 10)
+    const swipers = document.getElementsByClassName('swiper-slide');
+    swipers[targetIndex].style.width = '756px';
+    swiperRef.current.update();
+    },
+    [swiperRef],
+  );
 
   return (
     <Container>
-      <Swiper loop speed={1500}>
+      {cctvsSelected.map((cctv, index) => (
+        <button id={index} onClick={onClick}>{index}</button>
+      ))}
+      {cctvsSelected.map((cctv, index) => (
+        <button id={index} onClick={onClick1}>{index}</button>
+      ))}
+      <Swiper loop speed={1500} >
         <SwiperControl swiperRef={swiperRef} />
         {cctvsSelected.map((cctv, cctvIndex) => (
           <SwiperSlide key={cctv.cctvId}>

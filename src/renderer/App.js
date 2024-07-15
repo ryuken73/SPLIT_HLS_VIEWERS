@@ -179,8 +179,8 @@ function App() {
     if(modalOpen){
       // console.log('start slide next!')
       // setTimeout(() => {
-        swiperRef.current.slideNext();
-        // swiperRef.current.slideToLoop(targetCCTVIndex);
+        // swiperRef.current.slideNext();
+        swiperRef.current.slideToLoop(targetCCTVIndex);
         // swiperRef.current.slideTo(targetCCTVIndex);
       // },200)
     } else {
@@ -208,31 +208,31 @@ function App() {
           // let nextPlayerIndex = (cctvIndexRef.current + 1) % (cctvPlayersRef.current.length);
           // const nextIndex = getNonPausedPlayerIndex(nextPlayerIndex, cctvPlayersRef, reloadPlayerComponent);
           let loopingCount = 0;
-          while (true) {
-            const nextPlayer = cctvPlayersRef.current[nextPlayerIndex];
-            if (isPlayerPlaying(nextPlayer, nextPlayerIndex)) {
-              break;
-            } else {
-              reloadPlayerComponent(nextPlayerIndex);
-              nextPlayerIndex++;
-              // setCCTVsSelectedAray((cctvsSelected) => {
-              //   const lastIndex = cctvsSelected.length - 1;
-              //   const newArray = moveTo(cctvsSelected)
-              //     .fromIndex(nextPlayerIndex)
-              //     .toIndex(lastIndex);
-              //     console.log(newArray);
-              //   return newArray;
-              // });
-            }
-            loopingCount ++;
-            if(loopingCount > 10){
-              console.error('max loop count exceed! just slideNext()')
-              break;
-            }
-          }
+          // while (true) {
+          //   const nextPlayer = cctvPlayersRef.current[nextPlayerIndex];
+          //   if (isPlayerPlaying(nextPlayer, nextPlayerIndex)) {
+          //     break;
+          //   } else {
+          //     reloadPlayerComponent(nextPlayerIndex);
+          //     nextPlayerIndex++;
+          //     // setCCTVsSelectedAray((cctvsSelected) => {
+          //     //   const lastIndex = cctvsSelected.length - 1;
+          //     //   const newArray = moveTo(cctvsSelected)
+          //     //     .fromIndex(nextPlayerIndex)
+          //     //     .toIndex(lastIndex);
+          //     //     console.log(newArray);
+          //     //   return newArray;
+          //     // });
+          //   }
+          //   loopingCount ++;
+          //   if(loopingCount > 10){
+          //     console.error('max loop count exceed! just slideNext()')
+          //     break;
+          //   }
+          // }
           // swiperRef.current.slideNext();
           swiperRef.current.slideTo(nextPlayerIndex);
-          // swiperRef.current.slideToLoop(next);
+          // swiperRef.current.slideToLoop(nextPlayerIndex);
           setCurrentCCTVIndex(nextPlayerIndex);
           cctvIndexRef.current = nextPlayerIndex;
           // console.log('!!! nextIndex=', nextIndex, cctvPlayersRef.current[nextIndex].paused())
