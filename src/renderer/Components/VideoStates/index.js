@@ -13,7 +13,7 @@ const Vcenter = styled.div`
 const Container = styled.div`
   width: 100%;
   display: flex;
-  justify-content: space-around;
+  justify-content: flex-start;
   align-items: center;
 `;
 

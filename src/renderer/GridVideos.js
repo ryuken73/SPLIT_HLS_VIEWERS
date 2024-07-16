@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
-import { EffectFade } from 'swiper';
+import { EffectFade, EffectFlip, EffectCube } from 'swiper/modules';
 import {
   AbsolutePositionBox,
   TransparentPaper,
@@ -13,6 +13,9 @@ import SwiperControl from './SwiperControl';
 import styled from 'styled-components';
 import HLSJSPlayer from './HLSJSPlayer';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css/effect-fade';
+import 'swiper/css/effect-flip';
+import 'swiper/css/effect-cube';
 
 const Container = styled.div`
   height: auto;
@@ -84,7 +87,14 @@ function GridVideos(props) {
       {cctvsSelected.map((cctv, index) => (
         <button id={index} onClick={onClick1}>{index}</button>
       ))}
-      <Swiper loop speed={1500} >
+      <Swiper
+        loop
+        speed={1500}
+        // speed={3000}
+        effect="fade"
+        fadeEffect={{ crossFade: true }}
+        modules={[EffectFade, EffectCube, EffectFlip]}
+      >
         <SwiperControl swiperRef={swiperRef} />
         {cctvsSelected.map((cctv, cctvIndex) => (
           <SwiperSlide key={cctv.cctvId}>

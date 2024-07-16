@@ -13,6 +13,7 @@ const Container = styled.div`
   border: ${props => props.isActive ? '2px solid yellow' : '2px solid white'};
   box-sizing: border-box;
   cursor: pointer;
+  margin: 10px;
 `
 const Title = styled.div`
   padding-left: 10px;

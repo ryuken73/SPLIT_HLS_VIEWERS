@@ -230,8 +230,8 @@ function App() {
           //     break;
           //   }
           // }
-          // swiperRef.current.slideNext();
-          swiperRef.current.slideTo(nextPlayerIndex);
+          swiperRef.current.slideNext();
+          // swiperRef.current.slideTo(nextPlayerIndex);
           // swiperRef.current.slideToLoop(nextPlayerIndex);
           setCurrentCCTVIndex(nextPlayerIndex);
           cctvIndexRef.current = nextPlayerIndex;
