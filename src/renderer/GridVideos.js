@@ -46,6 +46,7 @@ function GridVideos(props) {
   } = props;
 
   // const cctvs = [...cctvsInAreas.values()].flat();
+  const [titlePosition, setTitlePosition] = React.useState({ x: 0, y: 0 });
   const currentIndexRef = React.useRef(null);
   currentIndexRef.current = currentActiveIndex;
 
@@ -62,22 +63,14 @@ function GridVideos(props) {
     },
     [cctvPlayersRef],
   );
-  const onClick = React.useCallback((event) => {
-    const targetIndex = parseInt(event.target.id, 10)
-    const swipers = document.getElementsByClassName('swiper-slide');
-    swipers[targetIndex].style.width = '0';
-    swiperRef.current.update();
-    },
-    [swiperRef],
-  );
-  const onClick1 = React.useCallback((event) => {
-    const targetIndex = parseInt(event.target.id, 10)
-    const swipers = document.getElementsByClassName('swiper-slide');
-    swipers[targetIndex].style.width = '756px';
-    swiperRef.current.update();
-    },
-    [swiperRef],
-  );
+
+  const handleTitleDrag = React.useCallback((event, draggableData) => {
+    console.log(draggableData);
+    setTitlePosition({
+      x: draggableData.x,
+      y: draggableData.y
+    });
+  }, []);
 
   return (
     <Container>
@@ -92,6 +85,7 @@ function GridVideos(props) {
         speed={1500}
         // speed={3000}
         effect="fade"
+        noSwipingClass="react-draggable"
         fadeEffect={{ crossFade: true }}
         modules={[EffectFade, EffectCube, EffectFlip]}
       >
@@ -136,6 +130,8 @@ function GridVideos(props) {
                 refreshMode={refreshMode}
                 refreshInterval={refreshInterval}
                 reloadPlayerComponent={reloadPlayerComponent}
+                onDrag={handleTitleDrag}
+                position={titlePosition}
               />
             )}
           </SwiperSlide>

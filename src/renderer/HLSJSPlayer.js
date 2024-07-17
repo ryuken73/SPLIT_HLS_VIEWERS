@@ -4,6 +4,7 @@ import ReactHlsPlayer from 'react-hls-player/dist';
 import usePrevious from './hooks/usePrevious';
 import {isPlayerPlaying} from './lib/sourceUtil';
 import { replace } from './lib/arrayUtil';
+import DraggableTitle from './Components/Player/DraggableTitle';
 
 const Conatiner = styled.div`
   position: relative;
@@ -51,7 +52,9 @@ function HLSJSPlayer(props) {
     refreshMode,
     refreshInterval,
     currentCCTVIndex,
-    aspectRatio
+    aspectRatio,
+    onDrag,
+    position
   } = props;
   const playerRef = React.useRef(null);
   const { url } = source;
@@ -187,6 +190,11 @@ function HLSJSPlayer(props) {
         width="100%"
         // height="100%"
         aspectRatio={aspectRatio}
+      />
+      <DraggableTitle
+        onDrag={onDrag}
+        position={position}
+        title={source.title}
       />
     </Conatiner>
   );
