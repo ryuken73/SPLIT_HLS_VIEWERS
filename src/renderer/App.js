@@ -85,8 +85,8 @@ function App() {
   const [autoPlay, setAutoPlay] = React.useState(false);
   const [autoInterval, setAutoInterval] = React.useState(INITIAL_AUTO_INTERVAL);
   const [checkedCCTVId, setCheckedCCTVId] = React.useState('');
-  const [currentCCTVIndex, setCurrentCCTVIndex] = React.useState(null);
-  const [activeIndex, setActiveIndex] = React.useState(null);
+  // const [currentCCTVIndex, setCurrentCCTVIndex] = React.useState(null);
+  const [activeIndex, setActiveIndex] = React.useState(0);
   const [refreshMode, setRefreshMode] = React.useState(INITIAL_REFRESH_MODE);
   const [refreshInterval, setRefreshInterval] = React.useState(
     INITIAL_REFRESH_INTERVAL,
@@ -99,35 +99,41 @@ function App() {
     React.useState(INITIAL_LOAD_TIME);
 
   useHotkeys('c', () => setDialogOpen(true));
-  const cctvIndexRef = React.useRef(0);
+  // const cctvIndexRef = React.useRef(0);
   const preLoadMapRef = React.useRef(new Map());
   const setLeftSmallPlayerRef = React.useRef(() => {});
   const autoplayTimer = React.useRef(null);
   const modalOpenRef = React.useRef(modalOpen);
-  const gridNumNormalized = getRealIndex(
-    currentCCTVIndex,
-    gridDimension,
-    cctvsSelectedArray,
-  );
+  // const gridNumNormalized = getRealIndex(
+  //   currentCCTVIndex,
+  //   gridDimension,
+  //   cctvsSelectedArray,
+  // );
+  const activeIndexRef = React.useRef(activeIndex);
   const cctvPlayersRef = React.useRef([]);
   const swiperRef = React.useRef(null);
 
+  // const saveLastIndex = React.useCallback((index) => {
+  //   cctvIndexRef.current = index;
+  // }, []);
+
   React.useEffect(() => {
-    swiperRef.current.on('activeIndexChange', (e) => {
-      // eslint-disable-next-line @typescript-eslint/no-shadow
-      console.log(e)
-      const { activeIndex } = e;
-      setActiveIndex(activeIndex);
+    swiperRef.current.on('realIndexChange', (e) => {
+      // console.log('real index change: ',e)
+      const { realIndex } = e;
+      setActiveIndex(realIndex);
+      activeIndexRef.current = realIndex;
     });
+  // eslint-disable-next-line no-use-before-define
   }, []);
 
   // console.log('gridNumNormalized=', gridNumNormalized, currentCCTVIndex, cctvIndexRef.current)
 
-  React.useEffect(() => {
-    if (cctvsSelectedArray.length > 0) {
-      setCurrentCCTVIndex(0);
-    }
-  }, [cctvsSelectedArray.length]);
+  // React.useEffect(() => {
+  //   if (cctvsSelectedArray.length > 0) {
+  //     setCurrentCCTVIndex(0);
+  //   }
+  // }, [cctvsSelectedArray.length]);
 
   const gridNum2CCTVIndex = React.useCallback(
     (gridNum) => {
@@ -136,18 +142,11 @@ function App() {
     [cctvsSelectedArray, gridDimension],
   );
 
-  const saveLastIndex = React.useCallback((index) => {
-    cctvIndexRef.current = index;
+  const moveToSlide = React.useCallback((index) => {
+    swiperRef.current.slideTo(index);
+    // saveLastIndex(index);
+    // setCurrentCCTVIndex(index);
   }, []);
-
-  const moveToSlide = React.useCallback(
-    (index) => {
-      swiperRef.current.slideTo(index);
-      saveLastIndex(index);
-      setCurrentCCTVIndex(index);
-    },
-    [saveLastIndex],
-  );
 
   const handlePressKeyboard = React.useCallback(
     (_, handler) => {
@@ -183,18 +182,21 @@ function App() {
     (startAutoPlay = false, autoInterval) => {
       if (startAutoPlay) {
         document.title = `CCTV[auto - every ${autoInterval}s]`;
-        const firstIndex = cctvIndexRef.current;
+        const firstIndex = activeIndex;
         moveToSlide(firstIndex);
         autoplayTimer.current = setInterval(() => {
           let nextPlayerIndex =
-            (cctvIndexRef.current + 1) % cctvPlayersRef.current.length;
+            // (activeIndex + 1) % cctvPlayersRef.current.length;
+            (activeIndexRef.current + 1) % cctvPlayersRef.current.length;
           let loopingCount = 0;
           while (true) {
             const nextPlayer = cctvPlayersRef.current[nextPlayerIndex];
+            console.log('autoPlay:', cctvPlayersRef.current, nextPlayerIndex, nextPlayer)
             // console.log('check nextPlayer', nextPlayerIndex, nextPlayer)
             if (isPlayerPlaying(nextPlayer, nextPlayerIndex)) {
               break;
             } else {
+              console.log('reload player:', nextPlayerIndex)
               reloadPlayerComponent(nextPlayerIndex);
               // eslint-disable-next-line no-plusplus
               nextPlayerIndex =
@@ -207,9 +209,10 @@ function App() {
               break;
             }
           }
-          swiperRef.current.slideNext();
-          setCurrentCCTVIndex(nextPlayerIndex);
-          cctvIndexRef.current = nextPlayerIndex;
+          // swiperRef.current.slideNext();
+          swiperRef.current.slideToLoop(nextPlayerIndex);
+          // setCurrentCCTVIndex(nextPlayerIndex);
+          // cctvIndexRef.current = nextPlayerIndex;
           // console.log('!!! nextIndex=', nextIndex, cctvPlayersRef.current[nextIndex].paused())
         }, autoInterval * 1000);
       } else {
@@ -220,7 +223,7 @@ function App() {
         clearInterval(autoplayTimer.current);
       };
     },
-    [moveToSlide, reloadPlayerComponent],
+    [activeIndex, moveToSlide, reloadPlayerComponent],
   );
 
   const toggleAutoPlay = React.useCallback(() => {
@@ -271,7 +274,7 @@ function App() {
       <TopPanel>
         <VideoStates
           cctvSelected={cctvsSelectedArray}
-          currentCCTVIndex={currentCCTVIndex}
+          currentCCTVIndex={activeIndex}
           cctvPlayersRef={cctvPlayersRef}
         />
       </TopPanel>
@@ -291,14 +294,14 @@ function App() {
               toggleAutoPlay={toggleAutoPlay}
               autoPlay={autoPlay}
               gridDimension={gridDimension}
-              currentActiveIndex={gridNumNormalized}
+              currentActiveIndex={activeIndex}
               cctvPlayersRef={cctvPlayersRef}
               cctvLastLoadedTime={cctvLastLoadedTime}
               setLastLoadedTime={setLastLoadedTime}
               refreshMode={refreshMode}
               refreshInterval={refreshInterval}
               reloadPlayerComponent={reloadPlayerComponent}
-              currentCCTVIndex={currentCCTVIndex}
+              currentCCTVIndex={activeIndex}
             />
           )}
           <ConfigDialog
