@@ -35,7 +35,6 @@ const TopPanel = styled.div`
   border: 1px solid white;
   box-sizing: border-box;
   z-index: 10;
-  color: white;
 `
 const MiddlePanel = styled.div`
   height: 100%;
@@ -55,7 +54,7 @@ const CenterArea = styled.div`
 const BottomPanel = styled.div`
   margin-top: auto;
   min-height: 20px;
-  margin-bottom: 4px;
+  /* margin-bottom: 4px; */
   color: white;
   z-index: 10;
   background: black;

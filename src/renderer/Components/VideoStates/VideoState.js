@@ -2,14 +2,15 @@ import React from 'react'
 import styled from 'styled-components';
 
 const Container = styled.div`
-  height: 50px;
+  /* height: 50px; */
   background: ${(props) => (props.isActive ? 'red' : 'black')};
   color: ${(props) => (props.isActive ? 'yellow' : 'white')};
   font-weight: bold;
   line-height: 44px;
   text-align: center;
   border-radius: 10px;
-  min-width: 150px;
+  min-width: 100px;
+  max-width: 200px;
   border: ${props => props.isActive ? '2px solid yellow' : '2px solid white'};
   box-sizing: border-box;
   cursor: pointer;
@@ -18,6 +19,20 @@ const Container = styled.div`
 const Title = styled.div`
   padding-left: 10px;
   padding-right: 10px;
+  color: white;
+  font-size: clamp(1rem, 2vw, 1.5rem);
+  /* font-size: 2vw; */
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+`
+const SubTitle = styled.div`
+  color: yellow;
+  font-size: 0.6rem;
+  line-height: 0.6rem;
+  margin-bottom: 5px;
+  margin-left: 5px;
+  margin-right: 5px;
 `
 
 function VideoState(props) {
@@ -31,6 +46,7 @@ function VideoState(props) {
   return (
     <Container isActive={isActive} onClick={onClick}>
       <Title>{cctv.title}</Title>
+      <SubTitle> # of Resets [0]</SubTitle>
     </Container>
   )
 
