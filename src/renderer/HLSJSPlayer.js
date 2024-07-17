@@ -14,24 +14,6 @@ const Conatiner = styled.div`
   /* border: 5px solid black; */
   /* box-sizing: border-box; */
 `;
-const NumDisplay = styled.div`
-  display: ${props => !props.show && 'none'};
-  position: absolute;
-  top: ${props => (props.position === 'topLeft' || props.position === 'topRight') && '10px'};
-  bottom: ${props => (props.position === 'bottomLeft' || props.position === 'bottomRight') && '10px'};
-  left: ${props => (props.position === 'topLeft' || props.position === 'bottomLeft') && '10px'};
-  right: ${props => (props.position === 'topRight' || props.position === 'bottomRight') && '10px'};
-  /* background: ${props => props.isActive ? 'darkblue' : 'black'}; */
-  background: black;
-  /* width: 80px; */
-  backdrop-filter: blur(10px);
-  border-radius: 5px;
-  padding: 8px;
-  z-index: 1000;
-  /* line-height:3em;  */
-  vertical-align:top;
-  font-size: 15px;
-`
 const CustomPlayer = styled(ReactHlsPlayer)`
   width: 100%;
   height: 100%;
@@ -51,8 +33,8 @@ const hlsConfig = {
 
 const CHECK_INTERNAL_SEC = 2;
 
-const getRandomCountdown = refreshInterval => {
-    return Math.ceil(refreshInterval + Math.random() * 20);
+const getRandomCountdown = (refreshInterval) => {
+  return Math.ceil(refreshInterval + Math.random() * 20);
 };
 
 function HLSJSPlayer(props) {
@@ -72,7 +54,7 @@ function HLSJSPlayer(props) {
     aspectRatio
   } = props;
   const playerRef = React.useRef(null);
-  const {url} = source
+  const { url } = source;
 
   const prevRefreshInterval = usePrevious(refreshInterval);
   const isRefreshIntervalChanged = prevRefreshInterval !== refreshInterval;
@@ -85,12 +67,12 @@ function HLSJSPlayer(props) {
   const isActive = !autoRefresh ? true : cctvIndex === currentCCTVIndex;
 
 
-  console.log('re-render player:', cctvIndex, source.title);
+  // console.log('re-render player:', cctvIndex, source.title);
 
   const onLoadDataHandler = React.useCallback((event) => {
     // console.log('^^^',event)
     event.target.play();
-  }, [])
+  }, []);
 
   React.useEffect(() => {
     console.log('HLSJS Player mount')
@@ -114,38 +96,42 @@ function HLSJSPlayer(props) {
     return () => {
       // eslint-disable-next-line react-hooks/exhaustive-deps
       if(playerRef.current === null) return;
-      playerRef.current.removeEventListener('loadedmetadata', onLoadDataHandler);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      playerRef.current.removeEventListener(
+        'loadedmetadata',
+        onLoadDataHandler,
+      );
     }
   }, [cctvIndex, onLoadDataHandler, setPlayer])
 
-  React.useEffect(() => {
-    if (refreshMode !== 'auto') {
-      return;
-    }
-    if (isRefreshIntervalChanged) {
-      setCurrentCountDown(getRandomCountdown(refreshInterval))
-    }
-    const timer = setInterval(() => {
-      if(player === null) {
-        clearInterval(timer);
-        return;
-      }
-      // console.log('current time=', cctvIndex, player);
-      setCurrentCountDown(currentCountDown => {
-        return currentCountDown - CHECK_INTERNAL_SEC;
-      })
-    }, CHECK_INTERNAL_SEC * 1000);
-    // eslint-disable-next-line consistent-return
-    return () => {
-      clearInterval(timer);
-    };
-  }, [
-    cctvIndex,
-    player,
-    refreshMode,
-    isRefreshIntervalChanged,
-    refreshInterval,
-  ]);
+  // React.useEffect(() => {
+  //   if (refreshMode !== 'auto') {
+  //     return;
+  //   }
+  //   if (isRefreshIntervalChanged) {
+  //     setCurrentCountDown(getRandomCountdown(refreshInterval))
+  //   }
+  //   const timer = setInterval(() => {
+  //     if(player === null) {
+  //       clearInterval(timer);
+  //       return;
+  //     }
+  //     // console.log('current time=', cctvIndex, player);
+  //     setCurrentCountDown(currentCountDown => {
+  //       return currentCountDown - CHECK_INTERNAL_SEC;
+  //     })
+  //   }, CHECK_INTERNAL_SEC * 1000);
+  //   // eslint-disable-next-line consistent-return
+  //   return () => {
+  //     clearInterval(timer);
+  //   };
+  // }, [
+  //   cctvIndex,
+  //   player,
+  //   refreshMode,
+  //   isRefreshIntervalChanged,
+  //   refreshInterval,
+  // ]);
 
   const reloadPlayer = React.useCallback(() => {
     // eslint-disable-next-line @typescript-eslint/no-shadow
@@ -162,62 +148,48 @@ function HLSJSPlayer(props) {
 
   React.useEffect(() => {
     // console.log('reload while get next player: ', lastLoaded, cctvIndex);
-    setReloadTrigger(reloadTrigger => {
+    // eslint-disable-next-line @typescript-eslint/no-shadow
+    setReloadTrigger((reloadTrigger) => {
       return !reloadTrigger;
     })
   }, [cctvIndex, lastLoaded])
 
-  if(autoRefresh) {
-    const countdown = Math.ceil(currentCountDown);
-    // console.log('####', countdown)
-    if(countdown <= 0){
-      if(isActive){
-          //if active bypass reload
-          setCurrentCountDown(RELOAD_COUNTDOWN);
-          return;
-      }
-      setCurrentCountDown(RELOAD_COUNTDOWN);
-      reloadPlayer();
-    }
-  }
-  // const paused = !isPlayerPlaying(playerRef.current, cctvIndex, 'apply paused style');
-  const lastLoadedString = (new Date(lastLoaded)).toLocaleString();
-  const secondsFromLastLoaded = ((Date.now() - (new Date(lastLoaded)).getTime()) / 1000).toFixed(0);
-  const numDisplayContent = refreshMode === 'auto' ? currentCountDown : lastLoadedString;
+  // if(autoRefresh) {
+  //   const countdown = Math.ceil(currentCountDown);
+  //   // console.log('####', countdown)
+  //   if(countdown <= 0){
+  //     if(isActive){
+  //         //if active bypass reload
+  //         setCurrentCountDown(RELOAD_COUNTDOWN);
+  //         return;
+  //     }
+  //     setCurrentCountDown(RELOAD_COUNTDOWN);
+  //     reloadPlayer();
+  //   }
+  // }
+  const paused = !isPlayerPlaying(playerRef.current, cctvIndex);
+
+  // const lastLoadedString = (new Date(lastLoaded)).toLocaleString();
+  // const secondsFromLastLoaded = ((Date.now() - (new Date(lastLoaded)).getTime()) / 1000).toFixed(0);
+  // const numDisplayContent = refreshMode === 'auto' ? currentCountDown : lastLoadedString;
   // const numDisplayContent = refreshMode === 'auto' ? currentCountDown : `refreshed ${secondsFromLastLoaded}s ago`;
 
-
+  // eslint-disable-next-line consistent-return
   return (
     <Conatiner>
-      <NumDisplay onClick={reloadPlayer} isActive={isActive} show={autoRefresh} position={'topLeft'}>
-        <div>
-          {numDisplayContent}
-        </div>
-        <div style={{color: 'yellow'}}>
-          {source.title}
-        </div>
-      </NumDisplay>
-      <NumDisplay isActive={isActive} show={autoRefresh} position={'topRight'}>
-        <div>
-          {numDisplayContent}
-        </div>
-        <div style={{color: 'yellow'}}>
-          {source.title}
-        </div>
-      </NumDisplay>
       <CustomPlayer
         src={url}
         autoPlay={reloadTrigger}
-        controls={true}
+        controls
         playerRef={playerRef}
         hlsConfig={hlsConfig}
-        muted={true}
+        muted
         width="100%"
         // height="100%"
         aspectRatio={aspectRatio}
-      ></CustomPlayer>
+      />
     </Conatiner>
-  )
+  );
 }
 
 export default React.memo(HLSJSPlayer);
