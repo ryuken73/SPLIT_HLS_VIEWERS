@@ -2,6 +2,7 @@
 import React from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { EffectFade, EffectFlip, EffectCube } from 'swiper/modules';
+import { remove } from './lib/arrayUtil';
 import {
   AbsolutePositionBox,
   TransparentPaper,
@@ -64,6 +65,15 @@ function GridVideos(props) {
     [cctvPlayersRef],
   );
 
+  const delCCTVPlayerRef = React.useCallback((cctvIndex) => {
+      console.log('delCCTVPlayer before:', cctvPlayersRef.current)
+      const removed = remove(cctvPlayersRef.current).fromIndex(cctvIndex);
+      cctvPlayersRef.current = removed;
+      console.log('delCCTVPlayer after:', cctvPlayersRef.current)
+    },
+    [cctvPlayersRef],
+  );
+
   const handleTitleDrag = React.useCallback((event, draggableData) => {
     console.log(draggableData);
     setTitlePosition({
@@ -89,7 +99,7 @@ function GridVideos(props) {
         fadeEffect={{ crossFade: true }}
         modules={[EffectFade, EffectCube, EffectFlip]}
       >
-        <SwiperControl swiperRef={swiperRef} />
+        <SwiperControl cctvsSelected={cctvsSelected} swiperRef={swiperRef} />
         {cctvsSelected.map((cctv, cctvIndex) => (
           <SwiperSlide key={cctv.cctvId}>
             {mp4RegExp.test(cctv.url) ? (
@@ -118,6 +128,7 @@ function GridVideos(props) {
                 fill
                 source={cctv}
                 setPlayer={setCCTVPlayerRef}
+                delPlayer={delCCTVPlayerRef}
                 enableOverlay={enableOverlayGlobal}
                 overlayBig
                 overlayContent={cctv.title}
