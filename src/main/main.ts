@@ -36,6 +36,10 @@ ipcMain.on('getMemoryInfo', async (event) => {
   event.reply('getMemoryInfoResult', memInfo);
 });
 
+ipcMain.on('reload', async (event) => {
+  mainWindow?.reload()
+});
+
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');
   sourceMapSupport.install();

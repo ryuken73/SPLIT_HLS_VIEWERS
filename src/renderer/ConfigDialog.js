@@ -84,7 +84,8 @@ const ConfigDialog = props => {
     // console.log('re-render filter :', columnItems, preload)
 
     const onCloseFilterDialog = () => {
-        setDialogOpen(false);
+      setDialogOpen(false);
+      window.electron.ipcRenderer.sendMessage('reload');
     }
 
     const onDragEnd = React.useCallback(result => {

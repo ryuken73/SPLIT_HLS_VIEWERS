@@ -269,6 +269,10 @@ function App() {
     [saveOptions, savedOptions],
   );
 
+  const reloadApp = React.useCallback(() => {
+    window.electron.ipcRenderer.sendMessage('reload');
+  }, []);
+
   return (
     <Container>
       <TopPanel>
@@ -277,6 +281,7 @@ function App() {
           currentCCTVIndex={activeIndex}
           cctvPlayersRef={cctvPlayersRef}
         />
+        <button onClick={reloadApp}>reload</button>
       </TopPanel>
       <MiddlePanel>
         <CenterArea>
