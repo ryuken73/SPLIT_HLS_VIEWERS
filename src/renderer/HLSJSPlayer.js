@@ -167,7 +167,7 @@ function HLSJSPlayer(props) {
   //     reloadPlayer();
   //   }
   // }
-  const paused = !isPlayerPlaying(playerRef.current, cctvIndex);
+  // const paused = !isPlayerPlaying(playerRef.current, cctvIndex);
 
   // const lastLoadedString = (new Date(lastLoaded)).toLocaleString();
   // const secondsFromLastLoaded = ((Date.now() - (new Date(lastLoaded)).getTime()) / 1000).toFixed(0);

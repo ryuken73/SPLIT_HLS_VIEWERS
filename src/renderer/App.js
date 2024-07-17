@@ -209,17 +209,20 @@ function App() {
         const firstIndex = cctvIndexRef.current;
         moveToSlide(firstIndex);
         autoplayTimer.current = setInterval(() => {
-          let nextPlayerIndex = (cctvIndexRef.current + 1) % (cctvPlayersRef.current.length);
+          let nextPlayerIndex =
+            (cctvIndexRef.current + 1) % cctvPlayersRef.current.length;
           // const nextIndex = getNonPausedPlayerIndex(nextPlayerIndex, cctvPlayersRef, reloadPlayerComponent);
           let loopingCount = 0;
           while (true) {
             const nextPlayer = cctvPlayersRef.current[nextPlayerIndex];
+            // console.log('check nextPlayer', nextPlayerIndex, nextPlayer)
             if (isPlayerPlaying(nextPlayer, nextPlayerIndex)) {
               break;
             } else {
               reloadPlayerComponent(nextPlayerIndex);
               // eslint-disable-next-line no-plusplus
-              nextPlayerIndex++;
+              nextPlayerIndex =
+                (nextPlayerIndex + 1) % cctvPlayersRef.current.length;
               // setCCTVsSelectedAray((cctvsSelected) => {
               //   const lastIndex = cctvsSelected.length - 1;
               //   const newArray = moveTo(cctvsSelected)
