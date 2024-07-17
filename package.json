@@ -107,6 +107,7 @@
     "react": "^18.2.0",
     "react-beautiful-dnd": "^13.1.1",
     "react-dom": "^18.2.0",
+    "react-draggable": "^4.4.6",
     "react-hls-player": "^3.0.7",
     "react-hotkey-hook": "^1.0.3",
     "react-hotkeys-hook": "^4.5.0",
