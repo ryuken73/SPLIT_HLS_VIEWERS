@@ -7,19 +7,14 @@ import GridVideos from './GridVideos';
 import useLocalStorage from './hooks/useLocalStorage';
 import MessagePanel from './MessagePanel';
 import VideoStates from './Components/VideoStates';
-import {
-  getRealIndex,
-  getNonPausedPlayerIndex,
-  isPlayerPlaying
-} from './lib/sourceUtil';
-import { moveTo, replace } from './lib/arrayUtil';
-import "swiper/css";
-import MP4Player from './MP4Player';
+import { getRealIndex, isPlayerPlaying } from './lib/sourceUtil';
+import { replace } from './lib/arrayUtil';
+import 'swiper/css';
 
 const KEY_OPTIONS = 'hlsCCTVOptions';
 const KEY_SELECT_SAVED = 'selectedSavedCCTVs';
 const KEY_NOT_SELECT_SAVED = 'notSelectedSavedCCTVs';
-const INITIAL_LOAD_TIME = (new Array(9)).fill(Date.now());
+const INITIAL_LOAD_TIME = new Array(9).fill(Date.now());
 
 const Container = styled.div`
   background-color: #282c34;
@@ -35,13 +30,13 @@ const TopPanel = styled.div`
   border: 1px solid white;
   box-sizing: border-box;
   z-index: 10;
-`
+`;
 const MiddlePanel = styled.div`
   height: 100%;
   position: relative;
   border-left: 1px solid white;
   border-right: 1px solid white;
-`
+`;
 const CenterArea = styled.div`
   position: absolute;
   top: 50%;
@@ -50,7 +45,7 @@ const CenterArea = styled.div`
   transform: translate(5%, -50%);
   border: 5px solid white;
   box-sizing: border-box;
-`
+`;
 const BottomPanel = styled.div`
   margin-top: auto;
   min-height: 20px;
@@ -58,38 +53,60 @@ const BottomPanel = styled.div`
   color: white;
   z-index: 10;
   background: black;
-`
+`;
 
 function App() {
-  const [savedOptions, saveOptions] = useLocalStorage(KEY_OPTIONS,{});
-  const [selectedSaved, saveSelectedCCTVs] = useLocalStorage(KEY_SELECT_SAVED,[]);
-  const [notSelectedSaved, saveNotSelectedCCTVs] = useLocalStorage(KEY_NOT_SELECT_SAVED,[]);
-  const INITIAL_GRID_DIMENSION = savedOptions.gridDimension === undefined ? 2 : savedOptions.gridDimension;
-  const INITIAL_AUTO_INTERVAL = savedOptions.autoInterval === undefined ? 10 : savedOptions.autoInterval;
-  const INITIAL_REFRESH_MODE = savedOptions.refreshMode === undefined ? 'auto' : savedOptions.refreshMode;
-  const INITIAL_REFRESH_INTERVAL = savedOptions.refreshInterval === undefined ? 1 : savedOptions.refreshInterval
+  const [savedOptions, saveOptions] = useLocalStorage(KEY_OPTIONS, {});
+  const [selectedSaved, saveSelectedCCTVs] = useLocalStorage(
+    KEY_SELECT_SAVED,
+    [],
+  );
+  const [notSelectedSaved, saveNotSelectedCCTVs] = useLocalStorage(
+    KEY_NOT_SELECT_SAVED,
+    [],
+  );
+  const INITIAL_GRID_DIMENSION =
+    savedOptions.gridDimension === undefined ? 2 : savedOptions.gridDimension;
+  const INITIAL_AUTO_INTERVAL =
+    savedOptions.autoInterval === undefined ? 10 : savedOptions.autoInterval;
+  const INITIAL_REFRESH_MODE =
+    savedOptions.refreshMode === undefined ? 'auto' : savedOptions.refreshMode;
+  const INITIAL_REFRESH_INTERVAL =
+    savedOptions.refreshInterval === undefined
+      ? 1
+      : savedOptions.refreshInterval;
 
   const [dialogOpen, setDialogOpen] = React.useState(false);
   const [modalOpen, setModalOpen] = React.useState(true);
-  const [modalPlayers, setModalPlayers] = React.useState([null, null])
-  const [gridDimension, setGridDimension] = React.useState(INITIAL_GRID_DIMENSION);
+  const [gridDimension, setGridDimension] = React.useState(
+    INITIAL_GRID_DIMENSION,
+  );
   const [autoPlay, setAutoPlay] = React.useState(false);
   const [autoInterval, setAutoInterval] = React.useState(INITIAL_AUTO_INTERVAL);
-  const [cctvsNotSelectedArray, setCCTVsNotSelectedArray] = React.useState(notSelectedSaved);
-  const [cctvsSelectedArray, setCCTVsSelectedAray] = React.useState(selectedSaved);
+  const [cctvsNotSelectedArray, setCCTVsNotSelectedArray] =
+    React.useState(notSelectedSaved);
+  const [cctvsSelectedArray, setCCTVsSelectedAray] =
+    React.useState(selectedSaved);
   const [checkedCCTVId, setCheckedCCTVId] = React.useState('');
   const [currentCCTVIndex, setCurrentCCTVIndex] = React.useState(null);
-  const [cctvLastLoadedTime, setLastLoadedTime] = React.useState(INITIAL_LOAD_TIME);
+  const [cctvLastLoadedTime, setLastLoadedTime] =
+    React.useState(INITIAL_LOAD_TIME);
   const [refreshMode, setRefreshMode] = React.useState(INITIAL_REFRESH_MODE);
-  const [refreshInterval, setRefreshInterval] = React.useState(INITIAL_REFRESH_INTERVAL);
+  const [refreshInterval, setRefreshInterval] = React.useState(
+    INITIAL_REFRESH_INTERVAL,
+  );
 
   useHotkeys('c', () => setDialogOpen(true));
   const cctvIndexRef = React.useRef(0);
   const preLoadMapRef = React.useRef(new Map());
-  const setLeftSmallPlayerRef = React.useRef(()=>{});
+  const setLeftSmallPlayerRef = React.useRef(() => {});
   const autoplayTimer = React.useRef(null);
   const modalOpenRef = React.useRef(modalOpen);
-  const gridNumNormalized = getRealIndex(currentCCTVIndex, gridDimension, cctvsSelectedArray)
+  const gridNumNormalized = getRealIndex(
+    currentCCTVIndex,
+    gridDimension,
+    cctvsSelectedArray,
+  );
   const cctvPlayersRef = React.useRef([]);
   const swiperRef = React.useRef(null);
 
@@ -101,41 +118,20 @@ function App() {
     }
   }, [cctvsSelectedArray.length]);
 
-  const getSourceElement = React.useCallback((cctvIndex) => {
-    // const realIndex = getRealIndex(cctvIndex, gridDimension, cctvsSelectedArray)
-    // console.log(cctvIndex)
-    const cctv = cctvsSelectedArray[cctvIndex];
-    const cctvId = cctv.cctvId;
-    const preloadMap = preLoadMapRef.current;
-    const preloadElement = preloadMap.get(cctvId.toString());
-    return [cctv, preloadElement];
-  }, [cctvsSelectedArray])
-
-  const gridNum2CCTVIndex = React.useCallback((gridNum) => {
+  const gridNum2CCTVIndex = React.useCallback(
+    (gridNum) => {
       return getRealIndex(gridNum, gridDimension, cctvsSelectedArray);
     },
     [cctvsSelectedArray, gridDimension],
   );
-
-  const maximizeGrid = React.useCallback((cctvIndex) => {
-    // console.log('1s. start maximizeGrid')
-
-    const [cctv, preloadElement] = getSourceElement(cctvIndex);
-    setCurrentCCTVIndex(cctvIndex);
-    cctvIndexRef.current = cctvIndex;
-    // console.log('1e. start-end maximizeGrid')
-    return true;
-    },
-    [getSourceElement],
-  );
-
 
   // useAutoPlay({autoPlay, autoInterval, maximizeGrid, cctvIndexRef});
   const saveLastIndex = React.useCallback((index) => {
     cctvIndexRef.current = index;
   }, []);
 
-  const moveToSlide = React.useCallback((index) => {
+  const moveToSlide = React.useCallback(
+    (index) => {
       swiperRef.current.slideTo(index);
       saveLastIndex(index);
       setCurrentCCTVIndex(index);
@@ -143,7 +139,8 @@ function App() {
     [saveLastIndex],
   );
 
-  const handlePressKeyboard = React.useCallback((_, handler) => {
+  const handlePressKeyboard = React.useCallback(
+    (_, handler) => {
       const pressed = parseInt(handler.keys[0], 10);
       const targetIndex = gridNum2CCTVIndex(pressed - 1);
       moveToSlide(targetIndex);
@@ -160,45 +157,15 @@ function App() {
   useHotkeys('8', handlePressKeyboard);
   useHotkeys('9', handlePressKeyboard);
 
-  const reloadPlayerComponent = React.useCallback((cctvIndex) => {
-    // console.log('getNon: reload Player:', cctvIndex)
-    setLastLoadedTime(lastLoadedTime => {
-      const now = Date.now();
-      return replace(lastLoadedTime).index(cctvIndex).value(now);
-    })
-  }, [setLastLoadedTime])
-
-  const safeSlide = React.useCallback((targetIndex) => {
-    const {gridNum, cctvIndex} = targetIndex;
-    const targetCCTVIndex = cctvIndex === undefined ? gridNum2CCTVIndex(gridNum) : cctvIndex;
-    const modalOpen = modalOpenRef.current;
-    if(swiperRef.current === null){
-      return;
-    }
-    if(swiperRef.current.animating){
-      return;
-    }
-    const ret = maximizeGrid(targetCCTVIndex);
-    console.log(ret)
-    if(!ret) return false;
-    if(modalOpen){
-      // console.log('start slide next!')
-      // setTimeout(() => {
-        // swiperRef.current.slideNext();
-        swiperRef.current.slideToLoop(targetCCTVIndex);
-        // swiperRef.current.slideTo(targetCCTVIndex);
-      // },200)
-    } else {
-      // console.log('start slide to 0')
-      // swiper.slideTo(0);
-      swiperRef.current.slideToLoop(0);
-      // setModalOpen(true);
-      // modalOpenRef.current = true;
-    }
-    // console.log('!!!!current modalOpen = ', modalOpen, swiperRef.current.activeIndex, swiperRef.current.realIndex)
-    return true;
+  const reloadPlayerComponent = React.useCallback(
+    (cctvIndex) => {
+      // console.log('getNon: reload Player:', cctvIndex)
+      setLastLoadedTime((lastLoadedTime) => {
+        const now = Date.now();
+        return replace(lastLoadedTime).index(cctvIndex).value(now);
+      });
     },
-    [gridNum2CCTVIndex, maximizeGrid, swiperRef],
+    [setLastLoadedTime],
   );
 
   const runAutoPlay = React.useCallback(
@@ -211,7 +178,6 @@ function App() {
         autoplayTimer.current = setInterval(() => {
           let nextPlayerIndex =
             (cctvIndexRef.current + 1) % cctvPlayersRef.current.length;
-          // const nextIndex = getNonPausedPlayerIndex(nextPlayerIndex, cctvPlayersRef, reloadPlayerComponent);
           let loopingCount = 0;
           while (true) {
             const nextPlayer = cctvPlayersRef.current[nextPlayerIndex];
@@ -223,65 +189,29 @@ function App() {
               // eslint-disable-next-line no-plusplus
               nextPlayerIndex =
                 (nextPlayerIndex + 1) % cctvPlayersRef.current.length;
-              // setCCTVsSelectedAray((cctvsSelected) => {
-              //   const lastIndex = cctvsSelected.length - 1;
-              //   const newArray = moveTo(cctvsSelected)
-              //     .fromIndex(nextPlayerIndex)
-              //     .toIndex(lastIndex);
-              //     console.log(newArray);
-              //   return newArray;
-              // });
             }
             // eslint-disable-next-line no-plusplus
-            loopingCount ++;
+            loopingCount++;
             if (loopingCount > 10) {
-              console.error('max loop count exceed! just slideNext()')
+              console.error('max loop count exceed! just slideNext()');
               break;
             }
           }
           swiperRef.current.slideNext();
-          // swiperRef.current.slideTo(nextPlayerIndex);
-          // swiperRef.current.slideToLoop(nextPlayerIndex);
           setCurrentCCTVIndex(nextPlayerIndex);
           cctvIndexRef.current = nextPlayerIndex;
           // console.log('!!! nextIndex=', nextIndex, cctvPlayersRef.current[nextIndex].paused())
-          // const ret = safeSlide({gridNum: nextIndex});
-          // swiper.slideNext();
         }, autoInterval * 1000);
-    } else {
-      document.title = 'CCTV';
+      } else {
+        document.title = 'CCTV';
         clearInterval(autoplayTimer.current);
-    }
-    return () => {
-      clearInterval(autoplayTimer.current);
-    }
+      }
+      return () => {
+        clearInterval(autoplayTimer.current);
+      };
     },
     [moveToSlide, reloadPlayerComponent],
   );
-
-  // const runAutoPlay = React.useCallback(
-  //   // eslint-disable-next-line default-param-last, @typescript-eslint/no-shadow
-  //   (startAutoPlay = false, autoInterval) => {
-  //     if (startAutoPlay) {
-  //       document.title = `CCTV[auto - every ${autoInterval}s]`;
-  //       const firstIndex = cctvIndexRef.current;
-  //       moveToSlide(firstIndex);
-  //       autoplayTimer.current = setInterval(() => {
-  //         const nextPlayerIndex = (cctvIndexRef.current + 1) % (cctvPlayersRef.current.length);
-  //         const nextIndex = getNonPausedPlayerIndex(nextPlayerIndex, cctvPlayersRef, reloadPlayerComponent);
-  //         // console.log('!!! nextIndex=', nextIndex, cctvPlayersRef.current[nextIndex].paused())
-  //         const ret = safeSlide({gridNum: nextIndex});
-  //         // maximizeGrid(nextIndex);
-  //         // swiper.slideNext();
-  //       },autoInterval*1000)
-  //   } else {
-  //     document.title="CCTV"
-  //     clearInterval(autoplayTimer.current);
-  //   }
-  //   return () => {
-  //     clearInterval(autoplayTimer.current);
-  //   }
-  // }, [safeSlide, reloadPlayerComponent, cctvIndexRef])
 
   const toggleAutoPlay = React.useCallback(() => {
     // eslint-disable-next-line @typescript-eslint/no-shadow
@@ -292,32 +222,39 @@ function App() {
         runAutoPlay(true, autoInterval);
       }
       return !autoPlay;
-    })
+    });
   }, [autoInterval, runAutoPlay]);
 
-  const setCCTVsSelectedArrayNSave = React.useCallback((cctvsArray) =>{
-    setCCTVsSelectedAray(cctvsArray);
-    saveSelectedCCTVs(cctvsArray);
-  },[saveSelectedCCTVs])
+  const setCCTVsSelectedArrayNSave = React.useCallback(
+    (cctvsArray) => {
+      setCCTVsSelectedAray(cctvsArray);
+      saveSelectedCCTVs(cctvsArray);
+    },
+    [saveSelectedCCTVs],
+  );
 
-  const setCCTVsNotSelectedArrayNSave = React.useCallback((cctvsArray) => {
-    setCCTVsNotSelectedArray(cctvsArray);
-    saveNotSelectedCCTVs(cctvsArray);
+  const setCCTVsNotSelectedArrayNSave = React.useCallback(
+    (cctvsArray) => {
+      setCCTVsNotSelectedArray(cctvsArray);
+      saveNotSelectedCCTVs(cctvsArray);
     },
     [saveNotSelectedCCTVs],
   );
 
-  const setOptionsNSave = React.useCallback((key, value) => {
-    key === 'gridDimension' && setGridDimension(value);
-    key === 'autoInterval' && setAutoInterval(value);
-    key === 'refreshMode' && setRefreshMode(value);
-    key === 'refreshInterval' && setRefreshInterval(value);
-    const options = {
-      ...savedOptions,
-      [key]: value
-    }
-    saveOptions(options)
-  },[saveOptions, savedOptions])
+  const setOptionsNSave = React.useCallback(
+    (key, value) => {
+      key === 'gridDimension' && setGridDimension(value);
+      key === 'autoInterval' && setAutoInterval(value);
+      key === 'refreshMode' && setRefreshMode(value);
+      key === 'refreshInterval' && setRefreshInterval(value);
+      const options = {
+        ...savedOptions,
+        [key]: value,
+      };
+      saveOptions(options);
+    },
+    [saveOptions, savedOptions],
+  );
 
   return (
     <Container>
@@ -371,12 +308,12 @@ function App() {
             refreshMode={refreshMode}
             setRefreshInterval={setRefreshInterval}
             refreshInterval={refreshInterval}
-           />
-          </CenterArea>
-        </MiddlePanel>
-        <BottomPanel>
-          <MessagePanel />
-        </BottomPanel>
+          />
+        </CenterArea>
+      </MiddlePanel>
+      <BottomPanel>
+        <MessagePanel />
+      </BottomPanel>
     </Container>
   );
 }
