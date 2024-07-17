@@ -8,7 +8,7 @@ const electronHandler = {
   ipcRenderer: {
     sendMessage(channel: Channels, ...args: unknown[]) {
       ipcRenderer.send(channel, ...args);
-      console.log(webFrame.getResourceUsage());
+      // console.log(webFrame.getResourceUsage());
     },
     on(channel: Channels, func: (...args: unknown[]) => void) {
       const subscription = (_event: IpcRendererEvent, ...args: unknown[]) =>

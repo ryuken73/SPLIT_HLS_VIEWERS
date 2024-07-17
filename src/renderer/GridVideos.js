@@ -81,12 +81,12 @@ function GridVideos(props) {
 
   return (
     <Container>
-      {cctvsSelected.map((cctv, index) => (
-        <button id={index} onClick={onClick}>{index}</button>
+      {/* {cctvsSelected.map((cctv, index) => (
+        <button key={cctv.cctvId} id={index} onClick={onClick}>{index}</button>
       ))}
       {cctvsSelected.map((cctv, index) => (
-        <button id={index} onClick={onClick1}>{index}</button>
-      ))}
+        <button key={cctv.cctvId} id={index} onClick={onClick1}>{index}</button>
+      ))} */}
       <Swiper
         loop
         speed={1500}
@@ -100,6 +100,7 @@ function GridVideos(props) {
           <SwiperSlide key={cctv.cctvId}>
             {mp4RegExp.test(cctv.url) ? (
               <MP4Player
+                key={cctv.cctvId}
                 source={cctv}
                 cctvIndex={cctvIndex}
                 currentIndexRef={currentIndexRef}
@@ -113,10 +114,9 @@ function GridVideos(props) {
               />
             ) : (
               <HLSJSPlayer
+                key={cctv.cctvId}
                 autoPlay={autoPlay}
                 player={cctvPlayersRef.current[cctvIndex]}
-                // width={350}
-                // height={200}
                 width="100%"
                 height="auto"
                 fluid={false}

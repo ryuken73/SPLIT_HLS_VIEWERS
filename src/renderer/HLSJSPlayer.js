@@ -85,13 +85,15 @@ function HLSJSPlayer(props) {
   const isActive = !autoRefresh ? true : cctvIndex === currentCCTVIndex;
 
 
+  console.log('re-render player:', cctvIndex, source.title);
+
   const onLoadDataHandler = React.useCallback((event) => {
     // console.log('^^^',event)
     event.target.play();
   }, [])
 
   React.useEffect(() => {
-    // console.log('HLSJS Player mount')
+    console.log('HLSJS Player mount')
     return () => console.log('HLSJS Player umount')
   }, [])
 
@@ -117,10 +119,10 @@ function HLSJSPlayer(props) {
   }, [cctvIndex, onLoadDataHandler, setPlayer])
 
   React.useEffect(() => {
-    if(refreshMode !== 'auto'){
+    if (refreshMode !== 'auto') {
       return;
     }
-    if(isRefreshIntervalChanged){
+    if (isRefreshIntervalChanged) {
       setCurrentCountDown(getRandomCountdown(refreshInterval))
     }
     const timer = setInterval(() => {
@@ -130,25 +132,33 @@ function HLSJSPlayer(props) {
       }
       // console.log('current time=', cctvIndex, player);
       setCurrentCountDown(currentCountDown => {
-          return currentCountDown - CHECK_INTERNAL_SEC;
+        return currentCountDown - CHECK_INTERNAL_SEC;
       })
-    }, CHECK_INTERNAL_SEC * 1000)
+    }, CHECK_INTERNAL_SEC * 1000);
+    // eslint-disable-next-line consistent-return
     return () => {
       clearInterval(timer);
-    }
-  }, [cctvIndex, player, refreshMode, isRefreshIntervalChanged, refreshInterval])
+    };
+  }, [
+    cctvIndex,
+    player,
+    refreshMode,
+    isRefreshIntervalChanged,
+    refreshInterval,
+  ]);
 
   const reloadPlayer = React.useCallback(() => {
-    setReloadTrigger(reloadTrigger => {
+    // eslint-disable-next-line @typescript-eslint/no-shadow
+    setReloadTrigger((reloadTrigger) => {
       // console.log('force reload Player:', cctvIndex)
 
-      setLastLoadedTime(lastLoadedTime => {
+      setLastLoadedTime((lastLoadedTime) => {
         const now = Date.now();
         return replace(lastLoadedTime).index(cctvIndex).value(now);
       })
       return !reloadTrigger;
     })
-  }, [cctvIndex, setLastLoadedTime])
+  }, [cctvIndex, setLastLoadedTime]);
 
   React.useEffect(() => {
     // console.log('reload while get next player: ', lastLoaded, cctvIndex);
@@ -170,7 +180,7 @@ function HLSJSPlayer(props) {
       reloadPlayer();
     }
   }
-  const paused = !isPlayerPlaying(playerRef.current, cctvIndex, 'apply paused style');
+  // const paused = !isPlayerPlaying(playerRef.current, cctvIndex, 'apply paused style');
   const lastLoadedString = (new Date(lastLoaded)).toLocaleString();
   const secondsFromLastLoaded = ((Date.now() - (new Date(lastLoaded)).getTime()) / 1000).toFixed(0);
   const numDisplayContent = refreshMode === 'auto' ? currentCountDown : lastLoadedString;
@@ -195,12 +205,10 @@ function HLSJSPlayer(props) {
           {source.title}
         </div>
       </NumDisplay>
-      <NumDisplay isActive={isActive} show={autoRefresh} position={'bottomLeft'}>{numDisplayContent}</NumDisplay>
-      <NumDisplay isActive={isActive} show={autoRefresh} position={'bottomRight'}>{numDisplayContent}</NumDisplay>
       <CustomPlayer
         src={url}
         autoPlay={reloadTrigger}
-        controls={false}
+        controls={true}
         playerRef={playerRef}
         hlsConfig={hlsConfig}
         muted={true}
