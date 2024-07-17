@@ -86,6 +86,7 @@ function App() {
   const [autoInterval, setAutoInterval] = React.useState(INITIAL_AUTO_INTERVAL);
   const [checkedCCTVId, setCheckedCCTVId] = React.useState('');
   const [currentCCTVIndex, setCurrentCCTVIndex] = React.useState(null);
+  const [activeIndex, setActiveIndex] = React.useState(null);
   const [refreshMode, setRefreshMode] = React.useState(INITIAL_REFRESH_MODE);
   const [refreshInterval, setRefreshInterval] = React.useState(
     INITIAL_REFRESH_INTERVAL,
@@ -110,6 +111,15 @@ function App() {
   );
   const cctvPlayersRef = React.useRef([]);
   const swiperRef = React.useRef(null);
+
+  React.useEffect(() => {
+    swiperRef.current.on('activeIndexChange', (e) => {
+      // eslint-disable-next-line @typescript-eslint/no-shadow
+      console.log(e)
+      const { activeIndex } = e;
+      setActiveIndex(activeIndex);
+    });
+  }, []);
 
   // console.log('gridNumNormalized=', gridNumNormalized, currentCCTVIndex, cctvIndexRef.current)
 
