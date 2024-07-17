@@ -11,7 +11,6 @@ const Container = styled.div`
   font-size: 15px;
   align-items: center;
   justify-content: center;
-  border: 1px solid white;
   box-sizing: border-box;
 `
 const MemUsage = styled.div`

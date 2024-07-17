@@ -26,16 +26,16 @@ const Container = styled.div`
 const TopPanel = styled.div`
   min-height: 100px;
   width: 100%;
-  background: black;
-  border: 1px solid white;
+  background-color: #282c34;
+  border: 3px solid grey;
   box-sizing: border-box;
   z-index: 10;
 `;
 const MiddlePanel = styled.div`
   height: 100%;
   position: relative;
-  border-left: 1px solid white;
-  border-right: 1px solid white;
+  border-left: 3px solid grey;
+  border-right: 3px solid grey;
 `;
 const CenterArea = styled.div`
   position: absolute;
@@ -52,7 +52,8 @@ const BottomPanel = styled.div`
   /* margin-bottom: 4px; */
   color: white;
   z-index: 10;
-  background: black;
+  background-color: #282c34;
+  border: 3px solid grey;
 `;
 
 function App() {
@@ -79,22 +80,22 @@ function App() {
   const [dialogOpen, setDialogOpen] = React.useState(false);
   const [modalOpen, setModalOpen] = React.useState(true);
   const [gridDimension, setGridDimension] = React.useState(
-    INITIAL_GRID_DIMENSION,
+    INITIAL_GRID_DIMENSION
   );
   const [autoPlay, setAutoPlay] = React.useState(false);
   const [autoInterval, setAutoInterval] = React.useState(INITIAL_AUTO_INTERVAL);
-  const [cctvsNotSelectedArray, setCCTVsNotSelectedArray] =
-    React.useState(notSelectedSaved);
-  const [cctvsSelectedArray, setCCTVsSelectedAray] =
-    React.useState(selectedSaved);
   const [checkedCCTVId, setCheckedCCTVId] = React.useState('');
   const [currentCCTVIndex, setCurrentCCTVIndex] = React.useState(null);
-  const [cctvLastLoadedTime, setLastLoadedTime] =
-    React.useState(INITIAL_LOAD_TIME);
   const [refreshMode, setRefreshMode] = React.useState(INITIAL_REFRESH_MODE);
   const [refreshInterval, setRefreshInterval] = React.useState(
     INITIAL_REFRESH_INTERVAL,
   );
+  const [cctvsNotSelectedArray, setCCTVsNotSelectedArray] =
+    React.useState(notSelectedSaved);
+  const [cctvsSelectedArray, setCCTVsSelectedAray] =
+    React.useState(selectedSaved);
+  const [cctvLastLoadedTime, setLastLoadedTime] =
+    React.useState(INITIAL_LOAD_TIME);
 
   useHotkeys('c', () => setDialogOpen(true));
   const cctvIndexRef = React.useRef(0);
@@ -125,7 +126,6 @@ function App() {
     [cctvsSelectedArray, gridDimension],
   );
 
-  // useAutoPlay({autoPlay, autoInterval, maximizeGrid, cctvIndexRef});
   const saveLastIndex = React.useCallback((index) => {
     cctvIndexRef.current = index;
   }, []);
