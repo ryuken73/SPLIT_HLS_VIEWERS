@@ -50,8 +50,8 @@ const CenterArea = styled.div`
   position: absolute;
   top: 50%;
   /* left: 50%; */
-  right: 5%;
-  transform: translate(5%, -50%);
+  right: 50%;
+  transform: translate(50%, -50%);
   border: 5px solid white;
   box-sizing: border-box;
 `;
