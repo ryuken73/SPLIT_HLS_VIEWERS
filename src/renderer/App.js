@@ -9,6 +9,7 @@ import MessagePanel from './MessagePanel';
 import VideoStates from './Components/VideoStates';
 import { getRealIndex, isPlayerPlaying } from './lib/sourceUtil';
 import { replace } from './lib/arrayUtil';
+import colors from './lib/colors';
 import 'swiper/css';
 
 const KEY_OPTIONS = 'hlsCCTVOptions';
@@ -16,26 +17,34 @@ const KEY_SELECT_SAVED = 'selectedSavedCCTVs';
 const KEY_NOT_SELECT_SAVED = 'notSelectedSavedCCTVs';
 const INITIAL_LOAD_TIME = new Array(9).fill(Date.now());
 
+const ACTIVE_COLOR_KEY = 950;
+const IDLE_COLOR_KEY = 400;
+
 const Container = styled.div`
-  background-color: #282c34;
   height: 100vh;
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  background-color: ${(props) =>
+    props.autoPlay
+      ? colors.active[ACTIVE_COLOR_KEY]
+      : colors.idle[ACTIVE_COLOR_KEY]};
 `;
 const TopPanel = styled.div`
   min-height: 100px;
   width: 100%;
-  background-color: #282c34;
-  border: 3px solid grey;
+  border: 3px solid;
+  border-color: ${(props) => props.autoPlay ? colors.active[IDLE_COLOR_KEY] : colors.idle[IDLE_COLOR_KEY]};
   box-sizing: border-box;
   z-index: 10;
 `;
 const MiddlePanel = styled.div`
   height: 100%;
   position: relative;
-  border-left: 3px solid grey;
-  border-right: 3px solid grey;
+  border-left: 3px solid;
+  border-right: 3px solid;
+  border-left-color: ${(props) => props.autoPlay ? colors.active[IDLE_COLOR_KEY] : colors.idle[IDLE_COLOR_KEY]};
+  border-right-color: ${(props) => props.autoPlay ? colors.active[IDLE_COLOR_KEY] : colors.idle[IDLE_COLOR_KEY]};
 `;
 const CenterArea = styled.div`
   position: absolute;
@@ -52,8 +61,8 @@ const BottomPanel = styled.div`
   /* margin-bottom: 4px; */
   color: white;
   z-index: 10;
-  background-color: #282c34;
-  border: 3px solid grey;
+  border: 3px solid;
+  border-color: ${(props) => props.autoPlay ? colors.active[IDLE_COLOR_KEY] : colors.idle[IDLE_COLOR_KEY]};
 `;
 
 function App() {
@@ -274,8 +283,8 @@ function App() {
   }, []);
 
   return (
-    <Container>
-      <TopPanel>
+    <Container autoPlay={autoPlay}>
+      <TopPanel autoPlay={autoPlay}>
         <VideoStates
           cctvSelected={cctvsSelectedArray}
           currentCCTVIndex={activeIndex}
@@ -283,7 +292,7 @@ function App() {
         />
         <button onClick={reloadApp}>reload</button>
       </TopPanel>
-      <MiddlePanel>
+      <MiddlePanel autoPlay={autoPlay}>
         <CenterArea>
           {cctvsSelectedArray.length === 0 ? (
             <div>use keyboard "c" to config HLS player to show.</div>
@@ -329,7 +338,7 @@ function App() {
           />
         </CenterArea>
       </MiddlePanel>
-      <BottomPanel>
+      <BottomPanel autoPlay={autoPlay}>
         <MessagePanel />
       </BottomPanel>
     </Container>

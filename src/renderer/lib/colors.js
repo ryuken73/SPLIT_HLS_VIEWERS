@@ -1,17 +1,30 @@
-import deepPurple from '@mui/material/colors/deepPurple';
-import blueGrey from '@mui/material/colors/blueGrey';
-import brown from '@mui/material/colors/brown';
-import grey from '@mui/material/colors/grey';
-import teal from '@mui/material/colors/teal';
-import cyan from '@mui/material/colors/cyan';
-
 const colors = {
-    deepPurple,
-    blueGrey,
-    brown,
-    grey,
-    teal,
-    cyan
-}
+  active: {
+    50: '#ffefef',
+    100: '#ffdcdc',
+    200: '#ffbfbf',
+    300: '#ff9292',
+    400: '#ff5454',
+    500: '#ff1f1f',
+    600: '#ff0000',
+    700: '#db0000',
+    800: '#b80000',
+    900: '#940808',
+    950: '#520000',
+  },
+  idle: {
+    50: '#f6f6f6',
+    100: '#e7e7e7',
+    200: '#d1d1d1',
+    300: '#b0b0b0',
+    400: '#888888',
+    500: '#6d6d6d',
+    600: '#5d5d5d',
+    700: '#4f4f4f',
+    800: '#454545',
+    900: '#3d3d3d',
+    950: '#000000',
+  }
+};
 
-export default colors
+export default colors;
