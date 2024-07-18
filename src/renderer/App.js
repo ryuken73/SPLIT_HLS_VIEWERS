@@ -127,6 +127,7 @@ function App() {
   // }, []);
 
   React.useEffect(() => {
+    if(swiperRef.current === null) return;
     swiperRef.current.on('realIndexChange', (e) => {
       // console.log('real index change: ',e)
       const { realIndex } = e;

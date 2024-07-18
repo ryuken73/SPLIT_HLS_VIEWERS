@@ -183,7 +183,7 @@ function HLSJSPlayer(props) {
       <CustomPlayer
         src={url}
         autoPlay={reloadTrigger}
-        controls
+        // controls
         playerRef={playerRef}
         hlsConfig={hlsConfig}
         muted
