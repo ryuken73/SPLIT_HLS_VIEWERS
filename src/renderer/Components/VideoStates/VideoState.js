@@ -100,7 +100,7 @@ function VideoState(props) {
         player.removeEventListener('ended', handlePlayerEvent);
       }
     }
-  }, [cctvIndex, cctvPlayersRef, handlePlayerEvent, player]);
+  }, [cctvIndex, cctvPlayersRef, handlePlayerEvent]);
 
   const onClick = React.useCallback(() => {
     cctvPlayersRef.current[cctvIndex].pause();
