@@ -55,7 +55,7 @@ const PLAYER_EVENTS = {
 
 function VideoState(props) {
   // eslint-disable-next-line react/prop-types
-  const { cctv, cctvIndex, currentCCTVIndex, player } = props;
+  const { cctv, cctvIndex, currentCCTVIndex, cctvPlayersRef } = props;
   const [playerStatus, setPlayerStatus] = React.useState(null);
   const isActive = cctvIndex === currentCCTVIndex;
   const isNormal = playerStatus === PLAYER_STATUS.normal;
@@ -77,6 +77,8 @@ function VideoState(props) {
   }, []);
 
   React.useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-shadow
+    const player = cctvPlayersRef.current[cctvIndex];
     if (player === undefined) return;
     // eslint-disable-next-line react/prop-types
     player.addEventListener('playing', handlePlayerEvent);
@@ -98,11 +100,11 @@ function VideoState(props) {
         player.removeEventListener('ended', handlePlayerEvent);
       }
     }
-  }, [handlePlayerEvent, player]);
+  }, [cctvIndex, cctvPlayersRef, handlePlayerEvent, player]);
 
   const onClick = React.useCallback(() => {
-    player.pause();
-  }, [player])
+    cctvPlayersRef.current[cctvIndex].pause();
+  }, [cctvIndex, cctvPlayersRef])
 
   // eslint-disable-next-line no-nested-ternary
   const bgColor = isActive

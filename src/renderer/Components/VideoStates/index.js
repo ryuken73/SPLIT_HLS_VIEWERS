@@ -29,7 +29,7 @@ function VideoStates(props) {
             cctv={cctv}
             cctvIndex={cctvIndex}
             currentCCTVIndex={currentCCTVIndex}
-            player={cctvPlayersRef.current[cctvIndex]}
+            cctvPlayersRef={cctvPlayersRef}
           />
         ))}
       </Container>
