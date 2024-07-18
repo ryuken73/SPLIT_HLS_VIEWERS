@@ -42,7 +42,6 @@ function MessagePanel() {
   const usagePercent = ((currentMem / MAX_MEMORY_MB) * 100).toFixed(1);
   return (
     <Container>
-      <BlinkingDot />
       <MemUsage>{currentMem}MB ({usagePercent}%)</MemUsage>
     </Container>
   )

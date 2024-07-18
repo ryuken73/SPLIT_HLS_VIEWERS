@@ -92,7 +92,7 @@ function GridVideos(props) {
       ))} */}
       <Swiper
         loop
-        speed={1500}
+        speed={500}
         // speed={3000}
         effect="fade"
         noSwipingClass="react-draggable"

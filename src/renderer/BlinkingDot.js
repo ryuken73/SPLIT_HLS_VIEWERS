@@ -4,7 +4,7 @@ import './BlinkingDot.css';
 function BlinkingDot() {
   return (
     <svg height="20" width="20" className="blinking">
-      <circle cx="10" cy="10" r="6" fill="red" />
+      <circle cx="10" cy="10" r="10" fill="red" />
       Sorry, your browser does not support inline SVG.
     </svg>
   )

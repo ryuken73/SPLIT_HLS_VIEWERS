@@ -1,14 +1,47 @@
 import React from 'react';
 import Draggable from 'react-draggable';
 import styled from 'styled-components';
+import colors from '../../lib/colors';
+import BlinkingDot from '../../BlinkingDot';
 
-const Banner = styled.div`
+const AbsoluteBox = styled.div`
   position: absolute;
   top: 0;
-  background: white;
-  color: black;
+  right: 0;
+`
+
+const Banner = styled.div`
+  background: ${colors.banner[950]};
+  color: ${colors.banner[200]};
+  border: 5px solid;
+  border-color: ${colors.banner[950]};
   cursor: move;
   z-index: 99;
+  font-size: clamp(3rem, 5vw, 4rem);
+  padding-left: 20px;
+  padding-right: 20px;
+  border-top-right-radius: 10px;
+  border-top-left-radius: 0;
+  opacity: 1;
+  font-weight: bold;
+`
+const Live = styled(Banner)`
+  width: fit-content;
+  font-size: clamp(1rem, 2vw, 2rem);
+  border-bottom: 0px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
+`;
+const Dot = styled.span`
+  margin-right: 10px;
+`;
+const Line = styled.div`
+  background: white;
+  height: 5px;
+  /* border-bottom-right-radius: 10px; */
+  /* border-bottom-left-radius: 10px; */
 `
 
 function DraggableTitle(props) {
@@ -16,7 +49,16 @@ function DraggableTitle(props) {
   const { title = 'sample', onDrag, position = {} } = props;
   return (
     <Draggable onDrag={onDrag} position={{ x: position.x, y: position.y }}>
-      <Banner>{title}</Banner>
+      <AbsoluteBox>
+        <Live>
+          <Dot>
+            <BlinkingDot />
+          </Dot>
+          LIVE
+        </Live>
+        <Banner>{title}</Banner>
+        <Line />
+      </AbsoluteBox>
     </Draggable>
   )
 }
