@@ -44,6 +44,7 @@ function GridVideos(props) {
     refreshMode,
     refreshInterval,
     currentCCTVIndex,
+    alignBy
   } = props;
 
   // const cctvs = [...cctvsInAreas.values()].flat();
@@ -114,6 +115,7 @@ function GridVideos(props) {
                 refreshMode={refreshMode}
                 refreshInterval={refreshInterval}
                 overlayContent={cctv.title}
+                alignBy={alignBy}
               />
             ) : (
               <HLSJSPlayer
@@ -142,6 +144,7 @@ function GridVideos(props) {
                 reloadPlayerComponent={reloadPlayerComponent}
                 onDrag={handleTitleDrag}
                 position={titlePosition}
+                alignBy={alignBy}
               />
             )}
           </SwiperSlide>

@@ -6,7 +6,8 @@ import BlinkingDot from '../../BlinkingDot';
 
 const AbsoluteBox = styled.div`
   position: absolute;
-  right: 10px;
+  right: ${(props) => props.alignBy === 'right' && '10px'};
+  left: ${(props) => props.alignBy === 'left' && '10px'};
   bottom: 100px;
 `
 
@@ -41,6 +42,7 @@ const Live = styled(Banner)`
 `;
 const Dot = styled.span`
   margin-right: 10px;
+  margin-bottom: -3px;
 `;
 const Line = styled.div`
   background: white;
@@ -51,10 +53,10 @@ const Line = styled.div`
 
 function DraggableTitle(props) {
   // eslint-disable-next-line react/prop-types
-  const { title = 'sample', onDrag, position = {} } = props;
+  const { title = 'sample', onDrag, position = {}, alignBy } = props;
   return (
     <Draggable onDrag={onDrag} position={{ x: position.x, y: position.y }}>
-      <AbsoluteBox>
+      <AbsoluteBox alignBy={alignBy}>
         <Live>
           <Dot>
             <BlinkingDot />

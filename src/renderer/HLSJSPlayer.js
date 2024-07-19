@@ -54,7 +54,8 @@ function HLSJSPlayer(props) {
     currentCCTVIndex,
     aspectRatio,
     onDrag,
-    position
+    position,
+    alignBy
   } = props;
   const playerRef = React.useRef(null);
   const { url } = source;
@@ -195,6 +196,7 @@ function HLSJSPlayer(props) {
         onDrag={onDrag}
         position={position}
         title={source.title}
+        alignBy={alignBy}
       />
     </Conatiner>
   );

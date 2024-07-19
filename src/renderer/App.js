@@ -10,6 +10,8 @@ import VideoStates from './Components/VideoStates';
 import { getRealIndex, isPlayerPlaying } from './lib/sourceUtil';
 import { replace } from './lib/arrayUtil';
 import colors from './lib/colors';
+import AlignTitle from './Components/SideComponents/AlignTitle';
+import AlignSide from './Components/SideComponents/AlignSide';
 import 'swiper/css';
 
 const KEY_OPTIONS = 'hlsCCTVOptions';
@@ -47,6 +49,7 @@ const MiddlePanel = styled.div`
   border-left-color: ${(props) => props.autoPlay ? colors.autoRun[IDLE_COLOR_KEY] : colors.idle[IDLE_COLOR_KEY]};
   border-right-color: ${(props) => props.autoPlay ? colors.autoRun[IDLE_COLOR_KEY] : colors.idle[IDLE_COLOR_KEY]};
   overflow: hidden;
+  display: flex;
 `;
 const CenterArea = styled.div`
   position: absolute;
@@ -57,6 +60,17 @@ const CenterArea = styled.div`
   border: 5px solid white;
   box-sizing: border-box;
 `;
+const LeftArea = styled.div`
+  color: white;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 10px;
+  min-width: 100px;
+`
+const RightArea = styled(LeftArea)`
+  margin-left: auto;
+  padding-right: 10px;
+`
 const BottomPanel = styled.div`
   margin-top: auto;
   min-height: 20px;
@@ -111,6 +125,7 @@ function App() {
   const [numberOfResets, setNumberOfResets] = React.useState(
     new Array(selectedSaved.length).fill(0)
   );
+  const [alignBy, setAlignBy] = React.useState('right');
 
   useHotkeys('c', () => setDialogOpen(true));
   const preLoadMapRef = React.useRef(new Map());
@@ -287,9 +302,11 @@ function App() {
           cctvPlayersRef={cctvPlayersRef}
           numberOfResets={numberOfResets}
         />
-        <button onClick={reloadApp}>reload</button>
       </TopPanel>
       <MiddlePanel autoPlay={autoPlay}>
+        <LeftArea>
+          <button onClick={reloadApp}>reload</button>
+        </LeftArea>
         <CenterArea>
           {cctvsSelectedArray.length === 0 ? (
             <div>use keyboard "c" to config HLS player to show.</div>
@@ -313,6 +330,7 @@ function App() {
               refreshInterval={refreshInterval}
               reloadPlayerComponent={reloadPlayerComponent}
               currentCCTVIndex={activeIndex}
+              alignBy={alignBy}
             />
           )}
           <ConfigDialog
@@ -334,6 +352,10 @@ function App() {
             refreshInterval={refreshInterval}
           />
         </CenterArea>
+        <RightArea>
+          {/* <AlignTitle></AlignTitle> */}
+          <AlignSide alignBy={alignBy} setAlignBy={setAlignBy} />
+        </RightArea>
       </MiddlePanel>
       <BottomPanel autoPlay={autoPlay}>
         <MessagePanel autoPlay={autoPlay} />

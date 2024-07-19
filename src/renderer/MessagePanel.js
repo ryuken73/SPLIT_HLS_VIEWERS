@@ -1,6 +1,5 @@
 import React from 'react'
 import styled from 'styled-components'
-import BlinkingDot from './BlinkingDot';
 
 const MAX_MEMORY_MB = 1024;
 
