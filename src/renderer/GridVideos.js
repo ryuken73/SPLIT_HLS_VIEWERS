@@ -120,31 +120,31 @@ function GridVideos(props) {
             ) : (
               <HLSJSPlayer
                 key={cctv.cctvId}
-                autoPlay={autoPlay}
-                player={cctvPlayersRef.current[cctvIndex]}
-                width="100%"
-                height="auto"
-                fluid={false}
-                aspectRatio="4/3"
-                fill
                 source={cctv}
                 setPlayer={setCCTVPlayerRef}
-                delPlayer={delCCTVPlayerRef}
-                enableOverlay={enableOverlayGlobal}
-                overlayBig
-                overlayContent={cctv.title}
-                cctvIndex={cctvIndex}
-                currentIndexRef={currentIndexRef}
-                currentCCTVIndex={currentCCTVIndex}
-                autoRefresh
                 lastLoaded={cctvLastLoadedTime[cctvIndex]}
-                setLastLoadedTime={setLastLoadedTime}
-                refreshMode={refreshMode}
-                refreshInterval={refreshInterval}
-                reloadPlayerComponent={reloadPlayerComponent}
+                cctvIndex={cctvIndex}
+                aspectRatio="4/3"
                 onDrag={handleTitleDrag}
                 position={titlePosition}
                 alignBy={alignBy}
+                // autoPlay={autoPlay}
+                // player={cctvPlayersRef.current[cctvIndex]}
+                // width="100%"
+                // height="auto"
+                // fluid={false}
+                // fill
+                // delPlayer={delCCTVPlayerRef}
+                // enableOverlay={enableOverlayGlobal}
+                // overlayBig
+                // overlayContent={cctv.title}
+                // currentIndexRef={currentIndexRef}
+                // currentCCTVIndex={currentCCTVIndex}
+                // autoRefresh
+                // setLastLoadedTime={setLastLoadedTime}
+                // refreshMode={refreshMode}
+                // refreshInterval={refreshInterval}
+                // reloadPlayerComponent={reloadPlayerComponent}
               />
             )}
           </SwiperSlide>
