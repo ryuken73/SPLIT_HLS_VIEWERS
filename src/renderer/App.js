@@ -109,26 +109,16 @@ function App() {
     React.useState(INITIAL_LOAD_TIME);
 
   useHotkeys('c', () => setDialogOpen(true));
-  // const cctvIndexRef = React.useRef(0);
   const preLoadMapRef = React.useRef(new Map());
   const setLeftSmallPlayerRef = React.useRef(() => {});
   const autoplayTimer = React.useRef(null);
   const modalOpenRef = React.useRef(modalOpen);
-  // const gridNumNormalized = getRealIndex(
-  //   currentCCTVIndex,
-  //   gridDimension,
-  //   cctvsSelectedArray,
-  // );
   const activeIndexRef = React.useRef(activeIndex);
   const cctvPlayersRef = React.useRef([]);
   const swiperRef = React.useRef(null);
 
-  // const saveLastIndex = React.useCallback((index) => {
-  //   cctvIndexRef.current = index;
-  // }, []);
-
   React.useEffect(() => {
-    if(swiperRef.current === null) return;
+    if (swiperRef.current === null) return;
     swiperRef.current.on('realIndexChange', (e) => {
       // console.log('real index change: ',e)
       const { realIndex } = e;
@@ -140,12 +130,6 @@ function App() {
 
   // console.log('gridNumNormalized=', gridNumNormalized, currentCCTVIndex, cctvIndexRef.current)
 
-  // React.useEffect(() => {
-  //   if (cctvsSelectedArray.length > 0) {
-  //     setCurrentCCTVIndex(0);
-  //   }
-  // }, [cctvsSelectedArray.length]);
-
   const gridNum2CCTVIndex = React.useCallback(
     (gridNum) => {
       return getRealIndex(gridNum, gridDimension, cctvsSelectedArray);
@@ -155,8 +139,6 @@ function App() {
 
   const moveToSlide = React.useCallback((index) => {
     swiperRef.current.slideTo(index);
-    // saveLastIndex(index);
-    // setCurrentCCTVIndex(index);
   }, []);
 
   const handlePressKeyboard = React.useCallback(
@@ -224,8 +206,6 @@ function App() {
           }
           // swiperRef.current.slideNext();
           swiperRef.current.slideToLoop(nextPlayerIndex);
-          // setCurrentCCTVIndex(nextPlayerIndex);
-          // cctvIndexRef.current = nextPlayerIndex;
           // console.log('!!! nextIndex=', nextIndex, cctvPlayersRef.current[nextIndex].paused())
         }, autoInterval * 1000);
       } else {
