@@ -12,13 +12,10 @@ const Conatiner = styled.div`
   width: 100%;
   background-color: black;
   aspect-ratio: 16/9;
-  /* border: 5px solid black; */
-  /* box-sizing: border-box; */
 `;
 const CustomPlayer = styled(ReactHlsPlayer)`
   width: 100%;
   height: 100%;
-  /* aspect-ratio: ${props => props.aspectRatio}; */
   object-fit: cover;
 `
 
@@ -60,46 +57,27 @@ function HLSJSPlayer(props) {
   const playerRef = React.useRef(null);
   const { url } = source;
 
-  const prevRefreshInterval = usePrevious(refreshInterval);
-  const isRefreshIntervalChanged = prevRefreshInterval !== refreshInterval;
-  const RELOAD_COUNTDOWN = getRandomCountdown(refreshInterval)
-  const [currentCountDown, setCurrentCountDown] = React.useState(RELOAD_COUNTDOWN);
-  // const [lastReloadTime, setLastReloadTime] = React.useState(Date.now());
-  // const [src, setSrc] = React.useState(url);
   const [reloadTrigger, setReloadTrigger] = React.useState(true);
-  // const isActive = !autoRefresh ? true : cctvIndex === currentIndexRef.current;
-  const isActive = !autoRefresh ? true : cctvIndex === currentCCTVIndex;
 
 
   // console.log('re-render player:', cctvIndex, source.title);
-
   const onLoadDataHandler = React.useCallback((event) => {
     // console.log('^^^',event)
     event.target.play();
   }, []);
 
-  React.useEffect(() => {
-    console.log('HLSJS Player mount')
-    return () => console.log('HLSJS Player umount')
-  }, [])
+  // React.useEffect(() => {
+  //   console.log('HLSJS Player mount')
+  //   return () => console.log('HLSJS Player umount')
+  // }, [])
 
-  // React.useLayoutEffect(() => {
-  //   console.log('reload mp4 player:', lastLoaded)
-  //   if(playerRef.current === null){
-  //     return;
-  //   }
-  //   playerRef.current.load();
-  // }, [lastLoaded])
 
   React.useLayoutEffect(() => {
-    // if(playerRef.current === null){
-    //   return;
-    // }
     setPlayer(cctvIndex, playerRef.current);
     playerRef.current.addEventListener('loadedmetadata', onLoadDataHandler);
     return () => {
       // eslint-disable-next-line react-hooks/exhaustive-deps
-      if(playerRef.current === null) return;
+      if (playerRef.current === null) return;
       // eslint-disable-next-line react-hooks/exhaustive-deps
       playerRef.current.removeEventListener(
         'loadedmetadata',
@@ -108,77 +86,14 @@ function HLSJSPlayer(props) {
     }
   }, [cctvIndex, onLoadDataHandler, setPlayer])
 
-  // React.useEffect(() => {
-  //   if (refreshMode !== 'auto') {
-  //     return;
-  //   }
-  //   if (isRefreshIntervalChanged) {
-  //     setCurrentCountDown(getRandomCountdown(refreshInterval))
-  //   }
-  //   const timer = setInterval(() => {
-  //     if(player === null) {
-  //       clearInterval(timer);
-  //       return;
-  //     }
-  //     // console.log('current time=', cctvIndex, player);
-  //     setCurrentCountDown(currentCountDown => {
-  //       return currentCountDown - CHECK_INTERNAL_SEC;
-  //     })
-  //   }, CHECK_INTERNAL_SEC * 1000);
-  //   // eslint-disable-next-line consistent-return
-  //   return () => {
-  //     clearInterval(timer);
-  //   };
-  // }, [
-  //   cctvIndex,
-  //   player,
-  //   refreshMode,
-  //   isRefreshIntervalChanged,
-  //   refreshInterval,
-  // ]);
-
-  const reloadPlayer = React.useCallback(() => {
-    // eslint-disable-next-line @typescript-eslint/no-shadow
-    setReloadTrigger((reloadTrigger) => {
-      // console.log('force reload Player:', cctvIndex)
-
-      setLastLoadedTime((lastLoadedTime) => {
-        const now = Date.now();
-        return replace(lastLoadedTime).index(cctvIndex).value(now);
-      })
-      return !reloadTrigger;
-    })
-  }, [cctvIndex, setLastLoadedTime]);
-
   React.useEffect(() => {
     // console.log('reload while get next player: ', lastLoaded, cctvIndex);
     // eslint-disable-next-line @typescript-eslint/no-shadow
     setReloadTrigger((reloadTrigger) => {
       return !reloadTrigger;
-    })
-  }, [cctvIndex, lastLoaded])
+    });
+  }, [cctvIndex, lastLoaded]);
 
-  // if(autoRefresh) {
-  //   const countdown = Math.ceil(currentCountDown);
-  //   // console.log('####', countdown)
-  //   if(countdown <= 0){
-  //     if(isActive){
-  //         //if active bypass reload
-  //         setCurrentCountDown(RELOAD_COUNTDOWN);
-  //         return;
-  //     }
-  //     setCurrentCountDown(RELOAD_COUNTDOWN);
-  //     reloadPlayer();
-  //   }
-  // }
-  // const paused = !isPlayerPlaying(playerRef.current, cctvIndex);
-
-  // const lastLoadedString = (new Date(lastLoaded)).toLocaleString();
-  // const secondsFromLastLoaded = ((Date.now() - (new Date(lastLoaded)).getTime()) / 1000).toFixed(0);
-  // const numDisplayContent = refreshMode === 'auto' ? currentCountDown : lastLoadedString;
-  // const numDisplayContent = refreshMode === 'auto' ? currentCountDown : `refreshed ${secondsFromLastLoaded}s ago`;
-
-  // eslint-disable-next-line consistent-return
   return (
     <Conatiner>
       <CustomPlayer
@@ -189,7 +104,6 @@ function HLSJSPlayer(props) {
         hlsConfig={hlsConfig}
         muted
         width="100%"
-        // height="100%"
         aspectRatio={aspectRatio}
       />
       <DraggableTitle
