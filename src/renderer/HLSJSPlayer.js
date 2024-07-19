@@ -1,9 +1,7 @@
+/* eslint-disable react/prop-types */
 import React from 'react';
 import styled from 'styled-components';
 import ReactHlsPlayer from 'react-hls-player/dist';
-import usePrevious from './hooks/usePrevious';
-import {isPlayerPlaying} from './lib/sourceUtil';
-import { replace } from './lib/arrayUtil';
 import DraggableTitle from './Components/Player/DraggableTitle';
 
 const Conatiner = styled.div`
@@ -29,30 +27,16 @@ const hlsConfig = {
   maxBufferLength: 10 * 1000 * 1000,
 }
 
-const CHECK_INTERNAL_SEC = 2;
-
-const getRandomCountdown = (refreshInterval) => {
-  return Math.ceil(refreshInterval + Math.random() * 20);
-};
-
 function HLSJSPlayer(props) {
   const {
-    autoPlay,
-    player=null,
     source,
     setPlayer,
     lastLoaded,
-    setLastLoadedTime,
     cctvIndex,
-    currentIndexRef,
-    autoRefresh,
-    refreshMode,
-    refreshInterval,
-    currentCCTVIndex,
     aspectRatio,
     onDrag,
     position,
-    alignBy
+    alignBy,
   } = props;
   const playerRef = React.useRef(null);
   const { url } = source;
