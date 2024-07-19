@@ -36,7 +36,8 @@ const TopPanel = styled.div`
   border: 3px solid;
   border-color: ${(props) => props.autoPlay ? colors.autoRun[IDLE_COLOR_KEY] : colors.idle[IDLE_COLOR_KEY]};
   box-sizing: border-box;
-  z-index: 10;
+  overflow-x: auto;
+  overflow-y: hidden;
 `;
 const MiddlePanel = styled.div`
   height: 100%;
@@ -45,6 +46,7 @@ const MiddlePanel = styled.div`
   border-right: 3px solid;
   border-left-color: ${(props) => props.autoPlay ? colors.autoRun[IDLE_COLOR_KEY] : colors.idle[IDLE_COLOR_KEY]};
   border-right-color: ${(props) => props.autoPlay ? colors.autoRun[IDLE_COLOR_KEY] : colors.idle[IDLE_COLOR_KEY]};
+  overflow: hidden;
 `;
 const CenterArea = styled.div`
   position: absolute;
@@ -60,7 +62,6 @@ const BottomPanel = styled.div`
   min-height: 20px;
   /* margin-bottom: 4px; */
   color: white;
-  z-index: 10;
   border: 3px solid;
   border-color: ${(props) => props.autoPlay ? colors.autoRun[IDLE_COLOR_KEY] : colors.idle[IDLE_COLOR_KEY]};
 `;

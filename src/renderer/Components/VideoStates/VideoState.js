@@ -137,13 +137,15 @@ function VideoState(props) {
   }, [isActive]);
   const bgColor = getBackgroundColor();
   const titleColor = getTitleColor();
+  // eslint-disable-next-line no-nested-ternary
+  const statusString = isPaused ? '[Paused]': isStalled ? '[Fail]' : '';
 
   // console.log('player state =', playerStatus, isStalled, bgColor, cctv.title)
 
   return (
     <Container isActive={isActive} bgcolor={bgColor} onClick={onClick}>
       <Title color={titleColor}>{cctv.title}</Title>
-      <SubTitle> # of Resets [0]</SubTitle>
+      <SubTitle> {statusString} # of Resets [0]</SubTitle>
     </Container>
   );
 }
