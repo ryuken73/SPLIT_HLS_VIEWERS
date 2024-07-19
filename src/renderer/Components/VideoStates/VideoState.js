@@ -5,10 +5,7 @@ import colors from '../../lib/colors';
 const { autoRun, idle } = colors;
 
 const Container = styled.div`
-  /* height: 50px; */
-  /* background: ${(props) => (props.isActive ? 'red' : 'black')}; */
   background: ${(props) => props.bgcolor || 'black'};
-  /* color: ${(props) => (props.isActive ? 'yellow' : 'white')}; */
   font-weight: bold;
   line-height: 44px;
   text-align: center;
@@ -62,7 +59,6 @@ function VideoState(props) {
   const { autoPlay, cctv, cctvIndex, currentCCTVIndex, cctvPlayersRef } = props;
   const [playerStatus, setPlayerStatus] = React.useState(PLAYER_STATUS.pause);
   const isActive = cctvIndex === currentCCTVIndex;
-  const isNormal = playerStatus === PLAYER_STATUS.normal;
   const isPaused = playerStatus === PLAYER_STATUS.pause;
   const isStalled = playerStatus === PLAYER_STATUS.stalled;
   // console.log(' re-render playerStatue=', cctv.title, playerStatus)
@@ -117,14 +113,6 @@ function VideoState(props) {
     cctvPlayersRef.current[cctvIndex].pause();
   }, [cctvIndex, cctvPlayersRef]);
 
-  // eslint-disable-next-line no-nested-ternary
-  // const bgColor = isActive
-  //   ? 'maroon'
-  //   : isPaused
-  //     ? 'grey'
-  //     : isStalled
-  //       ? 'darkslategrey'
-  //       : 'black';
   const getBackgroundColor = React.useCallback(() => {
     if (isActive) {
       return autoRun[900];
@@ -142,7 +130,6 @@ function VideoState(props) {
   }, [autoPlay, isActive, isPaused, isStalled])
   const getTitleColor = React.useCallback(() => {
     if (isActive){
-      // return autoRun[500];
       return 'yellow';
     }
     return autoRun[50];
