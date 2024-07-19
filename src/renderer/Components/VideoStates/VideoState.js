@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React from 'react';
 import styled from 'styled-components';
 import colors from '../../lib/colors';
@@ -56,7 +57,14 @@ const PLAYER_EVENTS = {
 
 function VideoState(props) {
   // eslint-disable-next-line react/prop-types
-  const { autoPlay, cctv, cctvIndex, currentCCTVIndex, cctvPlayersRef } = props;
+  const {
+    autoPlay,
+    cctv,
+    cctvIndex,
+    currentCCTVIndex,
+    cctvPlayersRef,
+    numberOfReset,
+  } = props;
   const [playerStatus, setPlayerStatus] = React.useState(PLAYER_STATUS.pause);
   const isActive = cctvIndex === currentCCTVIndex;
   const isPaused = playerStatus === PLAYER_STATUS.pause;
@@ -145,7 +153,10 @@ function VideoState(props) {
   return (
     <Container isActive={isActive} bgcolor={bgColor} onClick={onClick}>
       <Title color={titleColor}>{cctv.title}</Title>
-      <SubTitle> {statusString} # of Resets [0]</SubTitle>
+      <SubTitle>
+        {' '}
+        {statusString} # of Resets [{numberOfReset}]
+      </SubTitle>
     </Container>
   );
 }

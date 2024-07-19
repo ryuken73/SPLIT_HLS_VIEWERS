@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React from 'react';
 import styled from 'styled-components';
 import VideoState from './VideoState';
@@ -19,7 +20,13 @@ const Container = styled.div`
 
 function VideoStates(props) {
   // eslint-disable-next-line react/prop-types
-  const { autoPlay, cctvSelected, currentCCTVIndex, cctvPlayersRef } = props;
+  const {
+    autoPlay,
+    cctvSelected,
+    currentCCTVIndex,
+    cctvPlayersRef,
+    numberOfResets,
+  } = props;
   return (
     <Vcenter>
       <Container>
@@ -31,6 +38,7 @@ function VideoStates(props) {
             currentCCTVIndex={currentCCTVIndex}
             cctvPlayersRef={cctvPlayersRef}
             autoPlay={autoPlay}
+            numberOfReset={numberOfResets[cctvIndex]}
           />
         ))}
       </Container>

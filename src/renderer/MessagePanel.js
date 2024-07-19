@@ -17,8 +17,16 @@ const MemUsage = styled.div`
   margin-left: auto;
   margin-right: 10px;
 `
-function MessagePanel() {
+function MessagePanel(props) {
+  const { autoPlay } = props;
   const [currentMem, setCurrentMem] = React.useState('0');
+  const [autoPlayStartedTimestamp, setAutoPlayStartedTimestamp] = React.useState(null);
+
+  React.useEffect(() => {
+    if (autoPlay) {
+      setAutoPlayStartedTimestamp(Date.now())
+    }
+  }, [autoPlay]);
 
   const handleMemInfo = React.useCallback((result) => {
     const { private: privateKB } = result;

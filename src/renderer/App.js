@@ -108,6 +108,10 @@ function App() {
   const [cctvLastLoadedTime, setLastLoadedTime] =
     React.useState(INITIAL_LOAD_TIME);
 
+  const [numberOfResets, setNumberOfResets] = React.useState(
+    new Array(selectedSaved.length).fill(0)
+  );
+
   useHotkeys('c', () => setDialogOpen(true));
   const preLoadMapRef = React.useRef(new Map());
   const setLeftSmallPlayerRef = React.useRef(() => {});
@@ -165,6 +169,13 @@ function App() {
       setLastLoadedTime((lastLoadedTime) => {
         const now = Date.now();
         return replace(lastLoadedTime).index(cctvIndex).value(now);
+      });
+      // eslint-disable-next-line @typescript-eslint/no-shadow
+      setNumberOfResets((numberOfResets) => {
+        const lastNumber = numberOfResets[cctvIndex];
+        return replace(numberOfResets)
+          .index(cctvIndex)
+          .value(lastNumber + 1);
       });
     },
     [setLastLoadedTime],
@@ -274,6 +285,7 @@ function App() {
           cctvSelected={cctvsSelectedArray}
           currentCCTVIndex={activeIndex}
           cctvPlayersRef={cctvPlayersRef}
+          numberOfResets={numberOfResets}
         />
         <button onClick={reloadApp}>reload</button>
       </TopPanel>
@@ -324,7 +336,7 @@ function App() {
         </CenterArea>
       </MiddlePanel>
       <BottomPanel autoPlay={autoPlay}>
-        <MessagePanel />
+        <MessagePanel autoPlay={autoPlay} />
       </BottomPanel>
     </Container>
   );
