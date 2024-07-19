@@ -27,14 +27,14 @@ const Container = styled.div`
   overflow: hidden;
   background-color: ${(props) =>
     props.autoPlay
-      ? colors.active[ACTIVE_COLOR_KEY]
+      ? colors.autoRun[ACTIVE_COLOR_KEY]
       : colors.idle[ACTIVE_COLOR_KEY]};
 `;
 const TopPanel = styled.div`
   min-height: 100px;
   width: 100%;
   border: 3px solid;
-  border-color: ${(props) => props.autoPlay ? colors.active[IDLE_COLOR_KEY] : colors.idle[IDLE_COLOR_KEY]};
+  border-color: ${(props) => props.autoPlay ? colors.autoRun[IDLE_COLOR_KEY] : colors.idle[IDLE_COLOR_KEY]};
   box-sizing: border-box;
   z-index: 10;
 `;
@@ -43,8 +43,8 @@ const MiddlePanel = styled.div`
   position: relative;
   border-left: 3px solid;
   border-right: 3px solid;
-  border-left-color: ${(props) => props.autoPlay ? colors.active[IDLE_COLOR_KEY] : colors.idle[IDLE_COLOR_KEY]};
-  border-right-color: ${(props) => props.autoPlay ? colors.active[IDLE_COLOR_KEY] : colors.idle[IDLE_COLOR_KEY]};
+  border-left-color: ${(props) => props.autoPlay ? colors.autoRun[IDLE_COLOR_KEY] : colors.idle[IDLE_COLOR_KEY]};
+  border-right-color: ${(props) => props.autoPlay ? colors.autoRun[IDLE_COLOR_KEY] : colors.idle[IDLE_COLOR_KEY]};
 `;
 const CenterArea = styled.div`
   position: absolute;
@@ -62,7 +62,7 @@ const BottomPanel = styled.div`
   color: white;
   z-index: 10;
   border: 3px solid;
-  border-color: ${(props) => props.autoPlay ? colors.active[IDLE_COLOR_KEY] : colors.idle[IDLE_COLOR_KEY]};
+  border-color: ${(props) => props.autoPlay ? colors.autoRun[IDLE_COLOR_KEY] : colors.idle[IDLE_COLOR_KEY]};
 `;
 
 function App() {
@@ -289,6 +289,7 @@ function App() {
     <Container autoPlay={autoPlay}>
       <TopPanel autoPlay={autoPlay}>
         <VideoStates
+          autoPlay={autoPlay}
           cctvSelected={cctvsSelectedArray}
           currentCCTVIndex={activeIndex}
           cctvPlayersRef={cctvPlayersRef}

@@ -1,11 +1,14 @@
 import React from 'react';
 import styled from 'styled-components';
+import colors from '../../lib/colors';
+
+const { autoRun, idle } = colors;
 
 const Container = styled.div`
   /* height: 50px; */
   /* background: ${(props) => (props.isActive ? 'red' : 'black')}; */
   background: ${(props) => props.bgcolor || 'black'};
-  color: ${(props) => (props.isActive ? 'yellow' : 'white')};
+  /* color: ${(props) => (props.isActive ? 'yellow' : 'white')}; */
   font-weight: bold;
   line-height: 44px;
   text-align: center;
@@ -21,7 +24,8 @@ const Container = styled.div`
 const Title = styled.div`
   padding-left: 10px;
   padding-right: 10px;
-  color: white;
+  /* color: ${props => props.color || 'white'}; */
+  color: ${props => props.color || 'white'};
   font-size: clamp(1rem, 2vw, 1.5rem);
   /* font-size: 2vw; */
   overflow: hidden;
@@ -36,13 +40,11 @@ const SubTitle = styled.div`
   margin-left: 5px;
   margin-right: 5px;
 `;
-
 const PLAYER_STATUS = {
   normal: 'normal',
   pause: 'pause',
   stalled: 'stalled',
 };
-
 const PLAYER_EVENTS = {
   playing: 'playing',
   pause: 'pause',
@@ -54,9 +56,10 @@ const PLAYER_EVENTS = {
   ended: 'ended',
 };
 
+
 function VideoState(props) {
   // eslint-disable-next-line react/prop-types
-  const { cctv, cctvIndex, currentCCTVIndex, cctvPlayersRef } = props;
+  const { autoPlay, cctv, cctvIndex, currentCCTVIndex, cctvPlayersRef } = props;
   const [playerStatus, setPlayerStatus] = React.useState(PLAYER_STATUS.pause);
   const isActive = cctvIndex === currentCCTVIndex;
   const isNormal = playerStatus === PLAYER_STATUS.normal;
@@ -115,19 +118,44 @@ function VideoState(props) {
   }, [cctvIndex, cctvPlayersRef]);
 
   // eslint-disable-next-line no-nested-ternary
-  const bgColor = isActive
-    ? 'maroon'
-    : isPaused
-      ? 'grey'
-      : isStalled
-        ? 'darkslategrey'
-        : 'black';
+  // const bgColor = isActive
+  //   ? 'maroon'
+  //   : isPaused
+  //     ? 'grey'
+  //     : isStalled
+  //       ? 'darkslategrey'
+  //       : 'black';
+  const getBackgroundColor = React.useCallback(() => {
+    if (isActive) {
+      return autoRun[900];
+    }
+    if (isStalled) {
+      return 'grey';
+    }
+    if (isPaused) {
+      return 'darkslategrey';
+    }
+    if (autoPlay) {
+      return autoRun[950];
+    }
+    return idle[950];
+  }, [autoPlay, isActive, isPaused, isStalled])
+  const getTitleColor = React.useCallback(() => {
+    if (isActive){
+      // return autoRun[500];
+      return 'yellow';
+    }
+    return autoRun[50];
+
+  }, [isActive]);
+  const bgColor = getBackgroundColor();
+  const titleColor = getTitleColor();
 
   // console.log('player state =', playerStatus, isStalled, bgColor, cctv.title)
 
   return (
     <Container isActive={isActive} bgcolor={bgColor} onClick={onClick}>
-      <Title>{cctv.title}</Title>
+      <Title color={titleColor}>{cctv.title}</Title>
       <SubTitle> # of Resets [0]</SubTitle>
     </Container>
   );

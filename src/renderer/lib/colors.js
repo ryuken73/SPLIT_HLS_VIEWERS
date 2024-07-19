@@ -1,5 +1,5 @@
 const colors = {
-  active: {
+  autoRun: {
     50: '#ffefef',
     100: '#ffdcdc',
     200: '#ffbfbf',
