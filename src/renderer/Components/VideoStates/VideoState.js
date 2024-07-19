@@ -1,10 +1,10 @@
-import React from 'react'
+import React from 'react';
 import styled from 'styled-components';
 
 const Container = styled.div`
   /* height: 50px; */
   /* background: ${(props) => (props.isActive ? 'red' : 'black')}; */
-  background: ${(props) => props.bgColor || 'black'};
+  background: ${(props) => props.bgcolor || 'black'};
   color: ${(props) => (props.isActive ? 'yellow' : 'white')};
   font-weight: bold;
   line-height: 44px;
@@ -12,7 +12,8 @@ const Container = styled.div`
   border-radius: 10px;
   min-width: 100px;
   max-width: 200px;
-  border: ${props => props.isActive ? '2px solid yellow' : '2px solid white'};
+  border: ${(props) =>
+    props.isActive ? '2px solid yellow' : '2px solid white'};
   box-sizing: border-box;
   cursor: pointer;
   margin: 10px;
@@ -48,31 +49,36 @@ const PLAYER_EVENTS = {
   stalled: 'stalled',
   suspend: 'suspend',
   error: 'error',
+  abort: 'abort',
   waiting: 'waiting',
   ended: 'ended',
 };
 
-
 function VideoState(props) {
   // eslint-disable-next-line react/prop-types
   const { cctv, cctvIndex, currentCCTVIndex, cctvPlayersRef } = props;
-  const [playerStatus, setPlayerStatus] = React.useState(null);
+  const [playerStatus, setPlayerStatus] = React.useState(PLAYER_STATUS.pause);
   const isActive = cctvIndex === currentCCTVIndex;
   const isNormal = playerStatus === PLAYER_STATUS.normal;
   const isPaused = playerStatus === PLAYER_STATUS.pause;
   const isStalled = playerStatus === PLAYER_STATUS.stalled;
+  // console.log(' re-render playerStatue=', cctv.title, playerStatus)
 
   // eslint-disable-next-line react/prop-types
   const handlePlayerEvent = React.useCallback((event) => {
     const { type } = event;
-    if (type === PLAYER_EVENTS.playing){
+    // console.log('player event captured:', type);
+    if (type === PLAYER_EVENTS.playing) {
+      // console.log('player is playing!');
       setPlayerStatus(PLAYER_STATUS.normal);
       return;
     }
-    if (type === PLAYER_EVENTS.pause || type === PLAYER_EVENTS.ended){
+    if (type === PLAYER_EVENTS.pause || type === PLAYER_EVENTS.ended) {
+      // console.log('player is paused!');
       setPlayerStatus(PLAYER_STATUS.pause);
       return;
     }
+    // console.log('player is stalled!');
     setPlayerStatus(PLAYER_STATUS.stalled);
   }, []);
 
@@ -88,9 +94,10 @@ function VideoState(props) {
     player.addEventListener('error', handlePlayerEvent);
     player.addEventListener('waiting', handlePlayerEvent);
     player.addEventListener('ended', handlePlayerEvent);
+    player.addEventListener('abort', handlePlayerEvent);
     // eslint-disable-next-line consistent-return
     return () => {
-      if (player !== undefined){
+      if (player !== undefined) {
         player.removeEventListener('playing', handlePlayerEvent);
         player.removeEventListener('pause', handlePlayerEvent);
         player.removeEventListener('stalled', handlePlayerEvent);
@@ -98,13 +105,14 @@ function VideoState(props) {
         player.removeEventListener('error', handlePlayerEvent);
         player.removeEventListener('waiting', handlePlayerEvent);
         player.removeEventListener('ended', handlePlayerEvent);
+        player.removeEventListener('abort', handlePlayerEvent);
       }
-    }
+    };
   }, [cctvIndex, cctvPlayersRef, handlePlayerEvent]);
 
   const onClick = React.useCallback(() => {
     cctvPlayersRef.current[cctvIndex].pause();
-  }, [cctvIndex, cctvPlayersRef])
+  }, [cctvIndex, cctvPlayersRef]);
 
   // eslint-disable-next-line no-nested-ternary
   const bgColor = isActive
@@ -115,19 +123,14 @@ function VideoState(props) {
         ? 'darkslategrey'
         : 'black';
 
+  // console.log('player state =', playerStatus, isStalled, bgColor, cctv.title)
+
   return (
-    <Container
-      isActive={isActive}
-      bgColor={bgColor}
-      onClick={onClick}
-      isPaused={isPaused}
-      isStalled={isStalled}
-    >
+    <Container isActive={isActive} bgcolor={bgColor} onClick={onClick}>
       <Title>{cctv.title}</Title>
       <SubTitle> # of Resets [0]</SubTitle>
     </Container>
-  )
-
+  );
 }
 
-export default React.memo(VideoState)
+export default React.memo(VideoState);

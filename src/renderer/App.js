@@ -201,12 +201,14 @@ function App() {
           let loopingCount = 0;
           while (true) {
             const nextPlayer = cctvPlayersRef.current[nextPlayerIndex];
-            console.log('autoPlay:', cctvPlayersRef.current, nextPlayerIndex, nextPlayer)
+            // console.log('autoPlay:', cctvPlayersRef.current, nextPlayerIndex, nextPlayer)
             // console.log('check nextPlayer', nextPlayerIndex, nextPlayer)
             if (isPlayerPlaying(nextPlayer, nextPlayerIndex)) {
               break;
             } else {
               console.log('reload player:', nextPlayerIndex)
+              const newEvent = new Event('error');
+              nextPlayer.dispatchEvent(newEvent);
               reloadPlayerComponent(nextPlayerIndex);
               // eslint-disable-next-line no-plusplus
               nextPlayerIndex =
