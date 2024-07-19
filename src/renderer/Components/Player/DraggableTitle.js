@@ -6,8 +6,8 @@ import BlinkingDot from '../../BlinkingDot';
 
 const AbsoluteBox = styled.div`
   position: absolute;
-  top: 0;
-  right: 0;
+  right: 10px;
+  bottom: 100px;
 `
 
 const Banner = styled.div`
@@ -26,13 +26,18 @@ const Banner = styled.div`
   font-weight: bold;
 `
 const Live = styled(Banner)`
+  display: flex;
+  align-items: center;
   width: fit-content;
-  font-size: clamp(1rem, 2vw, 2rem);
+  font-size: clamp(1rem, 2vw, 1.5rem);
+  line-height: 1;
   border-bottom: 0px;
   border-bottom-right-radius: 0;
   border-bottom-left-radius: 0;
   border-top-right-radius: 10px;
   border-top-left-radius: 10px;
+  margin-bottom: -1px;
+  padding-left: 5px;
 `;
 const Dot = styled.span`
   margin-right: 10px;
@@ -54,7 +59,7 @@ function DraggableTitle(props) {
           <Dot>
             <BlinkingDot />
           </Dot>
-          LIVE
+          <div>LIVE</div>
         </Live>
         <Banner>{title}</Banner>
         <Line />
