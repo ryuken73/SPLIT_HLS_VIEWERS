@@ -32,8 +32,8 @@ const Title = styled.div`
 `;
 const SubTitle = styled.div`
   color: yellow;
-  font-size: 0.6rem;
-  line-height: 0.6rem;
+  font-size: 0.9rem;
+  line-height: 0.9rem;
   margin-bottom: 5px;
   margin-left: 5px;
   margin-right: 5px;
