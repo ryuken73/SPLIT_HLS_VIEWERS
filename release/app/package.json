@@ -1,10 +1,10 @@
 {
   "name": "split-cctv-viewer",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "split cctv viewer",
   "license": "MIT",
   "author": {
-    "name": "Electron React Boilerplate Maintainers",
+    "name": "HLS swiper viewer",
     "email": "ryuken01@sbs.co.kr",
     "url": "https://github.com/electron-react-boilerplate"
   },
