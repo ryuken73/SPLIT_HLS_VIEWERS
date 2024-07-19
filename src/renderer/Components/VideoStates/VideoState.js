@@ -132,7 +132,8 @@ function VideoState(props) {
       return 'darkslategrey';
     }
     if (autoPlay) {
-      return autoRun[950];
+      // return autoRun[950];
+      return idle[950];
     }
     return idle[950];
   }, [autoPlay, isActive, isPaused, isStalled])
