@@ -75,7 +75,6 @@ function GridVideos(props) {
   );
 
   const handleTitleDrag = React.useCallback((event, draggableData) => {
-    console.log(draggableData);
     setTitlePosition({
       x: draggableData.x,
       y: draggableData.y
