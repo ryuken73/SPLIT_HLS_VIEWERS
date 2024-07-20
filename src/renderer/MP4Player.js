@@ -27,7 +27,8 @@ function MP4Player(props) {
     aspectRatio,
     onDrag,
     position,
-    alignBy
+    alignBy,
+    showTitle = true,
   } = props;
 
   const playerRef = React.useRef(null);
@@ -85,12 +86,14 @@ function MP4Player(props) {
         crossOrigin="anonymous"
         controls
       />
-      <DraggableTitle
-        onDrag={onDrag}
-        position={position}
-        title={source.title}
-        alignBy={alignBy}
-      />
+      {showTitle && (
+        <DraggableTitle
+          onDrag={onDrag}
+          position={position}
+          title={source.title}
+          alignBy={alignBy}
+        />
+      )}
     </Container>
   );
 }

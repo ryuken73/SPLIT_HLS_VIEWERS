@@ -130,6 +130,7 @@ function AddManualUrl(props) {
               source={source}
               autoRefresh={true}
               setPlayer={setPlayer}
+              showTitle={false}
             >
             </MP4Player>
           ):(
@@ -140,6 +141,7 @@ function AddManualUrl(props) {
               enableOverlay={false}
               setPlayer={setPlayer}
               autoRefresh={false}
+              showTitle={false}
             ></HLSJSPlayer>
           )}
         </Box>

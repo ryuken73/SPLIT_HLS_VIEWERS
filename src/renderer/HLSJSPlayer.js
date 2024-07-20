@@ -40,6 +40,7 @@ function HLSJSPlayer(props) {
     onDrag,
     position,
     alignBy,
+    showTitle=true
   } = props;
   const playerRef = React.useRef(null);
   const { url } = source;
@@ -92,12 +93,14 @@ function HLSJSPlayer(props) {
         width="100%"
         aspectRatio={aspectRatio}
       />
-      <DraggableTitle
-        onDrag={onDrag}
-        position={position}
-        title={source.title}
-        alignBy={alignBy}
-      />
+      {showTitle && (
+        <DraggableTitle
+          onDrag={onDrag}
+          position={position}
+          title={source.title}
+          alignBy={alignBy}
+        />
+      )}
     </Conatiner>
   );
 }
