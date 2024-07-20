@@ -106,15 +106,12 @@ function GridVideos(props) {
               <MP4Player
                 key={cctv.cctvId}
                 source={cctv}
-                cctvIndex={cctvIndex}
-                currentIndexRef={currentIndexRef}
-                autoRefresh
                 setPlayer={setCCTVPlayerRef}
                 lastLoaded={cctvLastLoadedTime[cctvIndex]}
-                reloadPlayerComponent={reloadPlayerComponent}
-                refreshMode={refreshMode}
-                refreshInterval={refreshInterval}
-                overlayContent={cctv.title}
+                cctvIndex={cctvIndex}
+                aspectRatio="4/3"
+                onDrag={handleTitleDrag}
+                position={titlePosition}
                 alignBy={alignBy}
               />
             ) : (

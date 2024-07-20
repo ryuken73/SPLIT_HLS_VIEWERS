@@ -1,22 +1,22 @@
-import React from 'react'
+/* eslint-disable react/prop-types */
+import React from 'react';
 import styled from 'styled-components';
-// import Overlay from './Overlay';
-import usePrevious from './hooks/usePrevious';
+import DraggableTitle from './Components/Player/DraggableTitle';
 
 const Container = styled.div`
   overflow: hidden;
   width: 100%;
-  height: ${props => !props.isModalPlayer && '100%'};
-  aspect-ratio: ${props => props.isModalPlayer && '16/9'};
+  height: ${(props) => !props.isModalPlayer && '100%'};
+  aspect-ratio: ${(props) => props.isModalPlayer && '16/9'};
   position: relative;
   background-color: black;
-`
+`;
 const Overlay = styled.div`
-  display: ${props => !props.show && 'none'};
+  display: ${(props) => !props.show && 'none'};
   position: absolute;
   bottom: 100px;
   right: 5px;
-  font-size: ${props => props.big ? '3vw':'1.5vw'};
+  font-size: ${(props) => (props.big ? '3vw' : '1.5vw')};
   font-weight: bold;
   opacity: 0.6;
   border: 3px solid darkviolet;
@@ -31,148 +31,108 @@ const Overlay = styled.div`
   line-height: 1;
   word-break: initial;
   font-family: Arial, Helvetica, sans-serif;
-`
-const NumDisplay = styled.div`
-  display: ${props => !props.show && 'none'};
-  position: absolute;
-  top: ${props => (props.position === 'topLeft' || props.position === 'topRight') && '10px'};
-  bottom: ${props => (props.position === 'bottomLeft' || props.position === 'bottomRight') && '10px'};
-  left: ${props => (props.position === 'topLeft' || props.position === 'bottomLeft') && '10px'};
-  right: ${props => (props.position === 'topRight' || props.position === 'bottomRight') && '10px'};
-  background: black;
-  width: 80px;
-  z-index: 1000;
-`
+`;
 const CustomVideo = styled.video`
   width: 100%;
   height: 100%;
   object-fit: cover;
-`
+`;
 
-const getRandomCountdown = refreshInterval => {
-    return Math.ceil(refreshInterval + Math.random() * 20);
-};
 
-const CHECK_INTERNAL_SEC = 2;
+function MP4Player(props) {
+  const {
+    source = {},
+    setPlayer,
+    lastLoaded,
+    cctvIndex,
+    aspectRatio,
+    onDrag,
+    position,
+    alignBy
+  } = props;
+  // const prevRefreshInterval = usePrevious(refreshInterval);
+  // const isRefreshIntervalChanged = prevRefreshInterval !== refreshInterval;
+  // const RELOAD_COUNTDOWN = getRandomCountdown(refreshInterval)
+  // const [currentCountDown, setCurrentCountDown] = React.useState(RELOAD_COUNTDOWN);
+  // const [lastReloadTime, setLastReloadTime] = React.useState(Date.now());
+  // const [loadDateTime, setLoadDateTime] = React.useState(null);
+  const playerRef = React.useRef(null);
+  const { url } = source;
 
-const MP4Player = (props) => {
-    const {
-      source={},
-      cctvIndex,
-      currentIndexRef,
-      autoRefresh=false,
-      setPlayer,
-      lastLoaded,
-      refreshMode,
-      refreshInterval,
-      reloadPlayerComponent,
-      playerNum,
-      overlayContent
-    } = props;
-    const prevRefreshInterval = usePrevious(refreshInterval);
-    const isRefreshIntervalChanged = prevRefreshInterval !== refreshInterval;
-    const RELOAD_COUNTDOWN = getRandomCountdown(refreshInterval)
-    const [currentCountDown, setCurrentCountDown] = React.useState(RELOAD_COUNTDOWN);
-    const [lastReloadTime, setLastReloadTime] = React.useState(Date.now());
-    const videoRef = React.useRef(null);
-    // const [loadDateTime, setLoadDateTime] = React.useState(null);
-    const {url} = source;
+  const [reloadTrigger, setReloadTrigger] = React.useState(true);
 
-    // const isActive = autoRefresh ? true : cctvIndex === currentIndexRef.current;
+  // React.useEffect(() => {
+  // console.log('reload mp4 player:', lastLoaded)
+  //   if(playerRef.current === null){
+  //     return;
+  //   }
+  //   playerRef.current.load();
+  // }, [lastLoaded]);
 
-    // React.useEffect(() => {
-    //     const reloadTimer = setTimeout(() => {
-    //         console.log('isActive=', isActive, cctvIndex);
-    //         setLoadDateTime(Date.now());
-    //     // }, 3600000 + Math.random()*200000)
-    //     }, 120000 + Math.random() * 200000)
-    //     return () => {
-    //         clearTimeout(reloadTimer);
-    //     }
-    // }, [loadDateTime, isActive, cctvIndex])
-
-    React.useEffect(() => {
-      if(refreshMode !== 'auto'){
-        return;
-      }
-      if(isRefreshIntervalChanged){
-        setCurrentCountDown(getRandomCountdown(refreshInterval))
-      }
-      const timer = setInterval(() => {
-        // console.log('current time=', cctvIndex);
-        setCurrentCountDown(currentCountDown => {
-            return currentCountDown - CHECK_INTERNAL_SEC;
-        })
-      }, CHECK_INTERNAL_SEC * 1000)
-      return () => {
-        clearInterval(timer);
-      }
-    }, [cctvIndex, refreshMode, isRefreshIntervalChanged, refreshInterval])
-
-    if(autoRefresh) {
-      const countdown = Math.ceil(currentCountDown);
-      // console.log('####', countdown)
-      if(countdown <= 0){
-        setCurrentCountDown(RELOAD_COUNTDOWN);
-        reloadPlayerComponent(cctvIndex);
-        // setLastReloadTime(Date.now());
-      }
+  const onLoadDataHandler = React.useCallback((event) => {
+    // console.log(lastLoaded)
+    if (playerRef.current === null) {
+      return;
     }
+    // console.log('loadedMetadata mp4', playerRef.current.duration);
+    if (!isNaN(playerRef.current.duration)) {
+      playerRef.current.play();
+    }
+  }, []);
+
+  React.useLayoutEffect(() => {
+    if (playerRef.current === null) {
+      return;
+    }
+    setPlayer(cctvIndex, playerRef.current);
+    playerRef.current.addEventListener('loadedmetadata', onLoadDataHandler);
+    // playerRef.current.addEventListener('ended', reloadPlayer)
+    // eslint-disable-next-line consistent-return
+    return () => {
+      if (playerRef.current === null) return;
+      playerRef.current.removeEventListener(
+        'loadedmetadata',
+        onLoadDataHandler,
+      );
+    };
+  }, [cctvIndex, onLoadDataHandler, setPlayer]);
 
     React.useEffect(() => {
-      // console.log('reload mp4 player:', lastLoaded)
-      if(videoRef.current === null){
-        return;
-      }
-      videoRef.current.load();
-    }, [lastLoaded]);
+    // console.log('reload while get next player: ', lastLoaded, cctvIndex);
+    // eslint-disable-next-line @typescript-eslint/no-shadow
+    console.log('reload mp4 player', lastLoaded)
+    setReloadTrigger((reloadTrigger) => {
+      return !reloadTrigger;
+    });
+    console.log(playerRef.current)
+    playerRef.current.load();
+  }, [cctvIndex, lastLoaded]);
 
-    const handleLoadedMetadata = React.useCallback(event => {
-      // console.log(lastLoaded)
-      if(videoRef.current === null){
-        return;
-      }
-      // console.log('loadedMetadata mp4', videoRef.current.duration);
-      if(!isNaN(videoRef.current.duration)){
-          videoRef.current.play();
-      }
-      if(autoRefresh === true){
-          setPlayer(cctvIndex, videoRef.current);
-      }
-    }, [autoRefresh, cctvIndex, lastLoaded, setPlayer]);
+  // React.useLayoutEffect(() => {
+  //   if (autoRefresh === false) {
+  //     setPlayer(20, playerRef.current, playerNum);
+  //   }
+  // }, [autoRefresh, playerNum, setPlayer]);
 
-    React.useEffect(() => {
-      if(videoRef.current === null){
-        return;
-      }
-      videoRef.current.addEventListener('loadedmetadata', handleLoadedMetadata)
-      // videoRef.current.addEventListener('ended', reloadPlayer)
-      return () => {
-        if(videoRef.current){
-            videoRef.current.removeEventListener('loadedmetadata', handleLoadedMetadata)
-            // videoRef.current.removeEventListener('ended', reloadPlayer)
-        }
-      }
-    }, [handleLoadedMetadata])
-
-    React.useLayoutEffect(() => {
-      if(autoRefresh === false){
-          setPlayer(20, videoRef.current, playerNum);
-      }
-    }, [autoRefresh, playerNum, setPlayer])
-
-  const isModalPlayer = playerNum !== undefined ;
-  const big = isModalPlayer;
   return (
-    <Container isModalPlayer={isModalPlayer}>
-      <NumDisplay show={autoRefresh} position={'topLeft'}>{currentCountDown}</NumDisplay>
-      <NumDisplay show={autoRefresh} position={'topRight'}>{currentCountDown}</NumDisplay>
-      <NumDisplay show={autoRefresh} position={'bottomLeft'}>{currentCountDown}</NumDisplay>
-      <NumDisplay show={autoRefresh} position={'bottomRight'}>{currentCountDown}</NumDisplay>
-      <CustomVideo muted ref={videoRef} src={url} crossOrigin="anonymous"></CustomVideo>
-      <Overlay big={big} show={true}>{overlayContent}</Overlay>
+    <Container>
+      <CustomVideo
+        src={url}
+        autoPlay={reloadTrigger}
+        ref={playerRef}
+        muted
+        width="100%"
+        crossOrigin="anonymous"
+        controls
+      />
+      <DraggableTitle
+        onDrag={onDrag}
+        position={position}
+        title={source.title}
+        alignBy={alignBy}
+      />
     </Container>
-  )
+  );
 }
 
 export default React.memo(MP4Player);
