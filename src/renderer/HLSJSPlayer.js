@@ -2,6 +2,9 @@
 import React from 'react';
 import styled from 'styled-components';
 import ReactHlsPlayer from 'react-hls-player/dist';
+import usePrevious from './hooks/usePrevious';
+import {isPlayerPlaying} from './lib/sourceUtil';
+import { replace } from './lib/arrayUtil';
 import DraggableTitle from './Components/Player/DraggableTitle';
 
 const Conatiner = styled.div`
@@ -83,7 +86,6 @@ function HLSJSPlayer(props) {
       <CustomPlayer
         src={url}
         autoPlay={reloadTrigger}
-        // controls
         playerRef={playerRef}
         hlsConfig={hlsConfig}
         muted
