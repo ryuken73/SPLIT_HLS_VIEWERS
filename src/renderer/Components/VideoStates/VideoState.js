@@ -38,6 +38,11 @@ const SubTitle = styled.div`
   margin-left: 5px;
   margin-right: 5px;
 `;
+const TimeDisplay = styled(SubTitle)`
+  color: white;
+  font-size: 0.7rem;
+  line-height: 0.7rem;
+`
 const PLAYER_STATUS = {
   normal: 'normal',
   pause: 'pause',
@@ -54,6 +59,10 @@ const PLAYER_EVENTS = {
   ended: 'ended',
 };
 
+const secondToHHMMSS = seconds => {
+  return new Date(seconds*1000).toISOString().slice(11, 19);
+};
+
 
 function VideoState(props) {
   // eslint-disable-next-line react/prop-types
@@ -66,6 +75,8 @@ function VideoState(props) {
     numberOfReset,
   } = props;
   const [playerStatus, setPlayerStatus] = React.useState(PLAYER_STATUS.pause);
+  const [currentTime, setCurrentTime] = React.useState(secondToHHMMSS(0));
+  const [duration, setDuration] = React.useState(secondToHHMMSS(0));
   const isActive = cctvIndex === currentCCTVIndex;
   const isPaused = playerStatus === PLAYER_STATUS.pause;
   const isStalled = playerStatus === PLAYER_STATUS.stalled;
@@ -91,6 +102,16 @@ function VideoState(props) {
     [cctvIndex],
   );
 
+  const updateCurrentTime = React.useCallback((event) => {
+    const HHMMSS = secondToHHMMSS(event.target.currentTime);
+    setCurrentTime(HHMMSS);
+  }, []);
+
+  const updateDuration = React.useCallback((event) => {
+    const HHMMSS = secondToHHMMSS(event.target.duration);
+    setDuration(HHMMSS);
+  }, []);
+
   React.useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-shadow
     const player = cctvPlayersRef.current[cctvIndex];
@@ -104,6 +125,9 @@ function VideoState(props) {
     player.addEventListener('waiting', handlePlayerEvent);
     player.addEventListener('ended', handlePlayerEvent);
     player.addEventListener('abort', handlePlayerEvent);
+    player.addEventListener('timeupdate', updateCurrentTime);
+    player.addEventListener('durationchange', updateDuration);
+
     // eslint-disable-next-line consistent-return
     return () => {
       if (player !== undefined) {
@@ -117,7 +141,13 @@ function VideoState(props) {
         player.removeEventListener('abort', handlePlayerEvent);
       }
     };
-  }, [cctvIndex, cctvPlayersRef, handlePlayerEvent]);
+  }, [
+    cctvIndex,
+    cctvPlayersRef,
+    handlePlayerEvent,
+    updateCurrentTime,
+    updateDuration,
+  ]);
 
   const onClick = React.useCallback(() => {
     cctvPlayersRef.current[cctvIndex].pause();
@@ -160,6 +190,9 @@ function VideoState(props) {
         {' '}
         {statusString} # of Resets [{numberOfReset}]
       </SubTitle>
+      <TimeDisplay>
+        {currentTime} / {duration}
+      </TimeDisplay>
     </Container>
   );
 }

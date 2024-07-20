@@ -25,10 +25,10 @@ const SubContainer = styled.div`
 
 function AddManualUrl(props) {
   const {
-    allCCTVs, 
-    checkedCCTVId, 
-    checkedInSelected, 
-    setCCTVsNotSelectedArray, 
+    allCCTVs,
+    checkedCCTVId,
+    checkedInSelected,
+    setCCTVsNotSelectedArray,
     setCCTVsSelectedArray
   } = props;
   const [url, setUrl] = React.useState('');
@@ -50,28 +50,28 @@ function AddManualUrl(props) {
 
   const setPlayer = React.useCallback(() => {
     return null;
-  },[])
+  }, []);
 
   const onChangeUrl = React.useCallback((event) => {
     setUrl(event.target.value);
-  },[])
+  }, []);
 
   const source = React.useMemo(() => {
     return {
       url
     }
-  },[url])
+  }, [url]);
 
   const mp4RegExp = /.*\.mp4.*/;
   const isMP4 = mp4RegExp.test(source.url);
 
   const setTitleValue = React.useCallback((event) => {
     setTitle(event.target.value);
-  },[])
+  }, []);
 
   const onDragOver = React.useCallback((event) => {
     event.preventDefault();
-  },[])
+  }, []);
 
   const onDrop = React.useCallback((event) => {
     event.preventDefault();
@@ -79,7 +79,7 @@ function AddManualUrl(props) {
     const {cctvId, title, url} = dropped;
     setTitle(title);
     setUrl(url);
-  },[])
+  }, []);
 
   const onClickAdd = React.useCallback(() => {
     if(checkedCCTVId){
@@ -116,7 +116,7 @@ function AddManualUrl(props) {
       title,
       cctvId: Date.now(),
       num: Date.now()
-    } 
+    }
     setCCTVsNotSelectedArray(cctvs => {
       return [...cctvs, newCCTV]
     })
@@ -126,7 +126,12 @@ function AddManualUrl(props) {
     <Container onDragOver={onDragOver} onDrop={onDrop}>
         <Box width="300px">
           {isMP4 ? (
-            <MP4Player source={source} autoRefresh={true}></MP4Player>
+            <MP4Player
+              source={source}
+              autoRefresh={true}
+              setPlayer={setPlayer}
+            >
+            </MP4Player>
           ):(
             <HLSJSPlayer
               source={source}
