@@ -29,6 +29,7 @@ function MP4Player(props) {
     position,
     alignBy,
     showTitle = true,
+    titleFontSize
   } = props;
 
   const playerRef = React.useRef(null);
@@ -92,6 +93,7 @@ function MP4Player(props) {
           position={position}
           title={source.title}
           alignBy={alignBy}
+          titleFontSize={titleFontSize}
         />
       )}
     </Container>

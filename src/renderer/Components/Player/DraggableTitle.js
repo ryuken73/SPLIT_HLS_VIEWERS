@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React from 'react';
 import Draggable from 'react-draggable';
 import styled from 'styled-components';
@@ -9,6 +10,7 @@ const AbsoluteBox = styled.div`
   right: ${(props) => props.alignBy === 'right' && '10px'};
   left: ${(props) => props.alignBy === 'left' && '10px'};
   bottom: 100px;
+  opacity: 0.9;
 `
 
 const Banner = styled.div`
@@ -18,7 +20,8 @@ const Banner = styled.div`
   border-color: ${colors.banner[950]};
   cursor: move;
   z-index: 99;
-  font-size: clamp(3rem, 5vw, 4rem);
+  /* font-size: clamp(2rem, 4vw, 4rem); */
+  font-size: ${(props) => `clamp(${props.titleFontSize / 2}rem, 4vw, ${props.titleFontSize}rem)`};
   padding-left: 20px;
   padding-right: 20px;
   border-top-right-radius: 10px;
@@ -30,7 +33,8 @@ const Live = styled(Banner)`
   display: flex;
   align-items: center;
   width: fit-content;
-  font-size: clamp(1rem, 2vw, 1.5rem);
+  /* font-size: clamp(1rem, 2vw, 1.5rem); */
+  font-size: ${(props) => `clamp(${props.titleFontSize / 4}rem, 2vw, ${props.titleFontSize / 2.6}rem)`};
   line-height: 1;
   border-bottom: 0px;
   border-bottom-right-radius: 0;
@@ -53,17 +57,23 @@ const Line = styled.div`
 
 function DraggableTitle(props) {
   // eslint-disable-next-line react/prop-types
-  const { title = 'sample', onDrag, position = {}, alignBy } = props;
+  const {
+    title = 'sample',
+    onDrag,
+    position = {},
+    alignBy,
+    titleFontSize,
+  } = props;
   return (
     <Draggable onDrag={onDrag} position={{ x: position.x, y: position.y }}>
       <AbsoluteBox alignBy={alignBy}>
-        <Live>
+        <Live titleFontSize={titleFontSize}>
           <Dot>
             <BlinkingDot />
           </Dot>
           <div>LIVE</div>
         </Live>
-        <Banner>{title}</Banner>
+        <Banner titleFontSize={titleFontSize}>{title}</Banner>
         <Line />
       </AbsoluteBox>
     </Draggable>

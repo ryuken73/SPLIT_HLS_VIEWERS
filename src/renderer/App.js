@@ -10,8 +10,8 @@ import VideoStates from './Components/VideoStates';
 import { getRealIndex, isPlayerPlaying } from './lib/sourceUtil';
 import { replace } from './lib/arrayUtil';
 import colors from './lib/colors';
-import AlignTitle from './Components/SideComponents/AlignTitle';
 import AlignSide from './Components/SideComponents/AlignSide';
+import SetTitleFont from './Components/SideComponents/SetTitleFont';
 import 'swiper/css';
 
 const KEY_OPTIONS = 'hlsCCTVOptions';
@@ -126,6 +126,7 @@ function App() {
     new Array(selectedSaved.length).fill(0)
   );
   const [alignBy, setAlignBy] = React.useState('right');
+  const [titleFontSize, setTitleFontSize] = React.useState(3);
 
   useHotkeys('c', () => setDialogOpen(true));
   const preLoadMapRef = React.useRef(new Map());
@@ -331,6 +332,7 @@ function App() {
               reloadPlayerComponent={reloadPlayerComponent}
               currentCCTVIndex={activeIndex}
               alignBy={alignBy}
+              titleFontSize={titleFontSize}
             />
           )}
           <ConfigDialog
@@ -353,8 +355,11 @@ function App() {
           />
         </CenterArea>
         <RightArea>
-          {/* <AlignTitle></AlignTitle> */}
           <AlignSide alignBy={alignBy} setAlignBy={setAlignBy} />
+          <SetTitleFont
+            titleFontSize={titleFontSize}
+            setTitleFontSize={setTitleFontSize}
+          />
         </RightArea>
       </MiddlePanel>
       <BottomPanel autoPlay={autoPlay}>

@@ -40,7 +40,8 @@ function HLSJSPlayer(props) {
     onDrag,
     position,
     alignBy,
-    showTitle=true
+    showTitle=true,
+    titleFontSize
   } = props;
   const playerRef = React.useRef(null);
   const { url } = source;
@@ -99,6 +100,7 @@ function HLSJSPlayer(props) {
           position={position}
           title={source.title}
           alignBy={alignBy}
+          titleFontSize={titleFontSize}
         />
       )}
     </Conatiner>
