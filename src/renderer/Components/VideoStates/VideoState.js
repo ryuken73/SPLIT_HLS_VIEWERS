@@ -74,7 +74,7 @@ function VideoState(props) {
   // eslint-disable-next-line react/prop-types
   const handlePlayerEvent = React.useCallback((event) => {
     const { type } = event;
-    // console.log('player event captured:', type);
+    console.log('player event captured:', cctvIndex, type);
     if (type === PLAYER_EVENTS.playing) {
       // console.log('player is playing!');
       setPlayerStatus(PLAYER_STATUS.normal);
@@ -87,7 +87,9 @@ function VideoState(props) {
     }
     // console.log('player is stalled!');
     setPlayerStatus(PLAYER_STATUS.stalled);
-  }, []);
+    },
+    [cctvIndex],
+  );
 
   React.useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-shadow
@@ -97,7 +99,7 @@ function VideoState(props) {
     player.addEventListener('playing', handlePlayerEvent);
     player.addEventListener('pause', handlePlayerEvent);
     player.addEventListener('stalled', handlePlayerEvent);
-    player.addEventListener('suspend', handlePlayerEvent);
+    // player.addEventListener('suspend', handlePlayerEvent);
     player.addEventListener('error', handlePlayerEvent);
     player.addEventListener('waiting', handlePlayerEvent);
     player.addEventListener('ended', handlePlayerEvent);
@@ -108,7 +110,7 @@ function VideoState(props) {
         player.removeEventListener('playing', handlePlayerEvent);
         player.removeEventListener('pause', handlePlayerEvent);
         player.removeEventListener('stalled', handlePlayerEvent);
-        player.removeEventListener('suspend', handlePlayerEvent);
+        // player.removeEventListener('suspend', handlePlayerEvent);
         player.removeEventListener('error', handlePlayerEvent);
         player.removeEventListener('waiting', handlePlayerEvent);
         player.removeEventListener('ended', handlePlayerEvent);
