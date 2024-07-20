@@ -187,8 +187,8 @@ function VideoState(props) {
     <Container isActive={isActive} bgcolor={bgColor} onClick={onClick}>
       <Title color={titleColor}>{cctv.title}</Title>
       <SubTitle>
-        {' '}
-        {statusString} # of Resets [{numberOfReset}]
+        {/* {statusString} Reset Count [{numberOfReset}] */}
+        Reset Count [{numberOfReset}]
       </SubTitle>
       <TimeDisplay>
         {currentTime} / {duration}
