@@ -25,6 +25,9 @@ const electronHandler = {
     off(channel: Channels, func: (...args: unknown[]) => void) {
       ipcRenderer.off(channel,  func);
     },
+    getVersion() {
+      return ipcRenderer.invoke('getVerion');
+    },
   },
 };
 

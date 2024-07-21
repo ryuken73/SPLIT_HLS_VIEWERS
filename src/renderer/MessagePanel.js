@@ -16,16 +16,32 @@ const Since = styled.div`
   margin-right: auto;
   margin-left: 10px;
 `
-const MemUsage = styled.div`
+const RightSide = styled.div`
+  display: flex;
+  align-items: center;
   margin-left: auto;
   margin-right: 10px;
+  font-weight: bold;
+`
+const Version = styled.div`
+  /* margin-right: 10px; */
+`
+const MemUsage = styled.div`
 `
 function MessagePanel(props) {
   const { autoPlay } = props;
+  const [appVersion, setAppVersion] = React.useState('v.0.0.0');
   const [currentMem, setCurrentMem] = React.useState('0');
   const [autoPlayStartedTimestamp, setAutoPlayStartedTimestamp] = React.useState(null);
   const [elsapsed, setElapsed] = React.useState('00:00:00');
   // console.log('elapsed:', elsapsed)
+
+  React.useEffect(() => {
+    // eslint-disable-next-line promise/catch-or-return
+    window.electron.ipcRenderer
+      .getVersion()
+      .then((version) => setAppVersion(version));
+  }, []);
 
   React.useEffect(() => {
     if (autoPlay) {
@@ -82,9 +98,12 @@ function MessagePanel(props) {
       ):(
         <Since>Auto Play Off</Since>
       )}
-      <MemUsage>
-        {currentMem}MB ({usagePercent}%)
-      </MemUsage>
+      <RightSide>
+        <Version>[v{appVersion}]</Version>
+        <MemUsage>
+          [{currentMem}MB ({usagePercent}%)]
+        </MemUsage>
+      </RightSide>
     </Container>
   )
 }
