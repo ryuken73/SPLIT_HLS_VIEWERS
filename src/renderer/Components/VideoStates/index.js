@@ -26,6 +26,7 @@ function VideoStates(props) {
     currentCCTVIndex,
     cctvPlayersRef,
     numberOfResets,
+    setVideoStates
   } = props;
   return (
     <Vcenter>
@@ -39,6 +40,7 @@ function VideoStates(props) {
             cctvPlayersRef={cctvPlayersRef}
             autoPlay={autoPlay}
             numberOfReset={numberOfResets[cctvIndex]}
+            setVideoStates={setVideoStates}
           />
         ))}
       </Container>

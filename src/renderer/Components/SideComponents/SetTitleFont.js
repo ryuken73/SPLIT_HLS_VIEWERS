@@ -2,10 +2,9 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const Container = styled.div`
+const Container = styled.fieldset`
   margin-top: 1rem;
-  border: 1px solid white;
-  padding: 10px;
+  border: 3px solid white;
 `
 const Title = styled.div``
 const FlexBox = styled.div`
@@ -13,7 +12,7 @@ const FlexBox = styled.div`
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  margin-top: 10px;
+  /* margin-top: 10px; */
 `
 const FontSize = styled.div`
   margin-left: 10px;
@@ -33,14 +32,14 @@ function SetTitleFont(props) {
     })
   }, [setTitleFontSize]);
   return (
-    <Container>
-      <Title>Title Font Size</Title>
-      <FlexBox>
-        <button style={{width: '30px'}} onClick={increaseSize}>+</button>
-        <FontSize>{titleFontSize}</FontSize>
-        <button style={{width: '30px'}} onClick={decreaseSize}>-</button>
-      </FlexBox>
-    </Container>
+      <Container>
+        <legend>Title Font Size</legend>
+        <FlexBox>
+          <button style={{width: '30px'}} onClick={increaseSize}>+</button>
+          <FontSize>{titleFontSize}</FontSize>
+          <button style={{width: '30px'}} onClick={decreaseSize}>-</button>
+        </FlexBox>
+      </Container>
   )
 }
 

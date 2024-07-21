@@ -73,6 +73,7 @@ function VideoState(props) {
     currentCCTVIndex,
     cctvPlayersRef,
     numberOfReset,
+    setVideoStates
   } = props;
   const [playerStatus, setPlayerStatus] = React.useState(PLAYER_STATUS.pause);
   const [currentTime, setCurrentTime] = React.useState(secondToHHMMSS(0));
@@ -82,6 +83,7 @@ function VideoState(props) {
   const isStalled = playerStatus === PLAYER_STATUS.stalled;
   // console.log(' re-render playerStatue=', cctv.title, playerStatus)
 
+  const { url } = cctv;
   // eslint-disable-next-line react/prop-types
   const handlePlayerEvent = React.useCallback((event) => {
     const { type } = event;
@@ -89,15 +91,33 @@ function VideoState(props) {
     if (type === PLAYER_EVENTS.playing) {
       // console.log('player is playing!');
       setPlayerStatus(PLAYER_STATUS.normal);
+      setVideoStates((videoStates) => {
+        return {
+          ...videoStates,
+          [url]: PLAYER_STATUS.normal,
+        };
+      });
       return;
     }
     if (type === PLAYER_EVENTS.pause || type === PLAYER_EVENTS.ended) {
       // console.log('player is paused!');
       setPlayerStatus(PLAYER_STATUS.pause);
+      setVideoStates((videoStates) => {
+        return {
+          ...videoStates,
+          [url]: PLAYER_STATUS.pause,
+        };
+      });
       return;
     }
     // console.log('player is stalled!');
     setPlayerStatus(PLAYER_STATUS.stalled);
+    setVideoStates((videoStates) => {
+      return {
+        ...videoStates,
+        [url]: PLAYER_STATUS.stalled,
+      };
+    });
     },
     [cctvIndex],
   );

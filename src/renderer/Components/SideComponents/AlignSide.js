@@ -1,4 +1,10 @@
-import React from 'react'
+import React from 'react';
+import styled from 'styled-components';
+
+const Container = styled.fieldset`
+  /* margin-top: 1rem; */
+  border: 3px solid white;
+`
 
 function AlignSide(props) {
   // eslint-disable-next-line react/prop-types, @typescript-eslint/no-unused-vars
@@ -8,7 +14,7 @@ function AlignSide(props) {
     setAlignBy(e.target.id)
   }, [])
   return (
-    <fieldset onChange={onChangeAlign} value={value}>
+    <Container onChange={onChangeAlign} value={value}>
       <legend>Align Title</legend>
       <div>
         <input type="radio" id="right" name="align" value="right" defaultChecked={value === 'right'} />
@@ -18,7 +24,7 @@ function AlignSide(props) {
         <input type="radio" id="left" name="align" value="left" defaultChecked={value === 'left'}  />
         <label for="left">Left</label>
       </div>
-    </fieldset>
+    </Container>
   )
 }
 

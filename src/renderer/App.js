@@ -10,6 +10,7 @@ import VideoStates from './Components/VideoStates';
 import { getRealIndex, isPlayerPlaying } from './lib/sourceUtil';
 import { replace } from './lib/arrayUtil';
 import colors from './lib/colors';
+import DisplayStates from './Components/SideComponents/DisplayStates';
 import AlignSide from './Components/SideComponents/AlignSide';
 import SetTitleFont from './Components/SideComponents/SetTitleFont';
 import 'swiper/css';
@@ -62,10 +63,12 @@ const CenterArea = styled.div`
 `;
 const LeftArea = styled.div`
   color: white;
-  padding-left: 10px;
-  padding-right: 10px;
   padding-top: 10px;
-  min-width: 100px;
+  padding-left: 10px;
+  padding-right: auto;
+  width: 150px;
+  /* padding-top: 10px; */
+  /* min-width: 100px; */
 `
 const RightArea = styled(LeftArea)`
   margin-left: auto;
@@ -127,7 +130,15 @@ function App() {
   );
   const [alignBy, setAlignBy] = React.useState('right');
   const [titleFontSize, setTitleFontSize] = React.useState(3);
+  const [videoStates, setVideoStates] = React.useState({});
+  const [memUsage, setMemUsage] = React.useState(0);
+  const [appStartTimestamp, setAappStartTimestamp] = React.useState(Date.now())
+  const [elapsed, setElapsed] =  React.useState( {
+    num: 0,
+    str: '00:00:00'
+  });
 
+  console.log('stopped:', videoStates)
   useHotkeys('c', () => setDialogOpen(true));
   const preLoadMapRef = React.useRef(new Map());
   const setLeftSmallPlayerRef = React.useRef(() => {});
@@ -136,6 +147,28 @@ function App() {
   const activeIndexRef = React.useRef(activeIndex);
   const cctvPlayersRef = React.useRef([]);
   const swiperRef = React.useRef(null);
+
+  const totalVideos = cctvsSelectedArray.length;
+  const numberOfStoppedVideos = Object.values(videoStates).filter(
+    (videoState) => videoState !== 'normal'
+  ).length;
+  const videoStatesString = `${numberOfStoppedVideos}/${totalVideos}`
+  const numberOfLIveStream = totalVideos - numberOfStoppedVideos;
+
+  React.useEffect(() => {
+    let timer = setInterval(() => {
+      setElapsed(() => {
+        const diff = Date.now() - appStartTimestamp;
+        return {
+          num: diff,
+          str : new Date(diff).toISOString().slice(11, 19)
+        }
+      });
+    }, 1000);
+    return () => {
+      clearInterval(timer);
+    };
+  }, [appStartTimestamp]);
 
   React.useEffect(() => {
     if (swiperRef.current === null) return;
@@ -258,12 +291,28 @@ function App() {
     });
   }, [autoInterval, runAutoPlay]);
 
+  const updateVideoStates = React.useCallback((cctvsArray) => {
+    // eslint-disable-next-line @typescript-eslint/no-shadow
+    setVideoStates((videoStates) => {
+      return cctvsArray.reduce((acct, cctv) => {
+        if (videoStates[cctv.url] !== undefined) {
+          return {
+            ...acct,
+            [cctv.url]: videoStates[cctv.url]
+          }
+        }
+        return acct;
+      }, {});
+    });
+  }, []);
+
   const setCCTVsSelectedArrayNSave = React.useCallback(
     (cctvsArray) => {
       setCCTVsSelectedAray(cctvsArray);
       saveSelectedCCTVs(cctvsArray);
+      updateVideoStates(cctvsArray)
     },
-    [saveSelectedCCTVs],
+    [saveSelectedCCTVs, updateVideoStates],
   );
 
   const setCCTVsNotSelectedArrayNSave = React.useCallback(
@@ -293,6 +342,29 @@ function App() {
     window.electron.ipcRenderer.sendMessage('reload');
   }, []);
 
+  const totalResets = numberOfResets.reduce((acct, num) => {
+    return acct + num;
+  }, 0);
+
+  const MAX_MEM_USAGE = 100;
+  const MIN_ALIVE_VIDEOS = 2;
+  const MAX_ALIVE_TIMESTAMP = 43200000; // 12Hours
+
+  const getAppStatus = React.useCallback(() => {
+    if (memUsage > MAX_MEM_USAGE) {
+      return 'WARN';
+    }
+    if (numberOfLIveStream <= MIN_ALIVE_VIDEOS) {
+      return 'FATAL';
+    }
+    if (elapsed.num > MAX_ALIVE_TIMESTAMP) {
+      return 'WARN';
+    }
+    return 'OK';
+  }, [elapsed.num, memUsage, numberOfLIveStream])
+
+  const attention = getAppStatus();
+
   return (
     <Container autoPlay={autoPlay}>
       <TopPanel autoPlay={autoPlay}>
@@ -302,10 +374,16 @@ function App() {
           currentCCTVIndex={activeIndex}
           cctvPlayersRef={cctvPlayersRef}
           numberOfResets={numberOfResets}
+          setVideoStates={setVideoStates}
         />
       </TopPanel>
       <MiddlePanel autoPlay={autoPlay}>
         <LeftArea>
+          <DisplayStates title="Status" value={attention} isBig />
+          <DisplayStates title="Memory Usage" value={`${memUsage}%`} />
+          <DisplayStates title="Total Resets" value={totalResets} />
+          <DisplayStates title="Stopped Videos" value={videoStatesString} />
+          <DisplayStates title="Elapsed Time" value={elapsed.str} />
           <button onClick={reloadApp}>reload</button>
         </LeftArea>
         <CenterArea>
@@ -363,7 +441,7 @@ function App() {
         </RightArea>
       </MiddlePanel>
       <BottomPanel autoPlay={autoPlay}>
-        <MessagePanel autoPlay={autoPlay} />
+        <MessagePanel autoPlay={autoPlay} setMemUsage={setMemUsage} />
       </BottomPanel>
     </Container>
   );

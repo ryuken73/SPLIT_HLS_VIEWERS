@@ -29,7 +29,7 @@ const Version = styled.div`
 const MemUsage = styled.div`
 `
 function MessagePanel(props) {
-  const { autoPlay } = props;
+  const { autoPlay, setMemUsage } = props;
   const [appVersion, setAppVersion] = React.useState('v.0.0.0');
   const [currentMem, setCurrentMem] = React.useState('0');
   const [autoPlayStartedTimestamp, setAutoPlayStartedTimestamp] = React.useState(null);
@@ -91,6 +91,11 @@ function MessagePanel(props) {
   }, [handleMemInfo]);
 
   const usagePercent = ((currentMem / MAX_MEMORY_MB) * 100).toFixed(1);
+
+  React.useEffect(() => {
+    setMemUsage(usagePercent)
+  }, [usagePercent]);
+
   return (
     <Container>
       {autoPlayStartedTimestamp ? (
