@@ -21,13 +21,13 @@ const CustomPlayer = styled(ReactHlsPlayer)`
 `
 
 const hlsConfig = {
-  enableWorker: false,
+  enableWorker: true,
   debug: false,
-  backBufferLength: 0,
-  liveBackBufferLength: 0,
-  liveMaxBackBufferLength: 0,
-  maxBufferSize: 10,
-  maxBufferLength: 10 * 1000 * 1000,
+  // backBufferLength: 0,
+  // liveBackBufferLength: 0,
+  // liveMaxBackBufferLength: 0,
+  // maxBufferSize: 10,
+  // maxBufferLength: 10 * 1000 * 1000,
 }
 
 function HLSJSPlayer(props) {
