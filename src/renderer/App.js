@@ -138,7 +138,7 @@ function App() {
     str: '00:00:00'
   });
 
-  console.log('stopped:', videoStates)
+  // console.log('stopped:', videoStates)
   useHotkeys('c', () => setDialogOpen(true));
   const preLoadMapRef = React.useRef(new Map());
   const setLeftSmallPlayerRef = React.useRef(() => {});
@@ -293,8 +293,12 @@ function App() {
 
   const updateVideoStates = React.useCallback((cctvsArray) => {
     // eslint-disable-next-line @typescript-eslint/no-shadow
+    let currentCCTVS = cctvsArray;
+    if (typeof cctvsArray === 'function') {
+      currentCCTVS = cctvsArray(cctvsSelectedArray)
+    }
     setVideoStates((videoStates) => {
-      return cctvsArray.reduce((acct, cctv) => {
+      return currentCCTVS.reduce((acct, cctv) => {
         if (videoStates[cctv.url] !== undefined) {
           return {
             ...acct,
@@ -304,13 +308,16 @@ function App() {
         return acct;
       }, {});
     });
-  }, []);
+    },
+    [cctvsSelectedArray],
+  );
 
   const setCCTVsSelectedArrayNSave = React.useCallback(
     (cctvsArray) => {
+      // console.log('setCCTV:', cctvsArray)
       setCCTVsSelectedAray(cctvsArray);
       saveSelectedCCTVs(cctvsArray);
-      updateVideoStates(cctvsArray)
+      updateVideoStates(cctvsArray);
     },
     [saveSelectedCCTVs, updateVideoStates],
   );

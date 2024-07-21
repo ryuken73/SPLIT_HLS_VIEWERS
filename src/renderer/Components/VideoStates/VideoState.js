@@ -87,7 +87,7 @@ function VideoState(props) {
   // eslint-disable-next-line react/prop-types
   const handlePlayerEvent = React.useCallback((event) => {
     const { type } = event;
-    console.log('player event captured:', cctvIndex, type);
+    // console.log('player event captured:', cctvIndex, type);
     if (type === PLAYER_EVENTS.playing) {
       // console.log('player is playing!');
       setPlayerStatus(PLAYER_STATUS.normal);
