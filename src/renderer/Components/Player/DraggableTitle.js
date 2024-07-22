@@ -11,6 +11,7 @@ const AbsoluteBox = styled.div`
   left: ${(props) => props.alignBy === 'left' && '10px'};
   bottom: 100px;
   opacity: 0.9;
+  min-width: 20vw;
 `
 
 const Banner = styled.div`
@@ -28,6 +29,7 @@ const Banner = styled.div`
   border-top-left-radius: 0;
   opacity: 1;
   font-weight: bold;
+  text-align: left;
 `
 const Live = styled(Banner)`
   display: flex;
