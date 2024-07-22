@@ -14,6 +14,7 @@ import DisplayStates from './Components/SideComponents/DisplayStates';
 import AlignSide from './Components/SideComponents/AlignSide';
 import SetTitleFont from './Components/SideComponents/SetTitleFont';
 import 'swiper/css';
+import { SmallButton } from './template/smallComponents';
 
 const KEY_OPTIONS = 'hlsCCTVOptions';
 const KEY_SELECT_SAVED = 'selectedSavedCCTVs';
@@ -69,6 +70,14 @@ const LeftArea = styled.div`
   width: 150px;
   /* padding-top: 10px; */
   /* min-width: 100px; */
+`
+const AbsoluteBox = styled.div`
+  position: absolute;
+  border: 2px solid white;
+  padding: 15px;
+  /* width: ${(props) => !props.showStat && '0'}; */
+  opacity: ${(props) => (props.showStat ? 1 : 0)};
+  transition: 1s all;
 `
 const RightArea = styled(LeftArea)`
   margin-left: auto;
@@ -133,10 +142,11 @@ function App() {
   const [videoStates, setVideoStates] = React.useState({});
   const [memUsage, setMemUsage] = React.useState(0);
   const [appStartTimestamp, setAappStartTimestamp] = React.useState(Date.now())
-  const [elapsed, setElapsed] =  React.useState( {
+  const [elapsed, setElapsed] =  React.useState({
     num: 0,
     str: '00:00:00'
   });
+  const [showStat, setShowStat] = React.useState(false);
 
   // console.log('stopped:', videoStates)
   useHotkeys('c', () => setDialogOpen(true));
@@ -372,6 +382,11 @@ function App() {
 
   const attention = getAppStatus();
 
+  const toggleShowStat = React.useCallback(() => {
+    // eslint-disable-next-line @typescript-eslint/no-shadow
+    setShowStat((showStat) => !showStat);
+  }, []);
+
   return (
     <Container autoPlay={autoPlay}>
       <TopPanel autoPlay={autoPlay}>
@@ -386,12 +401,17 @@ function App() {
       </TopPanel>
       <MiddlePanel autoPlay={autoPlay}>
         <LeftArea>
-          <DisplayStates title="Status" value={attention} isBig />
-          <DisplayStates title="Memory Usage" value={`${memUsage}%`} />
-          <DisplayStates title="Total Resets" value={totalResets} />
-          <DisplayStates title="Stopped Videos" value={videoStatesString} />
-          <DisplayStates title="Elapsed Time" value={elapsed.str} />
-          <button onClick={reloadApp}>reload</button>
+          <SmallButton onClick={toggleShowStat}>
+            {showStat ? 'HIDE STAT' : 'SHOW STAT'}
+          </SmallButton>
+          <AbsoluteBox showStat={showStat}>
+            <DisplayStates title="Status" value={attention} isBig />
+            <DisplayStates title="Memory Usage" value={`${memUsage}%`} />
+            <DisplayStates title="Total Resets" value={totalResets} />
+            <DisplayStates title="Stopped Videos" value={videoStatesString} />
+            <DisplayStates title="Elapsed Time" value={elapsed.str} />
+            <button onClick={reloadApp}>reload</button>
+          </AbsoluteBox>
         </LeftArea>
         <CenterArea>
           {cctvsSelectedArray.length === 0 ? (
