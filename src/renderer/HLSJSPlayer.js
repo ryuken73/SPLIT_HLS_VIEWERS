@@ -107,6 +107,6 @@ function HLSJSPlayer(props) {
       )}
     </Conatiner>
   );
-}
+};
 
 export default React.memo(HLSJSPlayer);
