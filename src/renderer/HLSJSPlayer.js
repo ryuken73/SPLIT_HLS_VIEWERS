@@ -1,7 +1,8 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
 import styled from 'styled-components';
-import ReactHlsPlayer from 'react-hls-player/dist';
+// import ReactHlsPlayer from 'react-hls-player/dist';
+import ReactHlsPlayer from './Components/ReactHlsPlayer';
 import usePrevious from './hooks/usePrevious';
 import {isPlayerPlaying} from './lib/sourceUtil';
 import { replace } from './lib/arrayUtil';
