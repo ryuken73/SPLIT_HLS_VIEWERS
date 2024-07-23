@@ -148,12 +148,14 @@ function App() {
     str: '00:00:00'
   });
   const [showStat, setShowStat] = React.useState(false);
+  const [remainNextms, setRemainNextms] = React.useState(0);
 
   // console.log('stopped:', videoStates)
   useHotkeys('c', () => setDialogOpen(true));
   const preLoadMapRef = React.useRef(new Map());
   const setLeftSmallPlayerRef = React.useRef(() => {});
   const autoplayTimer = React.useRef(null);
+  const remainSecTimer = React.useRef(null);
   const modalOpenRef = React.useRef(modalOpen);
   const activeIndexRef = React.useRef(activeIndex);
   const cctvPlayersRef = React.useRef([]);
@@ -246,14 +248,41 @@ function App() {
     });
   }, []);
 
+  const remainTimerStartTimestamp = React.useRef(null);
+
+  const resetRemainTimer = React.useCallback(() => {
+    setRemainNextms(autoInterval * 1000);
+  }, [autoInterval]);
+
+  const startRemainTimer = React.useCallback(() => {
+    console.log('start reset timer')
+    remainTimerStartTimestamp.current = Date.now();
+    remainSecTimer.current = setInterval(() => {
+      setRemainNextms((nextms) => {
+        // eslint-disable-next-line react-hooks/exhaustive-deps, @typescript-eslint/no-shadow
+        const elapsed = Date.now() - remainTimerStartTimestamp;
+        console.log(elapsed);
+        return nextms - elapsed;
+      })
+    }, 300);
+  }, []);
+  const removeRemainTimer = React.useCallback(() => {
+    if (remainSecTimer.current !== null) {
+      clearInterval(remainSecTimer.current)
+    }
+  }, []);
+
+
   const runAutoPlay = React.useCallback(
     // eslint-disable-next-line default-param-last, @typescript-eslint/no-shadow
     (startAutoPlay = false, autoInterval) => {
+      // removeRemainTimer();
       if (startAutoPlay) {
         document.title = `CCTV[auto - every ${autoInterval}s]`;
         const firstIndex = activeIndex;
         moveToSlide(firstIndex);
         autoplayTimer.current = setInterval(() => {
+          // resetRemainTimer();
           let nextPlayerIndex =
             // (activeIndex + 1) % cctvPlayersRef.current.length;
             (activeIndexRef.current + 1) % cctvPlayersRef.current.length;
@@ -282,6 +311,7 @@ function App() {
           // swiperRef.current.slideNext();
           swiperRef.current.slideToLoop(nextPlayerIndex);
           // console.log('!!! nextIndex=', nextIndex, cctvPlayersRef.current[nextIndex].paused())
+          // startRemainTimer();
         }, autoInterval * 1000);
       } else {
         document.title = 'CCTV';
@@ -410,6 +440,7 @@ function App() {
           <SmallButton onClick={toggleShowStat}>
             {showStat ? 'HIDE STAT' : 'SHOW STAT'}
           </SmallButton>
+          <div>{remainNextms}</div>
           <AbsoluteBox showStat={showStat}>
             <DisplayStates title="Status" value={attention} isBig />
             <DisplayStates title="Memory Usage" value={`${memUsage}%`} />
