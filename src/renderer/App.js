@@ -23,6 +23,7 @@ const INITIAL_LOAD_TIME = new Array(9).fill(Date.now());
 
 const ACTIVE_COLOR_KEY = 950;
 const IDLE_COLOR_KEY = 400;
+const MAX_NUMBER_OF_RESETS = 50;
 
 const Container = styled.div`
   height: 100vh;
@@ -222,23 +223,28 @@ function App() {
   useHotkeys('8', handlePressKeyboard);
   useHotkeys('9', handlePressKeyboard);
 
-  const reloadPlayerComponent = React.useCallback(
-    (cctvIndex) => {
-      // console.log('getNon: reload Player:', cctvIndex)
-      setLastLoadedTime((lastLoadedTime) => {
-        const now = Date.now();
-        return replace(lastLoadedTime).index(cctvIndex).value(now);
-      });
-      // eslint-disable-next-line @typescript-eslint/no-shadow
-      setNumberOfResets((numberOfResets) => {
-        const lastNumber = numberOfResets[cctvIndex];
-        return replace(numberOfResets)
-          .index(cctvIndex)
-          .value(lastNumber + 1);
-      });
-    },
-    [setLastLoadedTime],
-  );
+  const reloadPlayerComponent = React.useCallback((cctvIndex) => {
+    // eslint-disable-next-line @typescript-eslint/no-shadow
+    setNumberOfResets((numberOfResets) => {
+      if (numberOfResets[cctvIndex] > MAX_NUMBER_OF_RESETS) {
+        console.log('too many resets:', cctvIndex);
+      } else {
+        console.log('reload player:', cctvIndex);
+        setLastLoadedTime((lastLoadedTime) => {
+          const now = Date.now();
+          return replace(lastLoadedTime).index(cctvIndex).value(now);
+        });
+        // eslint-disable-next-line @typescript-eslint/no-shadow
+        setNumberOfResets((numberOfResets) => {
+          const lastNumber = numberOfResets[cctvIndex];
+          return replace(numberOfResets)
+            .index(cctvIndex)
+            .value(lastNumber + 1);
+        });
+      }
+      return numberOfResets;
+    });
+  }, []);
 
   const runAutoPlay = React.useCallback(
     // eslint-disable-next-line default-param-last, @typescript-eslint/no-shadow
@@ -259,7 +265,6 @@ function App() {
             if (isPlayerPlaying(nextPlayer, nextPlayerIndex)) {
               break;
             } else {
-              console.log('reload player:', nextPlayerIndex)
               const newEvent = new Event('error');
               nextPlayer.dispatchEvent(newEvent);
               reloadPlayerComponent(nextPlayerIndex);
@@ -397,6 +402,7 @@ function App() {
           cctvPlayersRef={cctvPlayersRef}
           numberOfResets={numberOfResets}
           setVideoStates={setVideoStates}
+          maxNumberOfResets={MAX_NUMBER_OF_RESETS}
         />
       </TopPanel>
       <MiddlePanel autoPlay={autoPlay}>

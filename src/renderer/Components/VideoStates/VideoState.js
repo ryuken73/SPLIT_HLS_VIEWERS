@@ -29,6 +29,7 @@ const Title = styled.div`
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+  text-decoration: ${(props) => props.disabled && 'line-through'};
 `;
 const SubTitle = styled.div`
   color: yellow;
@@ -37,11 +38,13 @@ const SubTitle = styled.div`
   margin-bottom: 5px;
   margin-left: 5px;
   margin-right: 5px;
+  text-decoration: ${(props) => props.disabled && 'line-through'};
 `;
 const TimeDisplay = styled(SubTitle)`
   color: white;
   font-size: 0.7rem;
   line-height: 0.7rem;
+  text-decoration: ${(props) => props.disabled && 'line-through'};
 `
 const PLAYER_STATUS = {
   normal: 'normal',
@@ -73,7 +76,8 @@ function VideoState(props) {
     currentCCTVIndex,
     cctvPlayersRef,
     numberOfReset,
-    setVideoStates
+    maxNumberOfResets,
+    setVideoStates,
   } = props;
   const [playerStatus, setPlayerStatus] = React.useState(PLAYER_STATUS.pause);
   const [currentTime, setCurrentTime] = React.useState(secondToHHMMSS(0));
@@ -83,6 +87,7 @@ function VideoState(props) {
   const isStalled = playerStatus === PLAYER_STATUS.stalled;
   // console.log(' re-render playerStatue=', cctv.title, playerStatus)
 
+  const disabled = numberOfReset > maxNumberOfResets;
   const { url } = cctv;
   // eslint-disable-next-line react/prop-types
   const handlePlayerEvent = React.useCallback((event) => {
@@ -205,12 +210,12 @@ function VideoState(props) {
 
   return (
     <Container isActive={isActive} bgcolor={bgColor} onClick={onClick}>
-      <Title color={titleColor}>{cctv.title}</Title>
-      <SubTitle>
+      <Title disabled={disabled} color={titleColor}>{cctv.title}</Title>
+      <SubTitle disabled={disabled}>
         {/* {statusString} Reset Count [{numberOfReset}] */}
         Reset Count [{numberOfReset}]
       </SubTitle>
-      <TimeDisplay>
+      <TimeDisplay disabled={disabled}>
         {currentTime} / {duration}
       </TimeDisplay>
     </Container>

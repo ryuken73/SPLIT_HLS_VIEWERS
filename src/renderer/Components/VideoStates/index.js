@@ -26,6 +26,7 @@ function VideoStates(props) {
     currentCCTVIndex,
     cctvPlayersRef,
     numberOfResets,
+    maxNumberOfResets,
     setVideoStates
   } = props;
   return (
@@ -41,6 +42,7 @@ function VideoStates(props) {
             autoPlay={autoPlay}
             numberOfReset={numberOfResets[cctvIndex]}
             setVideoStates={setVideoStates}
+            maxNumberOfResets={maxNumberOfResets}
           />
         ))}
       </Container>
