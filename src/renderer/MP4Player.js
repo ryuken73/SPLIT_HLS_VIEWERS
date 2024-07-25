@@ -28,8 +28,8 @@ function MP4Player(props) {
     onDrag,
     position,
     alignBy,
-    showTitle = true,
-    titleFontSize
+    titleFontSize,
+    showTitle
   } = props;
 
   const playerRef = React.useRef(null);

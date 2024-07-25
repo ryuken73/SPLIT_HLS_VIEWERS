@@ -13,6 +13,7 @@ import colors from './lib/colors';
 import DisplayStates from './Components/SideComponents/DisplayStates';
 import AlignSide from './Components/SideComponents/AlignSide';
 import SetTitleFont from './Components/SideComponents/SetTitleFont';
+import ShowTitle from './Components/SideComponents/ShowTitle';
 import 'swiper/css';
 import { SmallButton } from './template/smallComponents';
 
@@ -149,6 +150,7 @@ function App() {
   });
   const [showStat, setShowStat] = React.useState(false);
   const [remainNextms, setRemainNextms] = React.useState(0);
+  const [showTitle, setShowTitle] = React.useState(true);
 
   // console.log('stopped:', videoStates)
   useHotkeys('c', () => setDialogOpen(true));
@@ -493,6 +495,7 @@ function App() {
               currentCCTVIndex={activeIndex}
               alignBy={alignBy}
               titleFontSize={titleFontSize}
+              showTitle={showTitle}
             />
           )}
           <ConfigDialog
@@ -520,6 +523,7 @@ function App() {
             titleFontSize={titleFontSize}
             setTitleFontSize={setTitleFontSize}
           />
+          <ShowTitle showTitle={showTitle} setShowTitle={setShowTitle} />
         </RightArea>
       </MiddlePanel>
       <BottomPanel autoPlay={autoPlay}>

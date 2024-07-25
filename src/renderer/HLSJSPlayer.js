@@ -49,7 +49,7 @@ function HLSJSPlayer(props) {
     onDrag,
     position,
     alignBy,
-    showTitle=true,
+    showTitle,
     titleFontSize
   } = props;
   const playerRef = React.useRef(null);
