@@ -10,7 +10,7 @@ const AbsoluteBox = styled.div`
   right: ${(props) => props.alignBy === 'right' && '10px'};
   left: ${(props) => props.alignBy === 'left' && '10px'};
   bottom: 100px;
-  opacity: 0.9;
+  opacity: ${(props) => props.titleOpacity};
   min-width: 20vw;
 `
 
@@ -65,10 +65,11 @@ function DraggableTitle(props) {
     position = {},
     alignBy,
     titleFontSize,
+    titleOpacity = 0.9,
   } = props;
   return (
     <Draggable onDrag={onDrag} position={{ x: position.x, y: position.y }}>
-      <AbsoluteBox alignBy={alignBy}>
+      <AbsoluteBox alignBy={alignBy} titleOpacity={titleOpacity}>
         <Live titleFontSize={titleFontSize}>
           <Dot>
             <BlinkingDot />

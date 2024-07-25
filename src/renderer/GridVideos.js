@@ -46,7 +46,8 @@ function GridVideos(props) {
     currentCCTVIndex,
     alignBy,
     titleFontSize,
-    showTitle
+    titleOpacity,
+    showTitle,
   } = props;
 
   // const cctvs = [...cctvsInAreas.values()].flat();
@@ -116,6 +117,7 @@ function GridVideos(props) {
                 position={titlePosition}
                 alignBy={alignBy}
                 titleFontSize={titleFontSize}
+                titleOpacity={titleOpacity}
                 showTitle={showTitle}
               />
             ) : (
@@ -130,6 +132,7 @@ function GridVideos(props) {
                 position={titlePosition}
                 alignBy={alignBy}
                 titleFontSize={titleFontSize}
+                titleOpacity={titleOpacity}
                 showTitle={showTitle}
                 // autoPlay={autoPlay}
                 // player={cctvPlayersRef.current[cctvIndex]}

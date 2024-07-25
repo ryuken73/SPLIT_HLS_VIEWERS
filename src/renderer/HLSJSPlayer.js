@@ -50,7 +50,8 @@ function HLSJSPlayer(props) {
     position,
     alignBy,
     showTitle,
-    titleFontSize
+    titleFontSize,
+    titleOpacity
   } = props;
   const playerRef = React.useRef(null);
   const { url } = source;
@@ -110,6 +111,7 @@ function HLSJSPlayer(props) {
           title={source.title}
           alignBy={alignBy}
           titleFontSize={titleFontSize}
+          titleOpacity={titleOpacity}
         />
       )}
     </Conatiner>

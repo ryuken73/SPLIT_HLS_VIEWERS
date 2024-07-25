@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 const Container = styled.fieldset`
-  /* margin-top: 1rem; */
+  margin-top: 1rem;
   border: 3px solid white;
 `
 

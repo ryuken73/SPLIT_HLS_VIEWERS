@@ -11,9 +11,10 @@ import { getRealIndex, isPlayerPlaying } from './lib/sourceUtil';
 import { replace } from './lib/arrayUtil';
 import colors from './lib/colors';
 import DisplayStates from './Components/SideComponents/DisplayStates';
+import ShowTitle from './Components/SideComponents/ShowTitle';
 import AlignSide from './Components/SideComponents/AlignSide';
 import SetTitleFont from './Components/SideComponents/SetTitleFont';
-import ShowTitle from './Components/SideComponents/ShowTitle';
+import SetTitleOpacity from './Components/SideComponents/SetTitleOpacity';
 import 'swiper/css';
 import { SmallButton } from './template/smallComponents';
 
@@ -151,6 +152,7 @@ function App() {
   const [showStat, setShowStat] = React.useState(false);
   const [remainNextms, setRemainNextms] = React.useState(0);
   const [showTitle, setShowTitle] = React.useState(true);
+  const [titleOpacity, setTitleOpacity] = React.useState(0.9);
 
   // console.log('stopped:', videoStates)
   useHotkeys('c', () => setDialogOpen(true));
@@ -496,6 +498,7 @@ function App() {
               alignBy={alignBy}
               titleFontSize={titleFontSize}
               showTitle={showTitle}
+              titleOpacity={titleOpacity}
             />
           )}
           <ConfigDialog
@@ -518,12 +521,16 @@ function App() {
           />
         </CenterArea>
         <RightArea>
+          <ShowTitle showTitle={showTitle} setShowTitle={setShowTitle} />
           <AlignSide alignBy={alignBy} setAlignBy={setAlignBy} />
           <SetTitleFont
             titleFontSize={titleFontSize}
             setTitleFontSize={setTitleFontSize}
           />
-          <ShowTitle showTitle={showTitle} setShowTitle={setShowTitle} />
+          <SetTitleOpacity
+            titleOpacity={titleOpacity}
+            setTitleOpacity={setTitleOpacity}
+          />
         </RightArea>
       </MiddlePanel>
       <BottomPanel autoPlay={autoPlay}>
