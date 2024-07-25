@@ -25,12 +25,12 @@ const hlsConfig = {
   enableWorker: false,
   debug: false,
 
-  // liveBackBufferLength: 15,
-  // backBufferLength1: 15,
-  // liveMaxBackBufferLength: 15,
-  // maxBufferSize: 0,
-  // maxBufferLength: 10,
-  // liveSyncDurationCount: 1,
+  liveBackBufferLength: 15,
+  backBufferLength1: 15,
+  liveMaxBackBufferLength: 15,
+  maxBufferSize: 0,
+  maxBufferLength: 10,
+  liveSyncDurationCount: 1,
 
   // backBufferLength: 0,
   // liveBackBufferLength: 0,
@@ -45,23 +45,19 @@ function HLSJSPlayer(props) {
     setPlayer,
     lastLoaded,
     cctvIndex,
-    currentCCTVIndex,
     aspectRatio,
     onDrag,
     position,
     alignBy,
-    showTitle,
-    titleFontSize,
-    titleOpacity,
-    autoInterval,
-    autoPlay,
+    showTitle=true,
+    titleFontSize
   } = props;
   const playerRef = React.useRef(null);
   const { url } = source;
 
   const [reloadTrigger, setReloadTrigger] = React.useState(true);
 
-  const isActive = cctvIndex === currentCCTVIndex;
+
   // console.log('re-render player:', cctvIndex, source.title);
   const onLoadDataHandler = React.useCallback((event) => {
     // console.log('^^^',event)
@@ -114,10 +110,6 @@ function HLSJSPlayer(props) {
           title={source.title}
           alignBy={alignBy}
           titleFontSize={titleFontSize}
-          titleOpacity={titleOpacity}
-          isActive={isActive}
-          autoInterval={autoInterval}
-          autoPlay={autoPlay}
         />
       )}
     </Conatiner>
