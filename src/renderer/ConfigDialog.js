@@ -184,7 +184,7 @@ const ConfigDialog = props => {
                         {optionTitle}
                         <Box style={{marginLeft:'auto'}}>
                         </Box>
-                        {displayGrid &&
+                        {/* {displayGrid &&
                             <Row>
                                 <input
                                     onChange={onChangeMode}
@@ -213,11 +213,14 @@ const ConfigDialog = props => {
                                 <FormControlLabel value="2" control={<Radio size="small" />} label="2X2" />
                                 <FormControlLabel value="3" control={<Radio size="small"/>} label="3X3" />
                             </RadioGroup>
-                        }
-                        {displayGrid &&
-                            <input type="text" onChange={handleChangeAutoInterval} value={autoInterval}>
-                            </input>
-                        }
+                        } */}
+                        {displayGrid && (
+                            <Row>
+                                <span style={{marginRight: '5px'}}>auto refresh</span>
+                                <input type="text" onChange={handleChangeAutoInterval} value={autoInterval}></input>
+                            </Row>
+                        )}
+
                     </Box>
                 </DialogTitle>
                 {/* <DialogContent dividers={scroll === 'paper'}> */}
