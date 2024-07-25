@@ -24,6 +24,7 @@ function MP4Player(props) {
     setPlayer,
     lastLoaded,
     cctvIndex,
+    currentCCTVIndex,
     aspectRatio,
     onDrag,
     position,
@@ -37,6 +38,7 @@ function MP4Player(props) {
   const { url } = source;
 
   const [reloadTrigger, setReloadTrigger] = React.useState(true);
+  const isActive = cctvIndex === currentCCTVIndex;
 
   const onLoadDataHandler = React.useCallback((event) => {
     // console.log(lastLoaded)
@@ -96,6 +98,7 @@ function MP4Player(props) {
           alignBy={alignBy}
           titleFontSize={titleFontSize}
           titleOpacity={titleOpacity}
+          isActive={isActive}
         />
       )}
     </Container>

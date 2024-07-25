@@ -462,7 +462,7 @@ function App() {
           <SmallButton onClick={toggleShowStat}>
             {showStat ? 'HIDE STAT' : 'SHOW STAT'}
           </SmallButton>
-          <div>{((remainNextms/(autoInterval*1000))*100).toFixed(1)}%</div>
+          {/* <div>{((remainNextms/(autoInterval*1000))*100).toFixed(1)}%</div> */}
           <AbsoluteBox showStat={showStat}>
             <DisplayStates title="Status" value={attention} isBig />
             <DisplayStates title="Memory Usage" value={`${memUsage}%`} />

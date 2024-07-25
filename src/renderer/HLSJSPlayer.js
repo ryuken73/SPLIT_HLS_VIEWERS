@@ -45,6 +45,7 @@ function HLSJSPlayer(props) {
     setPlayer,
     lastLoaded,
     cctvIndex,
+    currentCCTVIndex,
     aspectRatio,
     onDrag,
     position,
@@ -58,7 +59,7 @@ function HLSJSPlayer(props) {
 
   const [reloadTrigger, setReloadTrigger] = React.useState(true);
 
-
+  const isActive = cctvIndex === currentCCTVIndex;
   // console.log('re-render player:', cctvIndex, source.title);
   const onLoadDataHandler = React.useCallback((event) => {
     // console.log('^^^',event)
@@ -112,6 +113,7 @@ function HLSJSPlayer(props) {
           alignBy={alignBy}
           titleFontSize={titleFontSize}
           titleOpacity={titleOpacity}
+          isActive={isActive}
         />
       )}
     </Conatiner>

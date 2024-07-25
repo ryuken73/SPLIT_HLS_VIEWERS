@@ -112,6 +112,7 @@ function GridVideos(props) {
                 setPlayer={setCCTVPlayerRef}
                 lastLoaded={cctvLastLoadedTime[cctvIndex]}
                 cctvIndex={cctvIndex}
+                currentCCTVIndex={currentCCTVIndex}
                 aspectRatio="4/3"
                 onDrag={handleTitleDrag}
                 position={titlePosition}
@@ -127,6 +128,7 @@ function GridVideos(props) {
                 setPlayer={setCCTVPlayerRef}
                 lastLoaded={cctvLastLoadedTime[cctvIndex]}
                 cctvIndex={cctvIndex}
+                currentCCTVIndex={currentCCTVIndex}
                 aspectRatio="4/3"
                 onDrag={handleTitleDrag}
                 position={titlePosition}

@@ -51,10 +51,14 @@ const Dot = styled.span`
   margin-bottom: -3px;
 `;
 const Line = styled.div`
+  position: relative;
   background: white;
   height: 5px;
-  /* border-bottom-right-radius: 10px; */
-  /* border-bottom-left-radius: 10px; */
+`
+const Progress = styled(Line)`
+  position: absolute;
+  background: ${colors.banner[500]};
+  width: ${(props) => props.isActive && '100%'};
 `
 
 function DraggableTitle(props) {
@@ -66,6 +70,7 @@ function DraggableTitle(props) {
     alignBy,
     titleFontSize,
     titleOpacity = 0.9,
+    isActive
   } = props;
   return (
     <Draggable onDrag={onDrag} position={{ x: position.x, y: position.y }}>
@@ -77,7 +82,9 @@ function DraggableTitle(props) {
           <div>LIVE</div>
         </Live>
         <Banner titleFontSize={titleFontSize}>{title}</Banner>
-        <Line />
+        <Line>
+          <Progress isActive={isActive} />
+        </Line>
       </AbsoluteBox>
     </Draggable>
   )
