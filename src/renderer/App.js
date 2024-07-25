@@ -196,12 +196,12 @@ function App() {
 
   // console.log('gridNumNormalized=', gridNumNormalized, currentCCTVIndex, cctvIndexRef.current)
 
-  const gridNum2CCTVIndex = React.useCallback(
-    (gridNum) => {
-      return getRealIndex(gridNum, gridDimension, cctvsSelectedArray);
-    },
-    [cctvsSelectedArray, gridDimension],
-  );
+  // const gridNum2CCTVIndex = React.useCallback(
+  //   (gridNum) => {
+  //     return getRealIndex(gridNum, gridDimension, cctvsSelectedArray);
+  //   },
+  //   [cctvsSelectedArray, gridDimension],
+  // );
 
   const moveToSlide = React.useCallback((index) => {
     swiperRef.current.slideTo(index);
@@ -210,11 +210,14 @@ function App() {
   const handlePressKeyboard = React.useCallback(
     (_, handler) => {
       const pressed = parseInt(handler.keys[0], 10);
-      const targetIndex = gridNum2CCTVIndex(pressed - 1);
+      // const targetIndex = gridNum2CCTVIndex(pressed - 1);
+      const targetIndex = (pressed - 1) % cctvPlayersRef.current.length;
+      console.log(`pressed ${pressed}, targetIndex is ${targetIndex} `);
       moveToSlide(targetIndex);
     },
-    [gridNum2CCTVIndex, moveToSlide],
+    [moveToSlide],
   );
+
   useHotkeys('1', handlePressKeyboard);
   useHotkeys('2', handlePressKeyboard);
   useHotkeys('3', handlePressKeyboard);
