@@ -2,6 +2,8 @@
 import React from 'react';
 import Draggable from 'react-draggable';
 import styled from 'styled-components';
+import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
 import colors from '../../lib/colors';
 import BlinkingDot from '../../BlinkingDot';
 
@@ -58,7 +60,8 @@ const Line = styled.div`
 const Progress = styled(Line)`
   position: absolute;
   background: ${colors.banner[500]};
-  width: ${(props) => props.isActive && '100%'};
+  width: 0;
+  /* width: ${(props) => props.isActive && '100%'}; */
 `
 
 function DraggableTitle(props) {
@@ -70,8 +73,22 @@ function DraggableTitle(props) {
     alignBy,
     titleFontSize,
     titleOpacity = 0.9,
-    isActive
+    isActive,
+    autoInterval,
+    autoPlay,
   } = props;
+  const progressRef = React.useRef(null);
+  useGSAP(
+    () => {
+      if (isActive && autoPlay) {
+        gsap.to(progressRef.current, { width: '100%', duration: autoInterval });
+      }
+    },
+    {
+      dependencies: [isActive, autoInterval, autoPlay],
+      revertOnUpdate: true,
+    },
+  );
   return (
     <Draggable onDrag={onDrag} position={{ x: position.x, y: position.y }}>
       <AbsoluteBox alignBy={alignBy} titleOpacity={titleOpacity}>
@@ -83,7 +100,7 @@ function DraggableTitle(props) {
         </Live>
         <Banner titleFontSize={titleFontSize}>{title}</Banner>
         <Line>
-          <Progress isActive={isActive} />
+          <Progress ref={progressRef} isActive={isActive} />
         </Line>
       </AbsoluteBox>
     </Draggable>

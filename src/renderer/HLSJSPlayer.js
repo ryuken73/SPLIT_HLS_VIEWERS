@@ -52,7 +52,9 @@ function HLSJSPlayer(props) {
     alignBy,
     showTitle,
     titleFontSize,
-    titleOpacity
+    titleOpacity,
+    autoInterval,
+    autoPlay,
   } = props;
   const playerRef = React.useRef(null);
   const { url } = source;
@@ -114,6 +116,8 @@ function HLSJSPlayer(props) {
           titleFontSize={titleFontSize}
           titleOpacity={titleOpacity}
           isActive={isActive}
+          autoInterval={autoInterval}
+          autoPlay={autoPlay}
         />
       )}
     </Conatiner>

@@ -31,7 +31,9 @@ function MP4Player(props) {
     alignBy,
     titleFontSize,
     showTitle,
-    titleOpacity
+    titleOpacity,
+    autoInterval,
+    autoPlay,
   } = props;
 
   const playerRef = React.useRef(null);
@@ -99,6 +101,8 @@ function MP4Player(props) {
           titleFontSize={titleFontSize}
           titleOpacity={titleOpacity}
           isActive={isActive}
+          autoInterval={autoInterval}
+          autoPlay={autoPlay}
         />
       )}
     </Container>

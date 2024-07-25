@@ -499,6 +499,7 @@ function App() {
               titleFontSize={titleFontSize}
               showTitle={showTitle}
               titleOpacity={titleOpacity}
+              autoInterval={autoInterval}
             />
           )}
           <ConfigDialog
