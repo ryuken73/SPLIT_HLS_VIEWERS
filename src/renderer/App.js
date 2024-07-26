@@ -255,47 +255,47 @@ function App() {
     });
   }, []);
 
-  const remainTimerStartTimestamp = React.useRef(null);
+  // const remainTimerStartTimestamp = React.useRef(null);
 
-  const resetRemainTimer = React.useCallback(() => {
-    setRemainNextms(autoInterval * 1000);
-  }, [autoInterval]);
+  // const resetRemainTimer = React.useCallback(() => {
+  //   setRemainNextms(autoInterval * 1000);
+  // }, [autoInterval]);
 
-  const startRemainTimer = React.useCallback(() => {
-    console.log('start reset timer')
-    remainTimerStartTimestamp.current = Date.now();
-    remainSecTimer.current = setInterval(() => {
-      setRemainNextms((nextms) => {
-        // eslint-disable-next-line react-hooks/exhaustive-deps, @typescript-eslint/no-shadow
-        const elapsed = Date.now() - remainTimerStartTimestamp.current;
-        console.log(elapsed);
-        return autoInterval*1000 - elapsed;
-      })
-    }, 300);
-  }, [autoInterval]);
-  const removeRemainTimer = React.useCallback(() => {
-    if (remainSecTimer.current !== null) {
-      console.log('### clearInterval');
-      clearInterval(remainSecTimer.current)
-    }
-  }, []);
+  // const startRemainTimer = React.useCallback(() => {
+  //   console.log('start reset timer')
+  //   remainTimerStartTimestamp.current = Date.now();
+  //   remainSecTimer.current = setInterval(() => {
+  //     setRemainNextms((nextms) => {
+  //       // eslint-disable-next-line react-hooks/exhaustive-deps, @typescript-eslint/no-shadow
+  //       const elapsed = Date.now() - remainTimerStartTimestamp.current;
+  //       console.log(elapsed);
+  //       return autoInterval*1000 - elapsed;
+  //     })
+  //   }, 300);
+  // }, [autoInterval]);
+  // const removeRemainTimer = React.useCallback(() => {
+  //   if (remainSecTimer.current !== null) {
+  //     console.log('### clearInterval');
+  //     clearInterval(remainSecTimer.current)
+  //   }
+  // }, []);
 
 
   const runAutoPlay = React.useCallback(
     // eslint-disable-next-line default-param-last, @typescript-eslint/no-shadow
     (startAutoPlay = false, autoInterval) => {
-      console.log('remove timer');
-      removeRemainTimer();
+      // console.log('remove timer');
+      // removeRemainTimer();
       if (startAutoPlay) {
         document.title = `CCTV[auto - every ${autoInterval}s]`;
         const firstIndex = activeIndex;
         moveToSlide(firstIndex);
-        console.log('start timer')
-        startRemainTimer();
+        // console.log('start timer')
+        // startRemainTimer();
         autoplayTimer.current = setInterval(() => {
-          removeRemainTimer();
-          resetRemainTimer();
-          console.log('reset timer')
+          // removeRemainTimer();
+          // resetRemainTimer();
+          // console.log('reset timer')
           let nextPlayerIndex =
             // (activeIndex + 1) % cctvPlayersRef.current.length;
             (activeIndexRef.current + 1) % cctvPlayersRef.current.length;
@@ -324,26 +324,19 @@ function App() {
           // swiperRef.current.slideNext();
           swiperRef.current.slideToLoop(nextPlayerIndex);
           // console.log('!!! nextIndex=', nextIndex, cctvPlayersRef.current[nextIndex].paused())
-          console.log('start timer')
-          startRemainTimer();
+          // console.log('start timer')
+          // startRemainTimer();
         }, autoInterval * 1000);
       } else {
         document.title = 'CCTV';
         clearInterval(autoplayTimer.current);
-        resetRemainTimer();
+        // resetRemainTimer();
       }
       return () => {
         clearInterval(autoplayTimer.current);
       };
     },
-    [
-      activeIndex,
-      moveToSlide,
-      reloadPlayerComponent,
-      removeRemainTimer,
-      resetRemainTimer,
-      startRemainTimer,
-    ],
+    [activeIndex, moveToSlide, reloadPlayerComponent],
   );
 
   const toggleAutoPlay = React.useCallback(() => {
