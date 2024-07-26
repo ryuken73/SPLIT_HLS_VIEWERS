@@ -76,16 +76,17 @@ function DraggableTitle(props) {
     isActive,
     autoInterval,
     autoPlay,
+    showProgress,
   } = props;
   const progressRef = React.useRef(null);
   useGSAP(
     () => {
-      if (isActive && autoPlay) {
+      if (isActive && autoPlay && showProgress) {
         gsap.to(progressRef.current, { width: '100%', duration: autoInterval });
       }
     },
     {
-      dependencies: [isActive, autoInterval, autoPlay],
+      dependencies: [isActive, autoInterval, autoPlay, showProgress],
       revertOnUpdate: true,
     },
   );

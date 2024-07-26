@@ -15,6 +15,7 @@ import ShowTitle from './Components/SideComponents/ShowTitle';
 import AlignSide from './Components/SideComponents/AlignSide';
 import SetTitleFont from './Components/SideComponents/SetTitleFont';
 import SetTitleOpacity from './Components/SideComponents/SetTitleOpacity';
+import ShowProgress from './Components/SideComponents/ShowProgress';
 import 'swiper/css';
 import { SmallButton } from './template/smallComponents';
 
@@ -150,8 +151,9 @@ function App() {
     str: '00:00:00'
   });
   const [showStat, setShowStat] = React.useState(false);
-  const [remainNextms, setRemainNextms] = React.useState(0);
+  // const [remainNextms, setRemainNextms] = React.useState(0);
   const [showTitle, setShowTitle] = React.useState(true);
+  const [showProgress, setShowProgress] = React.useState(true);
   const [titleOpacity, setTitleOpacity] = React.useState(0.9);
 
   // console.log('stopped:', videoStates)
@@ -493,6 +495,7 @@ function App() {
               showTitle={showTitle}
               titleOpacity={titleOpacity}
               autoInterval={autoInterval}
+              showProgress={showProgress}
             />
           )}
           <ConfigDialog
@@ -517,6 +520,10 @@ function App() {
         <RightArea>
           <ShowTitle showTitle={showTitle} setShowTitle={setShowTitle} />
           <AlignSide alignBy={alignBy} setAlignBy={setAlignBy} />
+          <ShowProgress
+            showProgress={showProgress}
+            setShowProgress={setShowProgress}
+          />
           <SetTitleFont
             titleFontSize={titleFontSize}
             setTitleFontSize={setTitleFontSize}

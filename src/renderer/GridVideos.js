@@ -48,7 +48,8 @@ function GridVideos(props) {
     titleFontSize,
     titleOpacity,
     showTitle,
-    autoInterval
+    autoInterval,
+    showProgress,
   } = props;
 
   // const cctvs = [...cctvsInAreas.values()].flat();
@@ -123,6 +124,7 @@ function GridVideos(props) {
                 showTitle={showTitle}
                 autoInterval={autoInterval}
                 autoPlay={autoPlay}
+                showProgress={showProgress}
               />
             ) : (
               <HLSJSPlayer
@@ -141,6 +143,7 @@ function GridVideos(props) {
                 showTitle={showTitle}
                 autoInterval={autoInterval}
                 autoPlay={autoPlay}
+                showProgress={showProgress}
                 // player={cctvPlayersRef.current[cctvIndex]}
                 // width="100%"
                 // height="auto"

@@ -34,6 +34,7 @@ function MP4Player(props) {
     titleOpacity,
     autoInterval,
     autoPlay,
+    showProgress
   } = props;
 
   const playerRef = React.useRef(null);
@@ -103,6 +104,7 @@ function MP4Player(props) {
           isActive={isActive}
           autoInterval={autoInterval}
           autoPlay={autoPlay}
+          showProgress={showProgress}
         />
       )}
     </Container>

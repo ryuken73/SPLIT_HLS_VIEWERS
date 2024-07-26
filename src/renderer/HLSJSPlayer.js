@@ -55,6 +55,7 @@ function HLSJSPlayer(props) {
     titleOpacity,
     autoInterval,
     autoPlay,
+    showProgress,
   } = props;
   const playerRef = React.useRef(null);
   const { url } = source;
@@ -119,6 +120,7 @@ function HLSJSPlayer(props) {
           isActive={isActive}
           autoInterval={autoInterval}
           autoPlay={autoPlay}
+          showProgress={showProgress}
         />
       )}
     </Conatiner>
