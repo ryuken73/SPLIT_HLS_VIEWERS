@@ -78,10 +78,12 @@ function DraggableTitle(props) {
     autoPlay,
   } = props;
   const progressRef = React.useRef(null);
+  console.log(isActive, autoPlay)
   useGSAP(
     () => {
       if (isActive && autoPlay) {
-        gsap.to(progressRef.current, { width: '100%', duration: autoInterval });
+        // gsap.to(progressRef.current, { width: '100%', duration: autoInterval });
+        gsap.to('.progress', { width: '100%', duration: autoInterval });
       }
     },
     {
@@ -100,7 +102,7 @@ function DraggableTitle(props) {
         </Live>
         <Banner titleFontSize={titleFontSize}>{title}</Banner>
         <Line>
-          <Progress ref={progressRef} isActive={isActive} />
+          <Progress className='progress' ref={progressRef} isActive={isActive} />
         </Line>
       </AbsoluteBox>
     </Draggable>
