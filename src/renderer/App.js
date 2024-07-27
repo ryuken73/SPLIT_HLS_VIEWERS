@@ -7,7 +7,7 @@ import GridVideos from './GridVideos';
 import useLocalStorage from './hooks/useLocalStorage';
 import MessagePanel from './MessagePanel';
 import VideoStates from './Components/VideoStates';
-import { getRealIndex, isPlayerPlaying } from './lib/sourceUtil';
+import { isPlayerPlaying } from './lib/sourceUtil';
 import { replace } from './lib/arrayUtil';
 import colors from './lib/colors';
 import DisplayStates from './Components/SideComponents/DisplayStates';
@@ -42,7 +42,10 @@ const TopPanel = styled.div`
   min-height: 100px;
   width: 100%;
   border: 3px solid;
-  border-color: ${(props) => props.autoPlay ? colors.autoRun[IDLE_COLOR_KEY] : colors.idle[IDLE_COLOR_KEY]};
+  border-color: ${(props) =>
+    props.autoPlay
+      ? colors.autoRun[IDLE_COLOR_KEY]
+      : colors.idle[IDLE_COLOR_KEY]};
   box-sizing: border-box;
   overflow-x: auto;
   overflow-y: hidden;
@@ -52,15 +55,20 @@ const MiddlePanel = styled.div`
   position: relative;
   border-left: 3px solid;
   border-right: 3px solid;
-  border-left-color: ${(props) => props.autoPlay ? colors.autoRun[IDLE_COLOR_KEY] : colors.idle[IDLE_COLOR_KEY]};
-  border-right-color: ${(props) => props.autoPlay ? colors.autoRun[IDLE_COLOR_KEY] : colors.idle[IDLE_COLOR_KEY]};
+  border-left-color: ${(props) =>
+    props.autoPlay
+      ? colors.autoRun[IDLE_COLOR_KEY]
+      : colors.idle[IDLE_COLOR_KEY]};
+  border-right-color: ${(props) =>
+    props.autoPlay
+      ? colors.autoRun[IDLE_COLOR_KEY]
+      : colors.idle[IDLE_COLOR_KEY]};
   overflow: hidden;
   display: flex;
 `;
 const CenterArea = styled.div`
   position: absolute;
   top: 50%;
-  /* left: 50%; */
   right: 50%;
   transform: translate(50%, -50%);
   border: 5px solid white;
@@ -72,14 +80,11 @@ const LeftArea = styled.div`
   padding-left: 10px;
   padding-right: auto;
   width: 150px;
-  /* padding-top: 10px; */
-  /* min-width: 100px; */
 `
 const AbsoluteBox = styled.div`
   position: absolute;
   border: 2px solid white;
   padding: 15px;
-  /* width: ${(props) => !props.showStat && '0'}; */
   opacity: ${(props) => (props.showStat ? 1 : 0)};
   transition: 1s all;
 `
@@ -90,10 +95,12 @@ const RightArea = styled(LeftArea)`
 const BottomPanel = styled.div`
   margin-top: auto;
   min-height: 20px;
-  /* margin-bottom: 4px; */
   color: white;
   border: 3px solid;
-  border-color: ${(props) => props.autoPlay ? colors.autoRun[IDLE_COLOR_KEY] : colors.idle[IDLE_COLOR_KEY]};
+  border-color: ${(props) =>
+    props.autoPlay
+      ? colors.autoRun[IDLE_COLOR_KEY]
+      : colors.idle[IDLE_COLOR_KEY]};
 `;
 
 function App() {
@@ -125,7 +132,6 @@ function App() {
   const [autoPlay, setAutoPlay] = React.useState(false);
   const [autoInterval, setAutoInterval] = React.useState(INITIAL_AUTO_INTERVAL);
   const [checkedCCTVId, setCheckedCCTVId] = React.useState('');
-  // const [currentCCTVIndex, setCurrentCCTVIndex] = React.useState(null);
   const [activeIndex, setActiveIndex] = React.useState(0);
   const [refreshMode, setRefreshMode] = React.useState(INITIAL_REFRESH_MODE);
   const [refreshInterval, setRefreshInterval] = React.useState(
@@ -151,7 +157,6 @@ function App() {
     str: '00:00:00'
   });
   const [showStat, setShowStat] = React.useState(false);
-  // const [remainNextms, setRemainNextms] = React.useState(0);
   const [showTitle, setShowTitle] = React.useState(true);
   const [showProgress, setShowProgress] = React.useState(true);
   const [titleOpacity, setTitleOpacity] = React.useState(0.9);
@@ -161,7 +166,6 @@ function App() {
   const preLoadMapRef = React.useRef(new Map());
   const setLeftSmallPlayerRef = React.useRef(() => {});
   const autoplayTimer = React.useRef(null);
-  const remainSecTimer = React.useRef(null);
   const modalOpenRef = React.useRef(modalOpen);
   const activeIndexRef = React.useRef(activeIndex);
   const cctvPlayersRef = React.useRef([]);
@@ -175,12 +179,12 @@ function App() {
   const numberOfLIveStream = totalVideos - numberOfStoppedVideos;
 
   React.useEffect(() => {
-    let timer = setInterval(() => {
+    const timer = setInterval(() => {
       setElapsed(() => {
         const diff = Date.now() - appStartTimestamp;
         return {
           num: diff,
-          str : new Date(diff).toISOString().slice(11, 19)
+          str: new Date(diff).toISOString().slice(11, 19),
         }
       });
     }, 1000);
@@ -197,17 +201,8 @@ function App() {
       setActiveIndex(realIndex);
       activeIndexRef.current = realIndex;
     });
-  // eslint-disable-next-line no-use-before-define
   }, []);
 
-  // console.log('gridNumNormalized=', gridNumNormalized, currentCCTVIndex, cctvIndexRef.current)
-
-  // const gridNum2CCTVIndex = React.useCallback(
-  //   (gridNum) => {
-  //     return getRealIndex(gridNum, gridDimension, cctvsSelectedArray);
-  //   },
-  //   [cctvsSelectedArray, gridDimension],
-  // );
 
   const moveToSlide = React.useCallback((index) => {
     swiperRef.current.slideTo(index);
@@ -216,9 +211,8 @@ function App() {
   const handlePressKeyboard = React.useCallback(
     (_, handler) => {
       const pressed = parseInt(handler.keys[0], 10);
-      // const targetIndex = gridNum2CCTVIndex(pressed - 1);
       const targetIndex = (pressed - 1) % cctvPlayersRef.current.length;
-      console.log(`pressed ${pressed}, targetIndex is ${targetIndex} `);
+      // console.log(`pressed ${pressed}, targetIndex is ${targetIndex} `);
       moveToSlide(targetIndex);
     },
     [moveToSlide],
@@ -257,55 +251,21 @@ function App() {
     });
   }, []);
 
-  // const remainTimerStartTimestamp = React.useRef(null);
-
-  // const resetRemainTimer = React.useCallback(() => {
-  //   setRemainNextms(autoInterval * 1000);
-  // }, [autoInterval]);
-
-  // const startRemainTimer = React.useCallback(() => {
-  //   console.log('start reset timer')
-  //   remainTimerStartTimestamp.current = Date.now();
-  //   remainSecTimer.current = setInterval(() => {
-  //     setRemainNextms((nextms) => {
-  //       // eslint-disable-next-line react-hooks/exhaustive-deps, @typescript-eslint/no-shadow
-  //       const elapsed = Date.now() - remainTimerStartTimestamp.current;
-  //       console.log(elapsed);
-  //       return autoInterval*1000 - elapsed;
-  //     })
-  //   }, 300);
-  // }, [autoInterval]);
-  // const removeRemainTimer = React.useCallback(() => {
-  //   if (remainSecTimer.current !== null) {
-  //     console.log('### clearInterval');
-  //     clearInterval(remainSecTimer.current)
-  //   }
-  // }, []);
-
 
   const runAutoPlay = React.useCallback(
     // eslint-disable-next-line default-param-last, @typescript-eslint/no-shadow
     (startAutoPlay = false, autoInterval) => {
-      // console.log('remove timer');
-      // removeRemainTimer();
       if (startAutoPlay) {
         document.title = `CCTV[auto - every ${autoInterval}s]`;
         const firstIndex = activeIndex;
         moveToSlide(firstIndex);
-        // console.log('start timer')
-        // startRemainTimer();
         autoplayTimer.current = setInterval(() => {
-          // removeRemainTimer();
-          // resetRemainTimer();
-          // console.log('reset timer')
           let nextPlayerIndex =
-            // (activeIndex + 1) % cctvPlayersRef.current.length;
             (activeIndexRef.current + 1) % cctvPlayersRef.current.length;
           let loopingCount = 0;
+          // eslint-disable-next-line no-constant-condition
           while (true) {
             const nextPlayer = cctvPlayersRef.current[nextPlayerIndex];
-            // console.log('autoPlay:', cctvPlayersRef.current, nextPlayerIndex, nextPlayer)
-            // console.log('check nextPlayer', nextPlayerIndex, nextPlayer)
             if (isPlayerPlaying(nextPlayer, nextPlayerIndex)) {
               break;
             } else {
@@ -326,13 +286,10 @@ function App() {
           // swiperRef.current.slideNext();
           swiperRef.current.slideToLoop(nextPlayerIndex);
           // console.log('!!! nextIndex=', nextIndex, cctvPlayersRef.current[nextIndex].paused())
-          // console.log('start timer')
-          // startRemainTimer();
         }, autoInterval * 1000);
       } else {
         document.title = 'CCTV';
         clearInterval(autoplayTimer.current);
-        // resetRemainTimer();
       }
       return () => {
         clearInterval(autoplayTimer.current);
@@ -457,7 +414,6 @@ function App() {
           <SmallButton onClick={toggleShowStat}>
             {showStat ? 'HIDE STAT' : 'SHOW STAT'}
           </SmallButton>
-          {/* <div>{((remainNextms/(autoInterval*1000))*100).toFixed(1)}%</div> */}
           <AbsoluteBox showStat={showStat}>
             <DisplayStates title="Status" value={attention} isBig />
             <DisplayStates title="Memory Usage" value={`${memUsage}%`} />
@@ -500,7 +456,6 @@ function App() {
           )}
           <ConfigDialog
             open={dialogOpen}
-            // cctvs={cctvs}
             cctvsNotSelected={cctvsNotSelectedArray}
             cctvsSelected={cctvsSelectedArray}
             setCCTVsSelectedAray={setCCTVsSelectedArrayNSave}
