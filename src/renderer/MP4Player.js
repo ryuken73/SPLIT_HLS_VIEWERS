@@ -25,7 +25,6 @@ function MP4Player(props) {
     lastLoaded,
     cctvIndex,
     currentCCTVIndex,
-    aspectRatio,
     onDrag,
     position,
     alignBy,
