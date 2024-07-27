@@ -2,18 +2,11 @@
 import React from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { EffectFade, EffectFlip, EffectCube } from 'swiper/modules';
-import { remove } from './lib/arrayUtil';
-import {
-  AbsolutePositionBox,
-  TransparentPaper,
-} from './template/basicComponents';
-import MP4Player from './MP4Player';
-import Box from '@mui/material/Box';
-import ModalBox from './ModalBox';
-import SwiperControl from './SwiperControl';
 import styled from 'styled-components';
-import HLSJSPlayer from './HLSJSPlayer';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import MP4Player from './MP4Player';
+import SwiperControl from './SwiperControl';
+import HLSJSPlayer from './HLSJSPlayer';
 import 'swiper/css/effect-fade';
 import 'swiper/css/effect-flip';
 import 'swiper/css/effect-cube';
@@ -24,25 +17,14 @@ const Container = styled.div`
 `;
 function GridVideos(props) {
   const {
-    modalOpen = false,
-    modalOpenRef,
-    setModalOpen,
     swiperRef,
-    preLoadMapRef = null,
     cctvsSelected = [],
-    // setPlayer,
     toggleAutoPlay,
     autoPlay,
-    gridDimension = 2,
-    enableOverlayGlobal,
     toggleOverlayGlobal,
     currentActiveIndex,
     cctvPlayersRef,
     cctvLastLoadedTime,
-    setLastLoadedTime,
-    reloadPlayerComponent,
-    refreshMode,
-    refreshInterval,
     currentCCTVIndex,
     alignBy,
     titleFontSize,
@@ -52,7 +34,6 @@ function GridVideos(props) {
     showProgress,
   } = props;
 
-  // const cctvs = [...cctvsInAreas.values()].flat();
   const [titlePosition, setTitlePosition] = React.useState({ x: 0, y: 0 });
   const currentIndexRef = React.useRef(null);
   currentIndexRef.current = currentActiveIndex;
@@ -71,15 +52,6 @@ function GridVideos(props) {
     [cctvPlayersRef],
   );
 
-  const delCCTVPlayerRef = React.useCallback((cctvIndex) => {
-      console.log('delCCTVPlayer before:', cctvPlayersRef.current)
-      const removed = remove(cctvPlayersRef.current).fromIndex(cctvIndex);
-      cctvPlayersRef.current = removed;
-      console.log('delCCTVPlayer after:', cctvPlayersRef.current)
-    },
-    [cctvPlayersRef],
-  );
-
   const handleTitleDrag = React.useCallback((event, draggableData) => {
     setTitlePosition({
       x: draggableData.x,
@@ -89,12 +61,6 @@ function GridVideos(props) {
 
   return (
     <Container>
-      {/* {cctvsSelected.map((cctv, index) => (
-        <button key={cctv.cctvId} id={index} onClick={onClick}>{index}</button>
-      ))}
-      {cctvsSelected.map((cctv, index) => (
-        <button key={cctv.cctvId} id={index} onClick={onClick1}>{index}</button>
-      ))} */}
       <Swiper
         loop
         speed={500}
@@ -144,22 +110,6 @@ function GridVideos(props) {
                 autoInterval={autoInterval}
                 autoPlay={autoPlay}
                 showProgress={showProgress}
-                // player={cctvPlayersRef.current[cctvIndex]}
-                // width="100%"
-                // height="auto"
-                // fluid={false}
-                // fill
-                // delPlayer={delCCTVPlayerRef}
-                // enableOverlay={enableOverlayGlobal}
-                // overlayBig
-                // overlayContent={cctv.title}
-                // currentIndexRef={currentIndexRef}
-                // currentCCTVIndex={currentCCTVIndex}
-                // autoRefresh
-                // setLastLoadedTime={setLastLoadedTime}
-                // refreshMode={refreshMode}
-                // refreshInterval={refreshInterval}
-                // reloadPlayerComponent={reloadPlayerComponent}
               />
             )}
           </SwiperSlide>
