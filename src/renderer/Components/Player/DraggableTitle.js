@@ -38,7 +38,8 @@ const Live = styled(Banner)`
   align-items: center;
   width: fit-content;
   /* font-size: clamp(1rem, 2vw, 1.5rem); */
-  font-size: ${(props) => `clamp(${props.titleFontSize / 4}rem, 2vw, ${props.titleFontSize / 2.6}rem)`};
+  /* font-size: ${(props) => `clamp(${props.titleFontSize / 4}rem, 2vw, ${props.titleFontSize / 2.6}rem)`}; */
+  font-size: 1.2rem;
   line-height: 1;
   border-bottom: 0px;
   border-bottom-right-radius: 0;
