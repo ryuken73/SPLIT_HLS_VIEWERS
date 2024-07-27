@@ -3,9 +3,6 @@ import React from 'react';
 import styled from 'styled-components';
 // import ReactHlsPlayer from 'react-hls-player/dist';
 import ReactHlsPlayer from './Components/ReactHlsPlayer';
-import usePrevious from './hooks/usePrevious';
-import {isPlayerPlaying} from './lib/sourceUtil';
-import { replace } from './lib/arrayUtil';
 import DraggableTitle from './Components/Player/DraggableTitle';
 
 const Conatiner = styled.div`
@@ -69,12 +66,6 @@ function HLSJSPlayer(props) {
     // console.log('^^^',event)
     event.target.play();
   }, []);
-
-  // React.useEffect(() => {
-  //   console.log('HLSJS Player mount')
-  //   return () => console.log('HLSJS Player umount')
-  // }, [])
-
 
   React.useLayoutEffect(() => {
     setPlayer(cctvIndex, playerRef.current);
