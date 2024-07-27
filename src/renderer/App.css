@@ -86,30 +86,29 @@
   font-family: 'SBS';
   font-style: normal;
   font-weight: 100;
-  src: 
-  /* url("./assets/fonts/SBS신뢰체L-OTF.otf") format('truetype'); */
-  url("./assets/fonts/a.otf") format('truetype');
+  src:
+  url("./assets/fonts/SBS_l.otf") format('truetype');
 }
 @font-face {
   font-family: 'SBS';
   font-style: normal;
   font-weight: 200;
-  src: 
-  url("./assets/fonts/SBS신뢰체R-OTF") format('truetype');
+  src:
+  url("./assets/fonts/SBS_R.otf") format('truetype');
 }
 @font-face {
   font-family: 'SBS';
   font-style: normal;
   font-weight: 300;
-  src: 
-  url("./assets/fonts/SBS신뢰체B-OTF") format('truetype');
+  src:
+  url("./assets/fonts/SBS_B.otf") format('truetype');
 }
 @font-face {
   font-family: 'SBS';
   font-style: normal;
   font-weight: 400;
-  src: 
-  url("./assets/fonts/SBS신뢰체XB-OTF") format('truetype');
+  src:
+  url("./assets/fonts/SBS_XB.otf") format('truetype');
 }
 
 body {

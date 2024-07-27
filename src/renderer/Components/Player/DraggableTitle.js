@@ -19,7 +19,7 @@ const AbsoluteBox = styled.div`
 const Banner = styled.div`
   background: ${colors.banner[950]};
   color: ${colors.banner[200]};
-  border: 5px solid;
+  border: 10px solid;
   border-color: ${colors.banner[950]};
   cursor: move;
   z-index: 99;
