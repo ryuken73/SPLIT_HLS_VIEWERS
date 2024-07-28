@@ -35,9 +35,9 @@ function SetTitleFont(props) {
       <Container>
         <legend>Title Font Size</legend>
         <FlexBox>
-          <button style={{width: '30px'}} onClick={increaseSize}>+</button>
-          <FontSize>{titleFontSize}</FontSize>
           <button style={{width: '30px'}} onClick={decreaseSize}>-</button>
+          <FontSize>{titleFontSize}</FontSize>
+          <button style={{width: '30px'}} onClick={increaseSize}>+</button>
         </FlexBox>
       </Container>
   )

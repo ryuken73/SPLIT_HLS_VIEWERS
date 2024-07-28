@@ -35,9 +35,9 @@ function SetTitleFont(props) {
       <Container>
         <legend>Title Opacity</legend>
         <FlexBox>
-          <button style={{width: '30px'}} onClick={increaseOpacity}>+</button>
-          <FontSize>{titleOpacity}</FontSize>
           <button style={{width: '30px'}} onClick={decreaseOpacity}>-</button>
+          <FontSize>{titleOpacity}</FontSize>
+          <button style={{width: '30px'}} onClick={increaseOpacity}>+</button>
         </FlexBox>
       </Container>
   )
