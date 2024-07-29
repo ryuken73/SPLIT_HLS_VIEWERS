@@ -10,6 +10,9 @@ const Vcenter = styled.div`
   align-items: center;
   height: 100%;
   min-width: 1500px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
 `
 const Container = styled.div`
   width: 100%;
