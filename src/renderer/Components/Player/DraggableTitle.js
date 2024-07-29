@@ -17,10 +17,12 @@ const AbsoluteBox = styled.div`
 `
 
 const Banner = styled.div`
-  background: ${colors.banner[950]};
+  /* background: ${colors.banner[950]}; */
+  background: rgb(55, 2, 115, 0.1);
   color: ${colors.banner[200]};
-  border: 10px solid;
-  border-color: ${colors.banner[950]};
+  /* border: 10px solid; */
+  /* border-color: rgb(55, 2, 115, 0.8); */
+  padding: 10px;
   cursor: move;
   z-index: 99;
   /* font-size: clamp(2rem, 4vw, 4rem); */
@@ -46,8 +48,9 @@ const Live = styled(Banner)`
   border-bottom-left-radius: 0;
   border-top-right-radius: 10px;
   border-top-left-radius: 10px;
-  margin-bottom: -1px;
+  margin-bottom: 0px;
   padding-left: 5px;
+  padding-bottom: 5px;
 `;
 const Dot = styled.span`
   margin-right: 10px;
