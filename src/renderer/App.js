@@ -15,6 +15,7 @@ import ShowTitle from './Components/SideComponents/ShowTitle';
 import AlignSide from './Components/SideComponents/AlignSide';
 import SetTitleFont from './Components/SideComponents/SetTitleFont';
 import SetTitleOpacity from './Components/SideComponents/SetTitleOpacity';
+import SetMaxNumberOfResets from './Components/SideComponents/SetMaxNumberOfResets';
 import ShowProgress from './Components/SideComponents/ShowProgress';
 import 'swiper/css';
 import { SmallButton } from './template/smallComponents';
@@ -26,7 +27,7 @@ const INITIAL_LOAD_TIME = new Array(9).fill(Date.now());
 
 const ACTIVE_COLOR_KEY = 950;
 const IDLE_COLOR_KEY = 400;
-const MAX_NUMBER_OF_RESETS = 50;
+// const MAX_NUMBER_OF_RESETS = 50;
 
 const Container = styled.div`
   height: 100vh;
@@ -160,6 +161,7 @@ function App() {
   const [showTitle, setShowTitle] = React.useState(true);
   const [showProgress, setShowProgress] = React.useState(true);
   const [titleOpacity, setTitleOpacity] = React.useState(0.9);
+  const [maxNumberOfResets, setMaxNumberOfResets] = React.useState(50);
 
   // console.log('stopped:', videoStates)
   useHotkeys('c', () => setDialogOpen(true));
@@ -230,27 +232,32 @@ function App() {
 
   const reloadPlayerComponent = React.useCallback((cctvIndex) => {
     // eslint-disable-next-line @typescript-eslint/no-shadow
-    setNumberOfResets((numberOfResets) => {
-      if (numberOfResets[cctvIndex] > MAX_NUMBER_OF_RESETS) {
-        console.log('too many resets:', cctvIndex);
-      } else {
-        console.log('reload player:', cctvIndex);
-        setLastLoadedTime((lastLoadedTime) => {
-          const now = Date.now();
-          return replace(lastLoadedTime).index(cctvIndex).value(now);
-        });
+      setNumberOfResets((numberOfResets) => {
         // eslint-disable-next-line @typescript-eslint/no-shadow
-        setNumberOfResets((numberOfResets) => {
-          const lastNumber = numberOfResets[cctvIndex];
-          return replace(numberOfResets)
-            .index(cctvIndex)
-            .value(lastNumber + 1);
+        setMaxNumberOfResets((maxNumberOfResets) => {
+          if (numberOfResets[cctvIndex] > maxNumberOfResets) {
+            console.log('too many resets:', cctvIndex);
+          } else {
+            console.log('reload player:', cctvIndex);
+            setLastLoadedTime((lastLoadedTime) => {
+              const now = Date.now();
+              return replace(lastLoadedTime).index(cctvIndex).value(now);
+            });
+            // eslint-disable-next-line @typescript-eslint/no-shadow
+            setNumberOfResets((numberOfResets) => {
+              const lastNumber = numberOfResets[cctvIndex];
+              return replace(numberOfResets)
+                .index(cctvIndex)
+                .value(lastNumber + 1);
+            });
+          }
+          return maxNumberOfResets;
         });
-      }
       return numberOfResets;
     });
-  }, []);
-
+    },
+    [],
+  );
 
   const runAutoPlay = React.useCallback(
     // eslint-disable-next-line default-param-last, @typescript-eslint/no-shadow
@@ -406,7 +413,7 @@ function App() {
           cctvPlayersRef={cctvPlayersRef}
           numberOfResets={numberOfResets}
           setVideoStates={setVideoStates}
-          maxNumberOfResets={MAX_NUMBER_OF_RESETS}
+          maxNumberOfResets={maxNumberOfResets}
         />
       </TopPanel>
       <MiddlePanel autoPlay={autoPlay}>
@@ -487,6 +494,10 @@ function App() {
             titleOpacity={titleOpacity}
             setTitleOpacity={setTitleOpacity}
           />
+          <SetMaxNumberOfResets
+            maxNumberOfResets={maxNumberOfResets}
+            setMaxNumberOfResets={setMaxNumberOfResets}
+           />
         </RightArea>
       </MiddlePanel>
       <BottomPanel autoPlay={autoPlay}>
