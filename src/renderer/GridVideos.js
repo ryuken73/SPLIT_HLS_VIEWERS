@@ -29,6 +29,7 @@ function GridVideos(props) {
     alignBy,
     titleFontSize,
     titleOpacity,
+    titleBlur,
     showTitle,
     autoInterval,
     showProgress,
@@ -87,6 +88,7 @@ function GridVideos(props) {
                 alignBy={alignBy}
                 titleFontSize={titleFontSize}
                 titleOpacity={titleOpacity}
+                titleBlur={titleBlur}
                 showTitle={showTitle}
                 autoInterval={autoInterval}
                 autoPlay={autoPlay}
@@ -106,6 +108,7 @@ function GridVideos(props) {
                 alignBy={alignBy}
                 titleFontSize={titleFontSize}
                 titleOpacity={titleOpacity}
+                titleBlur={titleBlur}
                 showTitle={showTitle}
                 autoInterval={autoInterval}
                 autoPlay={autoPlay}

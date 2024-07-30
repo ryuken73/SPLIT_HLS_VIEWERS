@@ -15,6 +15,7 @@ import ShowTitle from './Components/SideComponents/ShowTitle';
 import AlignSide from './Components/SideComponents/AlignSide';
 import SetTitleFont from './Components/SideComponents/SetTitleFont';
 import SetTitleOpacity from './Components/SideComponents/SetTitleOpacity';
+import SetTitleBlur from './Components/SideComponents/SetTitleBlur';
 import SetMaxNumberOfResets from './Components/SideComponents/SetMaxNumberOfResets';
 import ShowProgress from './Components/SideComponents/ShowProgress';
 import 'swiper/css';
@@ -161,6 +162,7 @@ function App() {
   const [showTitle, setShowTitle] = React.useState(true);
   const [showProgress, setShowProgress] = React.useState(true);
   const [titleOpacity, setTitleOpacity] = React.useState(0.9);
+  const [titleBlur, setTitleBlur] = React.useState(0);
   const [maxNumberOfResets, setMaxNumberOfResets] = React.useState(50);
 
   // console.log('stopped:', videoStates)
@@ -457,6 +459,7 @@ function App() {
               titleFontSize={titleFontSize}
               showTitle={showTitle}
               titleOpacity={titleOpacity}
+              titleBlur={titleBlur}
               autoInterval={autoInterval}
               showProgress={showProgress}
             />
@@ -494,6 +497,7 @@ function App() {
             titleOpacity={titleOpacity}
             setTitleOpacity={setTitleOpacity}
           />
+          <SetTitleBlur titleBlur={titleBlur} setTitleBlur={setTitleBlur} />
           <SetMaxNumberOfResets
             maxNumberOfResets={maxNumberOfResets}
             setMaxNumberOfResets={setMaxNumberOfResets}

@@ -31,6 +31,7 @@ function MP4Player(props) {
     titleFontSize,
     showTitle,
     titleOpacity,
+    titleBlur,
     autoInterval,
     autoPlay,
     showProgress
@@ -100,6 +101,7 @@ function MP4Player(props) {
           alignBy={alignBy}
           titleFontSize={titleFontSize}
           titleOpacity={titleOpacity}
+          titleBlur={titleBlur}
           isActive={isActive}
           autoInterval={autoInterval}
           autoPlay={autoPlay}

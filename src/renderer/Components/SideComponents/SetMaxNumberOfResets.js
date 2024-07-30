@@ -3,8 +3,9 @@ import React from 'react';
 import styled from 'styled-components';
 
 const Container = styled.fieldset`
-  margin-top: 1rem;
-  border: 3px solid white;
+  color: red;
+  margin-top: 5rem;
+  border: 3px solid red;
 `
 const Title = styled.div``
 const FlexBox = styled.div`

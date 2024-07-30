@@ -35,7 +35,8 @@ const Banner = styled.div`
   opacity: 1;
   font-weight: bold;
   text-align: left;
-  backdrop-filter: blur(10px);
+  backdrop-filter: ${(props) => `blur(${props.titleBlur}px)`};
+  /* backdrop-filter: blur(10px); */
 `
 const Live = styled(Banner)`
   display: flex;
@@ -51,7 +52,7 @@ const Live = styled(Banner)`
   border-bottom-left-radius: 0;
   border-top-right-radius: 10px;
   border-top-left-radius: 10px;
-  margin-bottom: -2px;
+  margin-bottom: 0px;
   padding-left: 5px;
   padding-bottom: 5px;
 `;
@@ -82,6 +83,7 @@ function DraggableTitle(props) {
     alignBy,
     titleFontSize,
     titleOpacity = 0.9,
+    titleBlur,
     isActive,
     autoInterval,
     autoPlay,
@@ -102,13 +104,23 @@ function DraggableTitle(props) {
   return (
     <Draggable onDrag={onDrag} position={{ x: position.x, y: position.y }}>
       <AbsoluteBox alignBy={alignBy} titleOpacity={titleOpacity}>
-        <Live titleFontSize={titleFontSize} titleOpacity={titleOpacity}>
+        <Live
+          titleFontSize={titleFontSize}
+          titleOpacity={titleOpacity}
+          titleBlur={titleBlur}
+        >
           <Dot>
             <BlinkingDot />
           </Dot>
           <div>LIVE</div>
         </Live>
-        <Banner titleFontSize={titleFontSize} titleOpacity={titleOpacity}>{title}</Banner>
+        <Banner
+          titleFontSize={titleFontSize}
+          titleOpacity={titleOpacity}
+          titleBlur={titleBlur}
+        >
+          {title}
+        </Banner>
         <Line titleOpacity={titleOpacity}>
           <Progress
             ref={progressRef}

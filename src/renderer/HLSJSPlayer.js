@@ -50,6 +50,7 @@ function HLSJSPlayer(props) {
     titleFontSize,
     showTitle=true,
     titleOpacity,
+    titleBlur,
     autoInterval,
     autoPlay,
     showProgress,
@@ -108,6 +109,7 @@ function HLSJSPlayer(props) {
           alignBy={alignBy}
           titleFontSize={titleFontSize}
           titleOpacity={titleOpacity}
+          titleBlur={titleBlur}
           isActive={isActive}
           autoInterval={autoInterval}
           autoPlay={autoPlay}
