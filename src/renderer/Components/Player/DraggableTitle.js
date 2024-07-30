@@ -12,13 +12,14 @@ const AbsoluteBox = styled.div`
   right: ${(props) => props.alignBy === 'right' && '10px'};
   left: ${(props) => props.alignBy === 'left' && '10px'};
   bottom: 100px;
-  opacity: ${(props) => props.titleOpacity};
+  /* opacity: ${(props) => props.titleOpacity}; */
   min-width: 20vw;
 `
 
 const Banner = styled.div`
   /* background: ${colors.banner[950]}; */
-  background: rgb(55, 2, 115, 0.1);
+  /* background: rgb(55, 2, 115, 0.1); */
+  background: ${(props) => `rgba(55, 2, 115, ${props.titleOpacity})`};
   color: ${colors.banner[200]};
   /* border: 10px solid; */
   /* border-color: rgb(55, 2, 115, 0.8); */
@@ -34,6 +35,7 @@ const Banner = styled.div`
   opacity: 1;
   font-weight: bold;
   text-align: left;
+  backdrop-filter: blur(10px);
 `
 const Live = styled(Banner)`
   display: flex;
@@ -41,6 +43,7 @@ const Live = styled(Banner)`
   width: fit-content;
   /* font-size: clamp(1rem, 2vw, 1.5rem); */
   /* font-size: ${(props) => `clamp(${props.titleFontSize / 4}rem, 2vw, ${props.titleFontSize / 2.6}rem)`}; */
+  background: ${(props) => `rgba(55, 2, 115, ${props.titleOpacity})`};
   font-size: 1.2rem;
   line-height: 1;
   border-bottom: 0px;
@@ -48,7 +51,7 @@ const Live = styled(Banner)`
   border-bottom-left-radius: 0;
   border-top-right-radius: 10px;
   border-top-left-radius: 10px;
-  margin-bottom: 0px;
+  margin-bottom: -2px;
   padding-left: 5px;
   padding-bottom: 5px;
 `;
@@ -59,11 +62,13 @@ const Dot = styled.span`
 const Line = styled.div`
   position: relative;
   background: white;
+  /* background: ${(props) => `rgba(255, 255, 255, ${props.titleOpacity})`}; */
   height: 5px;
 `
 const Progress = styled(Line)`
   position: absolute;
-  background: ${colors.banner[500]};
+  /* background: ${colors.banner[500]}; */
+  background: ${(props) => `rgba(150, 67, 255, ${props.titleOpacity + 0.5})`};
   width: 0;
   /* width: ${(props) => props.isActive && '100%'}; */
 `
@@ -97,15 +102,19 @@ function DraggableTitle(props) {
   return (
     <Draggable onDrag={onDrag} position={{ x: position.x, y: position.y }}>
       <AbsoluteBox alignBy={alignBy} titleOpacity={titleOpacity}>
-        <Live titleFontSize={titleFontSize}>
+        <Live titleFontSize={titleFontSize} titleOpacity={titleOpacity}>
           <Dot>
             <BlinkingDot />
           </Dot>
           <div>LIVE</div>
         </Live>
-        <Banner titleFontSize={titleFontSize}>{title}</Banner>
-        <Line>
-          <Progress ref={progressRef} isActive={isActive} />
+        <Banner titleFontSize={titleFontSize} titleOpacity={titleOpacity}>{title}</Banner>
+        <Line titleOpacity={titleOpacity}>
+          <Progress
+            ref={progressRef}
+            titleOpacity={titleOpacity}
+            isActive={isActive}
+          />
         </Line>
       </AbsoluteBox>
     </Draggable>
