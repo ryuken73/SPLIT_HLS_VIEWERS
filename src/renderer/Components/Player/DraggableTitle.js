@@ -17,16 +17,11 @@ const AbsoluteBox = styled.div`
 `
 
 const Banner = styled.div`
-  /* background: ${colors.banner[950]}; */
-  /* background: rgb(55, 2, 115, 0.1); */
   background: ${(props) => `rgba(55, 2, 115, ${props.titleOpacity})`};
   color: ${colors.banner[200]};
-  /* border: 10px solid; */
-  /* border-color: rgb(55, 2, 115, 0.8); */
   padding: 10px;
   cursor: move;
   z-index: 99;
-  /* font-size: clamp(2rem, 4vw, 4rem); */
   font-size: ${(props) => `clamp(${props.titleFontSize / 2}rem, 4vw, ${props.titleFontSize}rem)`};
   padding-left: 20px;
   padding-right: 20px;
@@ -36,14 +31,11 @@ const Banner = styled.div`
   font-weight: bold;
   text-align: left;
   backdrop-filter: ${(props) => `blur(${props.titleBlur}px)`};
-  /* backdrop-filter: blur(10px); */
 `
 const Live = styled(Banner)`
   display: flex;
   align-items: center;
   width: fit-content;
-  /* font-size: clamp(1rem, 2vw, 1.5rem); */
-  /* font-size: ${(props) => `clamp(${props.titleFontSize / 4}rem, 2vw, ${props.titleFontSize / 2.6}rem)`}; */
   background: ${(props) => `rgba(55, 2, 115, ${props.titleOpacity})`};
   font-size: 1.2rem;
   line-height: 1;
