@@ -78,8 +78,10 @@ function VideoState(props) {
     numberOfReset,
     maxNumberOfResets,
     setVideoStates,
+    playerStatus
   } = props;
-  const [playerStatus, setPlayerStatus] = React.useState(PLAYER_STATUS.pause);
+  // console.log(cctv, cctvIndex, playerStatus)
+  // const [playerStatus, setPlayerStatus] = React.useState(PLAYER_STATUS.pause);
   const [currentTime, setCurrentTime] = React.useState(secondToHHMMSS(0));
   const [duration, setDuration] = React.useState(secondToHHMMSS(0));
   const isActive = cctvIndex === currentCCTVIndex;
@@ -95,7 +97,7 @@ function VideoState(props) {
     // console.log('player event captured:', cctvIndex, type);
     if (type === PLAYER_EVENTS.playing) {
       // console.log('player is playing!');
-      setPlayerStatus(PLAYER_STATUS.normal);
+      // setPlayerStatus(PLAYER_STATUS.normal);
       setVideoStates((videoStates) => {
         return {
           ...videoStates,
@@ -106,7 +108,7 @@ function VideoState(props) {
     }
     if (type === PLAYER_EVENTS.pause || type === PLAYER_EVENTS.ended) {
       // console.log('player is paused!');
-      setPlayerStatus(PLAYER_STATUS.pause);
+      // setPlayerStatus(PLAYER_STATUS.pause);
       setVideoStates((videoStates) => {
         return {
           ...videoStates,
@@ -116,7 +118,7 @@ function VideoState(props) {
       return;
     }
     // console.log('player is stalled!');
-    setPlayerStatus(PLAYER_STATUS.stalled);
+    // setPlayerStatus(PLAYER_STATUS.stalled);
     setVideoStates((videoStates) => {
       return {
         ...videoStates,
@@ -124,7 +126,7 @@ function VideoState(props) {
       };
     });
     },
-    [cctvIndex],
+    [setVideoStates, url],
   );
 
   const updateCurrentTime = React.useCallback((event) => {
@@ -142,6 +144,9 @@ function VideoState(props) {
     const player = cctvPlayersRef.current[cctvIndex];
     if (player === undefined) return;
     // eslint-disable-next-line react/prop-types
+    if (player.addEventListener === undefined) {
+      return;
+    };
     player.addEventListener('playing', handlePlayerEvent);
     player.addEventListener('pause', handlePlayerEvent);
     player.addEventListener('stalled', handlePlayerEvent);
@@ -155,6 +160,7 @@ function VideoState(props) {
 
     // eslint-disable-next-line consistent-return
     return () => {
+      if (player.removeEventListener === undefined) return;
       if (player !== undefined) {
         player.removeEventListener('playing', handlePlayerEvent);
         player.removeEventListener('pause', handlePlayerEvent);
@@ -175,6 +181,9 @@ function VideoState(props) {
   ]);
 
   const onClick = React.useCallback(() => {
+    if (cctvPlayersRef.current[cctvIndex].puase === undefined) {
+      return;
+    }
     cctvPlayersRef.current[cctvIndex].pause();
   }, [cctvIndex, cctvPlayersRef]);
 

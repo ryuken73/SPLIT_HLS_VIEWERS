@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable react/prop-types */
 import React from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
@@ -7,6 +8,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import MP4Player from './MP4Player';
 import SwiperControl from './SwiperControl';
 import HLSJSPlayer from './HLSJSPlayer';
+import YoutubeJSPlayer from './YoutubeJSPlayer';
 import 'swiper/css/effect-fade';
 import 'swiper/css/effect-flip';
 import 'swiper/css/effect-cube';
@@ -33,6 +35,7 @@ function GridVideos(props) {
     showTitle,
     autoInterval,
     showProgress,
+    setVideoStates
   } = props;
 
   const [titlePosition, setTitlePosition] = React.useState({ x: 0, y: 0 });
@@ -42,6 +45,7 @@ function GridVideos(props) {
   // console.log('#!Players',cctvPlayersRef.current, cctvsSelected, enableOverlayGlobal, currentIndexRef.current)
 
   const mp4RegExp = /.*\.mp4.*/;
+  const youtubeRegExtp = /.*youtube.com\/.*/;
 
   useHotkeys('a', () => toggleAutoPlay(), [toggleAutoPlay]);
   useHotkeys('t', () => toggleOverlayGlobal(), [toggleOverlayGlobal]);
@@ -94,6 +98,27 @@ function GridVideos(props) {
                 autoPlay={autoPlay}
                 showProgress={showProgress}
               />
+            ) : youtubeRegExtp.test(cctv.url) ? (
+              <YoutubeJSPlayer
+                key={cctv.cctvId}
+                source={cctv}
+                setPlayer={setCCTVPlayerRef}
+                lastLoaded={cctvLastLoadedTime[cctvIndex]}
+                cctvIndex={cctvIndex}
+                currentCCTVIndex={currentCCTVIndex}
+                aspectRatio="4/3"
+                onDrag={handleTitleDrag}
+                position={titlePosition}
+                alignBy={alignBy}
+                titleFontSize={titleFontSize}
+                titleOpacity={titleOpacity}
+                titleBlur={titleBlur}
+                showTitle={showTitle}
+                autoInterval={autoInterval}
+                autoPlay={autoPlay}
+                showProgress={showProgress}
+                setVideoStates={setVideoStates}
+               />
             ) : (
               <HLSJSPlayer
                 key={cctv.cctvId}

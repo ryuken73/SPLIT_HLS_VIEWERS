@@ -416,6 +416,7 @@ function App() {
           currentCCTVIndex={activeIndex}
           cctvPlayersRef={cctvPlayersRef}
           numberOfResets={numberOfResets}
+          videoStates={videoStates}
           setVideoStates={setVideoStates}
           maxNumberOfResets={maxNumberOfResets}
         />

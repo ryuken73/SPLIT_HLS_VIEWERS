@@ -4,6 +4,12 @@ import styled from 'styled-components';
 import YouTubePlayer from 'react-player/youtube';
 import DraggableTitle from './Components/Player/DraggableTitle';
 
+const PLAYER_STATUS = {
+  normal: 'normal',
+  pause: 'pause',
+  stalled: 'stalled',
+};
+
 const Container = styled.div`
   overflow: hidden;
   width: 100%;
@@ -13,7 +19,7 @@ const Container = styled.div`
   background-color: black;
 `;
 
-function YoutubePlayer(props){
+function YoutubePlayer(props) {
   const {
     source = {},
     setPlayer,
@@ -29,14 +35,16 @@ function YoutubePlayer(props){
     titleBlur,
     autoInterval,
     autoPlay,
-    showProgress
+    showProgress,
+    setVideoStates,
   } = props;
   const playerRef = React.useRef(null);
   const { url } = source;
-  console.log(source)
+  console.log(source);
 
   const [reloadTrigger, setReloadTrigger] = React.useState(true);
   const isActive = cctvIndex === currentCCTVIndex;
+  const IS_PREVIEW = !showTitle;
 
   const onLoadDataHandler = React.useCallback((event) => {
     // console.log(lastLoaded)
@@ -66,20 +74,58 @@ function YoutubePlayer(props){
     // };
   }, [cctvIndex, setPlayer]);
 
-  
   //neet to reload player method
   React.useEffect(() => {
     // console.log('reload while get next player: ', lastLoaded, cctvIndex);
     // eslint-disable-next-line @typescript-eslint/no-shadow
 
-    console.log('reload youtube js player', lastLoaded)
+    console.log('reload youtube js player', lastLoaded);
     setReloadTrigger((reloadTrigger) => {
       return !reloadTrigger;
     });
-    console.log(playerRef.current)
+    console.log(playerRef.current);
     // playerRef.current.load();
   }, [cctvIndex, lastLoaded]);
 
+  const setPlayerNormal = React.useCallback(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    (event) => {
+      if (IS_PREVIEW) return;
+      setVideoStates((videoStates) => {
+        return {
+          ...videoStates,
+          [url]: PLAYER_STATUS.normal,
+        };
+      });
+    },
+    [IS_PREVIEW, setVideoStates, url],
+  );
+  const setPlayerPaused = React.useCallback(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    (event) => {
+      if (IS_PREVIEW) return;
+      setVideoStates((videoStates) => {
+        return {
+          ...videoStates,
+          [url]: PLAYER_STATUS.pause,
+        };
+      });
+    },
+    [IS_PREVIEW, setVideoStates, url],
+  );
+  const setPlayerStalled = React.useCallback(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    (event) => {
+      if (IS_PREVIEW) return;
+      setVideoStates((videoStates) => {
+        return {
+          ...videoStates,
+          [url]: PLAYER_STATUS.stalled,
+        };
+      });
+    },
+    [IS_PREVIEW, setVideoStates, url],
+  );
 
   return (
     <Container>
@@ -91,6 +137,10 @@ function YoutubePlayer(props){
         width="100%"
         height="100%"
         onReady={onLoadDataHandler}
+        onPlay={setPlayerNormal}
+        onPause={setPlayerPaused}
+        onEnded={setPlayerPaused}
+        onError={setPlayerStalled}
       />
       {showTitle && (
         <DraggableTitle
@@ -108,7 +158,7 @@ function YoutubePlayer(props){
         />
       )}
     </Container>
-  )
-};
+  );
+}
 
-export default React.memo(YoutubePlayer)
+export default React.memo(YoutubePlayer);

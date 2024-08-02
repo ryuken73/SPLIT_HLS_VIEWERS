@@ -30,8 +30,10 @@ function VideoStates(props) {
     cctvPlayersRef,
     numberOfResets,
     maxNumberOfResets,
+    videoStates,
     setVideoStates
   } = props;
+  console.log(videoStates)
   return (
     <Vcenter>
       <Container>
@@ -44,6 +46,7 @@ function VideoStates(props) {
             cctvPlayersRef={cctvPlayersRef}
             autoPlay={autoPlay}
             numberOfReset={numberOfResets[cctvIndex]}
+            playerStatus={videoStates[cctv.url]}
             setVideoStates={setVideoStates}
             maxNumberOfResets={maxNumberOfResets}
           />

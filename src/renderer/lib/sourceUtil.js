@@ -107,6 +107,9 @@ export const getYoutubePlaylistUrl = (videoId) => {
 };
 
 export const isPlayerPlaying = (player, cctvIndex, checkType = 'none') => {
+  if (player.player !== undefined){ // youtube player
+    return player.player.isPlaying;
+  }
   if (player === null) return;
   try {
     const ended =
