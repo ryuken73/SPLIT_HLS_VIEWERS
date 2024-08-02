@@ -5,6 +5,7 @@ import TextField from '@mui/material/TextField';
 import styled from 'styled-components';
 import HLSJSPlayer from './HLSJSPlayer';
 import MP4Player from './MP4Player';
+import YoutubeJSPlayer from './YoutubeJSPlayer';
 import {replace} from './lib/arrayUtil';
 
 const Container = styled.div`
@@ -64,6 +65,8 @@ function AddManualUrl(props) {
 
   const mp4RegExp = /.*\.mp4.*/;
   const isMP4 = mp4RegExp.test(source.url);
+  const youtubeRegExtp = /.*youtube.com\/.*/;
+  const isYoutube = youtubeRegExtp.test(source.url)
 
   const setTitleValue = React.useCallback((event) => {
     setTitle(event.target.value);
@@ -133,6 +136,13 @@ function AddManualUrl(props) {
               showTitle={false}
             >
             </MP4Player>
+          ): isYoutube ? (
+            <YoutubeJSPlayer
+              source={source}
+              setPlayer={setPlayer}
+              showTitle={false}
+            >
+            </YoutubeJSPlayer>
           ):(
             <HLSJSPlayer
               source={source}
