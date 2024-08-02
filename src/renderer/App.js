@@ -279,8 +279,10 @@ function App() {
               break;
             } else {
               const newEvent = new Event('error');
-              nextPlayer.dispatchEvent(newEvent);
-              reloadPlayerComponent(nextPlayerIndex);
+              if (nextPlayer.dispatchEvent !== undefined) {
+                nextPlayer.dispatchEvent(newEvent);
+                reloadPlayerComponent(nextPlayerIndex);
+              }
               // eslint-disable-next-line no-plusplus
               nextPlayerIndex =
                 (nextPlayerIndex + 1) % cctvPlayersRef.current.length;
@@ -462,6 +464,7 @@ function App() {
               titleBlur={titleBlur}
               autoInterval={autoInterval}
               showProgress={showProgress}
+              setVideoStates={setVideoStates}
             />
           )}
           <ConfigDialog
