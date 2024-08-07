@@ -15,7 +15,7 @@ const Conatiner = styled.div`
 const CustomPlayer = styled(ReactHlsPlayer)`
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: fill;
 `
 
 const hlsConfig = {

@@ -15,7 +15,7 @@ const Container = styled.div`
 const CustomVideo = styled.video`
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: fill;
 `;
 
 function MP4Player(props) {

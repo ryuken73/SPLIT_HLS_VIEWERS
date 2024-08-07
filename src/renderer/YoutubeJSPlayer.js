@@ -40,7 +40,6 @@ function YoutubePlayer(props) {
   } = props;
   const playerRef = React.useRef(null);
   const { url } = source;
-  console.log(source);
 
   const [reloadTrigger, setReloadTrigger] = React.useState(true);
   const isActive = cctvIndex === currentCCTVIndex;
