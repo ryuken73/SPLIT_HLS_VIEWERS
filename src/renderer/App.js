@@ -419,6 +419,7 @@ function App() {
           videoStates={videoStates}
           setVideoStates={setVideoStates}
           maxNumberOfResets={maxNumberOfResets}
+          moveToSlide={moveToSlide}
         />
       </TopPanel>
       <MiddlePanel autoPlay={autoPlay}>

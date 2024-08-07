@@ -78,7 +78,8 @@ function VideoState(props) {
     numberOfReset,
     maxNumberOfResets,
     setVideoStates,
-    playerStatus
+    playerStatus,
+    moveToSlide
   } = props;
   // console.log(cctv, cctvIndex, playerStatus)
   // const [playerStatus, setPlayerStatus] = React.useState(PLAYER_STATUS.pause);
@@ -181,11 +182,12 @@ function VideoState(props) {
   ]);
 
   const onClick = React.useCallback(() => {
-    if (cctvPlayersRef.current[cctvIndex].puase === undefined) {
-      return;
-    }
-    cctvPlayersRef.current[cctvIndex].pause();
-  }, [cctvIndex, cctvPlayersRef]);
+    moveToSlide(cctvIndex);
+    // if (cctvPlayersRef.current[cctvIndex].puase === undefined) {
+    //   return;
+    // }
+    // cctvPlayersRef.current[cctvIndex].pause();
+  }, [cctvIndex, moveToSlide]);
 
   const getBackgroundColor = React.useCallback(() => {
     if (isActive) {
