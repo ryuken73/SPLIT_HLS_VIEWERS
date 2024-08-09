@@ -34,7 +34,7 @@ function VideoStates(props) {
     setVideoStates,
     moveToSlide
   } = props;
-  console.log(videoStates)
+  // console.log(videoStates)
   return (
     <Vcenter>
       <Container>
