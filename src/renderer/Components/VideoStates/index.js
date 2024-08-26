@@ -32,7 +32,8 @@ function VideoStates(props) {
     maxNumberOfResets,
     videoStates,
     setVideoStates,
-    moveToSlide
+    moveToSlide,
+    setCCTVsSelectedAray
   } = props;
   // console.log(videoStates)
   return (
@@ -51,6 +52,7 @@ function VideoStates(props) {
             setVideoStates={setVideoStates}
             maxNumberOfResets={maxNumberOfResets}
             moveToSlide={moveToSlide}
+            setCCTVsSelectedAray={setCCTVsSelectedAray}
           />
         ))}
       </Container>

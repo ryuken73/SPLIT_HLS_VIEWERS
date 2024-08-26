@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
 import styled from 'styled-components';
+import {remove} from '../../lib/arrayUtil';
 import colors from '../../lib/colors';
 
 const { autoRun, idle } = colors;
@@ -46,6 +47,11 @@ const TimeDisplay = styled(SubTitle)`
   line-height: 0.7rem;
   text-decoration: ${(props) => props.disabled && 'line-through'};
 `
+const StyledSpan = styled.span`
+  color: red;
+  cursor: pointer;
+  font-weight: 700;
+`;
 const PLAYER_STATUS = {
   normal: 'normal',
   pause: 'pause',
@@ -79,7 +85,8 @@ function VideoState(props) {
     maxNumberOfResets,
     setVideoStates,
     playerStatus,
-    moveToSlide
+    moveToSlide,
+    setCCTVsSelectedAray
   } = props;
   // console.log(cctv, cctvIndex, playerStatus)
   // const [playerStatus, setPlayerStatus] = React.useState(PLAYER_STATUS.pause);
@@ -212,6 +219,15 @@ function VideoState(props) {
     return autoRun[50];
 
   }, [isActive]);
+  const removeItem = React.useCallback(() => {
+    setCCTVsSelectedAray((cctvs) => {
+      return remove(cctvs).fromIndex(cctvIndex)
+    });
+    // setTimeout(() => {
+      window.electron.ipcRenderer.sendMessage('reload');
+    // }, 500)
+  }, [cctvIndex, setCCTVsSelectedAray]);
+
   const bgColor = getBackgroundColor();
   const titleColor = getTitleColor();
   // eslint-disable-next-line no-nested-ternary
@@ -227,7 +243,7 @@ function VideoState(props) {
         Reset Count [{numberOfReset}]
       </SubTitle>
       <TimeDisplay disabled={disabled}>
-        {currentTime} / {duration}
+        {currentTime} / {duration} <StyledSpan onClick={removeItem}>[del]</StyledSpan>
       </TimeDisplay>
     </Container>
   );

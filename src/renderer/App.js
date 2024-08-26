@@ -420,6 +420,7 @@ function App() {
           setVideoStates={setVideoStates}
           maxNumberOfResets={maxNumberOfResets}
           moveToSlide={moveToSlide}
+          setCCTVsSelectedAray={setCCTVsSelectedArrayNSave}
         />
       </TopPanel>
       <MiddlePanel autoPlay={autoPlay}>
