@@ -18,6 +18,7 @@ import SetTitleOpacity from './Components/SideComponents/SetTitleOpacity';
 import SetTitleBlur from './Components/SideComponents/SetTitleBlur';
 import SetMaxNumberOfResets from './Components/SideComponents/SetMaxNumberOfResets';
 import ShowProgress from './Components/SideComponents/ShowProgress';
+import QuickAddUrl from './QuickAddUrl';
 import 'swiper/css';
 import { SmallButton } from './template/smallComponents';
 
@@ -80,15 +81,18 @@ const LeftArea = styled.div`
   color: white;
   padding-top: 10px;
   padding-left: 10px;
-  padding-right: auto;
-  width: 150px;
+  /* width: 150px; */
+  /* padding-right: auto; */
+  /* width: 150px !important; */
 `
 const AbsoluteBox = styled.div`
   position: absolute;
   border: 2px solid white;
-  padding: 15px;
+  padding: 5px;
   opacity: ${(props) => (props.showStat ? 1 : 0)};
   transition: 1s all;
+  background: maroon;
+  width: 150px;
 `
 const RightArea = styled(LeftArea)`
   margin-left: auto;
@@ -158,7 +162,7 @@ function App() {
     num: 0,
     str: '00:00:00'
   });
-  const [showStat, setShowStat] = React.useState(false);
+  const [leftView, setLeftVeiw] = React.useState('addUrl');
   const [showTitle, setShowTitle] = React.useState(true);
   const [showProgress, setShowProgress] = React.useState(true);
   const [titleOpacity, setTitleOpacity] = React.useState(0.9);
@@ -402,10 +406,17 @@ function App() {
 
   const attention = getAppStatus();
 
-  const toggleShowStat = React.useCallback(() => {
+  const toggleLeftView = React.useCallback(() => {
     // eslint-disable-next-line @typescript-eslint/no-shadow
-    setShowStat((showStat) => !showStat);
+    setLeftVeiw((leftView) => {
+      if (leftView === 'addUrl') {
+        return 'stat'
+      } 
+      return 'addUrl';
+    });
   }, []);
+
+  const showStat = leftView === 'stat';
 
   return (
     <Container autoPlay={autoPlay}>
@@ -425,8 +436,8 @@ function App() {
       </TopPanel>
       <MiddlePanel autoPlay={autoPlay}>
         <LeftArea>
-          <SmallButton onClick={toggleShowStat}>
-            {showStat ? 'HIDE STAT' : 'SHOW STAT'}
+          <SmallButton onClick={toggleLeftView}>
+            {showStat ? 'STAT' : 'QUICK ADD URL'}
           </SmallButton>
           <AbsoluteBox showStat={showStat}>
             <DisplayStates title="Status" value={attention} isBig />
@@ -435,6 +446,13 @@ function App() {
             <DisplayStates title="Stopped Videos" value={videoStatesString} />
             <DisplayStates title="Elapsed Time" value={elapsed.str} />
             <button onClick={reloadApp}>reload</button>
+          </AbsoluteBox>
+          <AbsoluteBox showStat={!showStat}>
+            <QuickAddUrl
+              cctvsNotSelected={cctvsNotSelectedArray}
+              cctvsSelected={cctvsSelectedArray}
+              setCCTVsSelectedArray={setCCTVsSelectedArrayNSave}
+             />
           </AbsoluteBox>
         </LeftArea>
         <CenterArea>
