@@ -19,13 +19,19 @@ const SubContainer = styled.div`
   padding-top: 10px;
   justify-content: space-between;
 `;
+const ErrorMessage = styled.div`
+  margin-top: 5px;
+  font-size: 12px;
+`
 
 
 function AddManualUrl(props) {
   // eslint-disable-next-line react/prop-types
   const { cctvsNotSelected, cctvsSelected, setCCTVsSelectedArray } = props;
-  const [url, setUrl] = React.useState('https://-');
-  const [title, setTitle] = React.useState('제목');
+  const [url, setUrl] = React.useState('');
+  const [title, setTitle] = React.useState('');
+  const [errorMessage, setErrorMessage] = React.useState(null);
+
   const allCCTVs = React.useMemo(() => {
     return [...cctvsNotSelected, ...cctvsSelected]
   }, [cctvsNotSelected, cctvsSelected]);
@@ -68,10 +74,15 @@ function AddManualUrl(props) {
   }, []);
 
   const onClickAdd = React.useCallback(() => {
+    if (title.length === 0 || url.length === 0) {
+      setErrorMessage('[ERROR]title or url is empty')
+      return;
+    }
     const ALREADY_INDEX = allCCTVs.findIndex(cctv => cctv.url === url);
-    if(ALREADY_INDEX >= 0){
+    if (ALREADY_INDEX >= 0) {
       const alreadyCCTV = allCCTVs[ALREADY_INDEX];
-      alert(`URL already exists! - [${alreadyCCTV.title}]`);
+      // alert(`URL already exists! - [${alreadyCCTV.title}]`);
+      setErrorMessage(`[ERROR]already exists! - [${alreadyCCTV.title}]`);
       return;
     };
     const newCCTV = {
@@ -82,6 +93,8 @@ function AddManualUrl(props) {
     };
     setCCTVsSelectedArray([...cctvsSelected, newCCTV]);
     setUrl('');
+    setTitle('');
+    setErrorMessage(null);
   }, [allCCTVs, url, title, setCCTVsSelectedArray, cctvsSelected]);
 
   return (
@@ -115,16 +128,15 @@ function AddManualUrl(props) {
           )}
         </Box>
         <SubContainer>
-          <input placeholder={title} onChange={setTitleValue} />
-        <input
-          style={{ marginTop: '5px' }}
-          placeholder={url}
-          onChange={onChangeUrl}
-        />
-        <button style={{ marginTop: '5px' }} onClick={onClickAdd}>add url</button>
-          {/* <TextField onChange={setTitleValue} value={title} label="Title" variant="outlined" size="small"></TextField> */}
-          {/* <TextField fullWidth onChange={onChangeUrl} value={url} label="Url" variant="outlined" size="small"></TextField> */}
-          {/* <Button onClick={onClickAdd}>{checkedCCTVId ? "Update":"Add"}</Button> */}
+          <input placeholder="제목" onChange={setTitleValue} value={title} />
+          <input
+            style={{ marginTop: '5px' }}
+            placeholder="https://-"
+            onChange={onChangeUrl}
+            value={url}
+          />
+          <button style={{ marginTop: '5px' }} onClick={onClickAdd}>add url</button>
+          <ErrorMessage>{errorMessage}</ErrorMessage>
         </SubContainer>
     </Container>
   )
