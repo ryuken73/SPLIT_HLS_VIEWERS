@@ -1,7 +1,6 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
 import styled from 'styled-components';
-// import ReactHlsPlayer from 'react-hls-player/dist';
 import ReactHlsPlayer from './Components/ReactHlsPlayer';
 import DraggableTitle from './Components/Player/DraggableTitle';
 
@@ -16,7 +15,7 @@ const CustomPlayer = styled(ReactHlsPlayer)`
   width: 100%;
   height: 100%;
   object-fit: fill;
-`
+`;
 
 const hlsConfig = {
   enableWorker: false,
@@ -34,7 +33,7 @@ const hlsConfig = {
   // liveMaxBackBufferLength: 0,
   // maxBufferSize: 10,
   // maxBufferLength: 10 * 1000 * 1000,
-}
+};
 
 function HLSJSPlayer(props) {
   const {
