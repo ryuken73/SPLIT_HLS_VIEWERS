@@ -24,7 +24,6 @@ function GridVideos(props) {
     toggleAutoPlay,
     autoPlay,
     toggleOverlayGlobal,
-    // currentActiveIndex,
     cctvPlayersRef,
     cctvLastLoadedTime,
     currentCCTVIndex,
@@ -39,9 +38,6 @@ function GridVideos(props) {
   } = props;
 
   const [titlePosition, setTitlePosition] = React.useState({ x: 0, y: 0 });
-  // const currentIndexRef = React.useRef(null);
-  // currentIndexRef.current = currentActiveIndex;
-
   // console.log('#!Players',cctvPlayersRef.current, cctvsSelected, enableOverlayGlobal, currentIndexRef.current)
 
   const mp4RegExp = /.*\.mp4.*/;
@@ -69,7 +65,6 @@ function GridVideos(props) {
       <Swiper
         loop
         speed={500}
-        // speed={3000}
         effect="fade"
         noSwipingClass="react-draggable"
         fadeEffect={{ crossFade: true }}
