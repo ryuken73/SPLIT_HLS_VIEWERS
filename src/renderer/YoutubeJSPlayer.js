@@ -45,6 +45,14 @@ function YoutubePlayer(props) {
   const isActive = cctvIndex === currentCCTVIndex;
   const IS_PREVIEW = !showTitle;
 
+  // console.log('re-render youtube js player:', cctvIndex)
+  // React.useEffect(() => {
+  //   console.log('youtube js player mounted:', cctvIndex);
+  //   return ()  => {
+  //     console.log('youtube js player un-mounted', cctvIndex);
+  //   }
+  // }, [])
+
   const onLoadDataHandler = React.useCallback((event) => {
     // console.log(lastLoaded)
     if (playerRef.current === null) {
@@ -57,10 +65,11 @@ function YoutubePlayer(props) {
     }
   }, []);
 
-  React.useLayoutEffect(() => {
+  React.useEffect(() => {
     if (playerRef.current === null) {
       return;
     }
+    console.log('^^^ setPlayer:', playerRef.current)
     setPlayer(cctvIndex, playerRef.current);
     // playerRef.current.addEventListener('loadedmetadata', onLoadDataHandler);
     // eslint-disable-next-line consistent-return
@@ -84,7 +93,7 @@ function YoutubePlayer(props) {
     });
     console.log(playerRef.current);
     // playerRef.current.load();
-  }, [cctvIndex, lastLoaded]);
+  }, [lastLoaded]);
 
   const setPlayerNormal = React.useCallback(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars

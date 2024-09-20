@@ -24,7 +24,7 @@ function GridVideos(props) {
     toggleAutoPlay,
     autoPlay,
     toggleOverlayGlobal,
-    currentActiveIndex,
+    // currentActiveIndex,
     cctvPlayersRef,
     cctvLastLoadedTime,
     currentCCTVIndex,
@@ -39,8 +39,8 @@ function GridVideos(props) {
   } = props;
 
   const [titlePosition, setTitlePosition] = React.useState({ x: 0, y: 0 });
-  const currentIndexRef = React.useRef(null);
-  currentIndexRef.current = currentActiveIndex;
+  // const currentIndexRef = React.useRef(null);
+  // currentIndexRef.current = currentActiveIndex;
 
   // console.log('#!Players',cctvPlayersRef.current, cctvsSelected, enableOverlayGlobal, currentIndexRef.current)
 

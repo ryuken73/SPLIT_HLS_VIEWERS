@@ -107,6 +107,7 @@ export const getYoutubePlaylistUrl = (videoId) => {
 };
 
 export const isPlayerPlaying = (player, cctvIndex, checkType = 'none') => {
+  // console.log('isPlayerPlaying:', player, cctvIndex, checkType )
   if (player.player !== undefined){ // youtube player
     return player.player.isPlaying;
   }
@@ -141,49 +142,49 @@ export const isPlayerPlaying = (player, cctvIndex, checkType = 'none') => {
   }
 };
 
-export const getNonPausedPlayerIndex = (
-  nextPlayerIndex,
-  cctvPlayersRef,
-  reloadPlayerComponent = () => {},
-) => {
-  let nextIndex = nextPlayerIndex;
-  // console.log('1.getNonPausedPlayerIndex: nextIndex=', nextIndex);
-  let loopCount = 0;
-  while (true) {
-    // console.log('2.getNonPausedPlayerIndex(first in while):', nextIndex, cctvPlayersRef.current[nextIndex])
-    const player = cctvPlayersRef.current[nextIndex];
-    if (player === undefined) {
-      // console.log('x.!getNonPausedPlayerIndex player is undefined');
-      reloadPlayerComponent(nextIndex);
-      nextIndex = (nextIndex + 1) % cctvPlayersRef.current.length;
-      continue;
-    }
-    // const paused = typeof(player.paused) === 'boolean' ? player.paused :player.paused();
-    const paused = !isPlayerPlaying(
-      cctvPlayersRef.current[nextIndex],
-      nextIndex,
-    );
-    // console.log('2-X.getNonPausedPlayerIndex paused:', paused);
-    // console.log('2-1.getNonPausedPlayerIndex isPlaying:', isPlaying);
-    if (!paused) {
-      // if(isPlaying){
-      break;
-    }
-    reloadPlayerComponent(nextIndex);
-    // console.log('3.!getNonPausedPlayerIndex paused Index:', nextIndex)
-    nextIndex = (nextIndex + 1) % cctvPlayersRef.current.length;
-    loopCount++;
-    if (
-      nextIndex === nextPlayerIndex ||
-      loopCount === cctvPlayersRef.current.length
-    ) {
-      console.error('3-X prevent endless loop. loopCount=', loopCount);
-      break;
-    }
-  }
-  // console.log('4.getNonPausedPlayerIndex return nextIndex:', nextIndex)
-  return nextIndex;
-};
+// export const getNonPausedPlayerIndex = (
+//   nextPlayerIndex,
+//   cctvPlayersRef,
+//   reloadPlayerComponent = () => {},
+// ) => {
+//   let nextIndex = nextPlayerIndex;
+//   // console.log('1.getNonPausedPlayerIndex: nextIndex=', nextIndex);
+//   let loopCount = 0;
+//   while (true) {
+//     // console.log('2.getNonPausedPlayerIndex(first in while):', nextIndex, cctvPlayersRef.current[nextIndex])
+//     const player = cctvPlayersRef.current[nextIndex];
+//     if (player === undefined) {
+//       // console.log('x.!getNonPausedPlayerIndex player is undefined');
+//       reloadPlayerComponent(nextIndex);
+//       nextIndex = (nextIndex + 1) % cctvPlayersRef.current.length;
+//       continue;
+//     }
+//     // const paused = typeof(player.paused) === 'boolean' ? player.paused :player.paused();
+//     const paused = !isPlayerPlaying(
+//       cctvPlayersRef.current[nextIndex],
+//       nextIndex,
+//     );
+//     // console.log('2-X.getNonPausedPlayerIndex paused:', paused);
+//     // console.log('2-1.getNonPausedPlayerIndex isPlaying:', isPlaying);
+//     if (!paused) {
+//       // if(isPlaying){
+//       break;
+//     }
+//     reloadPlayerComponent(nextIndex);
+//     // console.log('3.!getNonPausedPlayerIndex paused Index:', nextIndex)
+//     nextIndex = (nextIndex + 1) % cctvPlayersRef.current.length;
+//     loopCount++;
+//     if (
+//       nextIndex === nextPlayerIndex ||
+//       loopCount === cctvPlayersRef.current.length
+//     ) {
+//       console.error('3-X prevent endless loop. loopCount=', loopCount);
+//       break;
+//     }
+//   }
+//   // console.log('4.getNonPausedPlayerIndex return nextIndex:', nextIndex)
+//   return nextIndex;
+// };
 
 export const getYoutubeId = (url) => {
   const addr = new URL(url);

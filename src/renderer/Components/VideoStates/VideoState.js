@@ -221,12 +221,20 @@ function VideoState(props) {
   }, [isActive]);
   const removeItem = React.useCallback(() => {
     setCCTVsSelectedAray((cctvs) => {
+      // cctvPlayersRef.current = remove(cctvPlayersRef.current).fromIndex(
+      //   cctvIndex,
+      // );
+      cctvPlayersRef.current = [
+        ...cctvPlayersRef.current.slice(0, cctvIndex),
+        ...cctvPlayersRef.current.slice(cctvIndex+1)
+      ]
+      console.log(cctvPlayersRef.current)
       return remove(cctvs).fromIndex(cctvIndex)
     });
     // setTimeout(() => {
-      window.electron.ipcRenderer.sendMessage('reload');
+      // window.electron.ipcRenderer.sendMessage('reload');
     // }, 500)
-  }, [cctvIndex, setCCTVsSelectedAray]);
+  }, [cctvIndex, cctvPlayersRef, setCCTVsSelectedAray]);
 
   const bgColor = getBackgroundColor();
   const titleColor = getTitleColor();

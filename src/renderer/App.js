@@ -206,6 +206,7 @@ function App() {
     swiperRef.current.on('realIndexChange', (e) => {
       // console.log('real index change: ',e)
       const { realIndex } = e;
+      // const realIndex = e.detail.activeIndex;
       setActiveIndex(realIndex);
       activeIndexRef.current = realIndex;
     });
@@ -470,7 +471,7 @@ function App() {
               toggleAutoPlay={toggleAutoPlay}
               autoPlay={autoPlay}
               gridDimension={gridDimension}
-              currentActiveIndex={activeIndex}
+              // currentActiveIndex={activeIndex}
               cctvPlayersRef={cctvPlayersRef}
               cctvLastLoadedTime={cctvLastLoadedTime}
               setLastLoadedTime={setLastLoadedTime}
