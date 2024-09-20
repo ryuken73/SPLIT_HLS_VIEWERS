@@ -29,9 +29,9 @@ function MP4Player(props) {
     position,
     alignBy,
     titleFontSize,
-    showTitle,
     titleOpacity,
     titleBlur,
+    showTitle,
     autoInterval,
     autoPlay,
     showProgress
