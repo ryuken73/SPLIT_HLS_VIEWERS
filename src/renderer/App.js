@@ -29,7 +29,6 @@ const INITIAL_LOAD_TIME = new Array(9).fill(Date.now());
 
 const ACTIVE_COLOR_KEY = 950;
 const IDLE_COLOR_KEY = 400;
-// const MAX_NUMBER_OF_RESETS = 50;
 
 const Container = styled.div`
   height: 100vh;
@@ -81,10 +80,7 @@ const LeftArea = styled.div`
   color: white;
   padding-top: 10px;
   padding-left: 10px;
-  /* width: 150px; */
-  /* padding-right: auto; */
-  /* width: 150px !important; */
-`
+`;
 const AbsoluteBox = styled.div`
   position: absolute;
   border: 2px solid white;
@@ -93,11 +89,11 @@ const AbsoluteBox = styled.div`
   transition: 1s all;
   background: maroon;
   width: 150px;
-`
+`;
 const RightArea = styled(LeftArea)`
   margin-left: auto;
   padding-right: 10px;
-`
+`;
 const BottomPanel = styled.div`
   margin-top: auto;
   min-height: 20px;
@@ -133,7 +129,7 @@ function App() {
   const [dialogOpen, setDialogOpen] = React.useState(false);
   const [modalOpen, setModalOpen] = React.useState(true);
   const [gridDimension, setGridDimension] = React.useState(
-    INITIAL_GRID_DIMENSION
+    INITIAL_GRID_DIMENSION,
   );
   const [autoPlay, setAutoPlay] = React.useState(false);
   const [autoInterval, setAutoInterval] = React.useState(INITIAL_AUTO_INTERVAL);
@@ -151,16 +147,16 @@ function App() {
     React.useState(INITIAL_LOAD_TIME);
 
   const [numberOfResets, setNumberOfResets] = React.useState(
-    new Array(selectedSaved.length).fill(0)
+    new Array(selectedSaved.length).fill(0),
   );
   const [alignBy, setAlignBy] = React.useState('right');
   const [titleFontSize, setTitleFontSize] = React.useState(3);
   const [videoStates, setVideoStates] = React.useState({});
   const [memUsage, setMemUsage] = React.useState(0);
-  const [appStartTimestamp, setAappStartTimestamp] = React.useState(Date.now())
-  const [elapsed, setElapsed] =  React.useState({
+  const [appStartTimestamp, setAappStartTimestamp] = React.useState(Date.now());
+  const [elapsed, setElapsed] = React.useState({
     num: 0,
-    str: '00:00:00'
+    str: '00:00:00',
   });
   const [leftView, setLeftVeiw] = React.useState('addUrl');
   const [showTitle, setShowTitle] = React.useState(true);
@@ -181,9 +177,9 @@ function App() {
 
   const totalVideos = cctvsSelectedArray.length;
   const numberOfStoppedVideos = Object.values(videoStates).filter(
-    (videoState) => videoState !== 'normal'
+    (videoState) => videoState !== 'normal',
   ).length;
-  const videoStatesString = `${numberOfStoppedVideos}/${totalVideos}`
+  const videoStatesString = `${numberOfStoppedVideos}/${totalVideos}`;
   const numberOfLIveStream = totalVideos - numberOfStoppedVideos;
 
   React.useEffect(() => {
@@ -193,7 +189,7 @@ function App() {
         return {
           num: diff,
           str: new Date(diff).toISOString().slice(11, 19),
-        }
+        };
       });
     }, 1000);
     return () => {
@@ -211,7 +207,6 @@ function App() {
       activeIndexRef.current = realIndex;
     });
   }, []);
-
 
   const moveToSlide = React.useCallback((index) => {
     swiperRef.current.slideTo(index);
@@ -239,32 +234,30 @@ function App() {
 
   const reloadPlayerComponent = React.useCallback((cctvIndex) => {
     // eslint-disable-next-line @typescript-eslint/no-shadow
-      setNumberOfResets((numberOfResets) => {
-        // eslint-disable-next-line @typescript-eslint/no-shadow
-        setMaxNumberOfResets((maxNumberOfResets) => {
-          if (numberOfResets[cctvIndex] > maxNumberOfResets) {
-            console.log('too many resets:', cctvIndex);
-          } else {
-            console.log('reload player:', cctvIndex);
-            setLastLoadedTime((lastLoadedTime) => {
-              const now = Date.now();
-              return replace(lastLoadedTime).index(cctvIndex).value(now);
-            });
-            // eslint-disable-next-line @typescript-eslint/no-shadow
-            setNumberOfResets((numberOfResets) => {
-              const lastNumber = numberOfResets[cctvIndex];
-              return replace(numberOfResets)
-                .index(cctvIndex)
-                .value(lastNumber + 1);
-            });
-          }
-          return maxNumberOfResets;
-        });
+    setNumberOfResets((numberOfResets) => {
+      // eslint-disable-next-line @typescript-eslint/no-shadow
+      setMaxNumberOfResets((maxNumberOfResets) => {
+        if (numberOfResets[cctvIndex] > maxNumberOfResets) {
+          console.log('too many resets:', cctvIndex);
+        } else {
+          console.log('reload player:', cctvIndex);
+          setLastLoadedTime((lastLoadedTime) => {
+            const now = Date.now();
+            return replace(lastLoadedTime).index(cctvIndex).value(now);
+          });
+          // eslint-disable-next-line @typescript-eslint/no-shadow
+          setNumberOfResets((numberOfResets) => {
+            const lastNumber = numberOfResets[cctvIndex];
+            return replace(numberOfResets)
+              .index(cctvIndex)
+              .value(lastNumber + 1);
+          });
+        }
+        return maxNumberOfResets;
+      });
       return numberOfResets;
     });
-    },
-    [],
-  );
+  }, []);
 
   const runAutoPlay = React.useCallback(
     // eslint-disable-next-line default-param-last, @typescript-eslint/no-shadow
@@ -326,23 +319,24 @@ function App() {
     });
   }, [autoInterval, runAutoPlay]);
 
-  const updateVideoStates = React.useCallback((cctvsArray) => {
-    // eslint-disable-next-line @typescript-eslint/no-shadow
-    let currentCCTVS = cctvsArray;
-    if (typeof cctvsArray === 'function') {
-      currentCCTVS = cctvsArray(cctvsSelectedArray)
-    }
-    setVideoStates((videoStates) => {
-      return currentCCTVS.reduce((acct, cctv) => {
-        if (videoStates[cctv.url] !== undefined) {
-          return {
-            ...acct,
-            [cctv.url]: videoStates[cctv.url]
+  const updateVideoStates = React.useCallback(
+    (cctvsArray) => {
+      // eslint-disable-next-line @typescript-eslint/no-shadow
+      let currentCCTVS = cctvsArray;
+      if (typeof cctvsArray === 'function') {
+        currentCCTVS = cctvsArray(cctvsSelectedArray);
+      }
+      setVideoStates((videoStates) => {
+        return currentCCTVS.reduce((acct, cctv) => {
+          if (videoStates[cctv.url] !== undefined) {
+            return {
+              ...acct,
+              [cctv.url]: videoStates[cctv.url],
+            };
           }
-        }
-        return acct;
-      }, {});
-    });
+          return acct;
+        }, {});
+      });
     },
     [cctvsSelectedArray],
   );
@@ -403,7 +397,7 @@ function App() {
       return 'WARN';
     }
     return 'OK';
-  }, [elapsed.num, memUsage, numberOfLIveStream])
+  }, [elapsed.num, memUsage, numberOfLIveStream]);
 
   const attention = getAppStatus();
 
@@ -411,8 +405,8 @@ function App() {
     // eslint-disable-next-line @typescript-eslint/no-shadow
     setLeftVeiw((leftView) => {
       if (leftView === 'addUrl') {
-        return 'stat'
-      } 
+        return 'stat';
+      }
       return 'addUrl';
     });
   }, []);
@@ -453,7 +447,7 @@ function App() {
               cctvsNotSelected={cctvsNotSelectedArray}
               cctvsSelected={cctvsSelectedArray}
               setCCTVsSelectedArray={setCCTVsSelectedArrayNSave}
-             />
+            />
           </AbsoluteBox>
         </LeftArea>
         <CenterArea>
@@ -471,7 +465,6 @@ function App() {
               toggleAutoPlay={toggleAutoPlay}
               autoPlay={autoPlay}
               gridDimension={gridDimension}
-              // currentActiveIndex={activeIndex}
               cctvPlayersRef={cctvPlayersRef}
               cctvLastLoadedTime={cctvLastLoadedTime}
               setLastLoadedTime={setLastLoadedTime}
@@ -526,7 +519,7 @@ function App() {
           <SetMaxNumberOfResets
             maxNumberOfResets={maxNumberOfResets}
             setMaxNumberOfResets={setMaxNumberOfResets}
-           />
+          />
         </RightArea>
       </MiddlePanel>
       <BottomPanel autoPlay={autoPlay}>
