@@ -447,6 +447,7 @@ function App() {
               cctvsNotSelected={cctvsNotSelectedArray}
               cctvsSelected={cctvsSelectedArray}
               setCCTVsSelectedArray={setCCTVsSelectedArrayNSave}
+              setNumberOfResets={setNumberOfResets}
             />
           </AbsoluteBox>
         </LeftArea>
