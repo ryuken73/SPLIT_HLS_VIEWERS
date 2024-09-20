@@ -100,7 +100,6 @@ function GridVideos(props) {
                 lastLoaded={cctvLastLoadedTime[cctvIndex]}
                 cctvIndex={cctvIndex}
                 currentCCTVIndex={currentCCTVIndex}
-                aspectRatio="4/3"
                 onDrag={handleTitleDrag}
                 position={titlePosition}
                 alignBy={alignBy}
