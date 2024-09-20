@@ -45,48 +45,29 @@ function YoutubePlayer(props) {
   const isActive = cctvIndex === currentCCTVIndex;
   const IS_PREVIEW = !showTitle;
 
-  // console.log('re-render youtube js player:', cctvIndex)
-  // React.useEffect(() => {
-  //   console.log('youtube js player mounted:', cctvIndex);
-  //   return ()  => {
-  //     console.log('youtube js player un-mounted', cctvIndex);
-  //   }
-  // }, [])
-
   const onLoadDataHandler = React.useCallback((event) => {
     // console.log(lastLoaded)
     if (playerRef.current === null) {
       return;
-    }
-    // console.log('loadedMetadata mp4', playerRef.current.duration);
+    };
     // eslint-disable-next-line no-restricted-globals
     if (!isNaN(playerRef.current.duration)) {
       playerRef.current.play();
-    }
+    };
   }, []);
 
   React.useEffect(() => {
     if (playerRef.current === null) {
       return;
     }
-    console.log('^^^ setPlayer:', playerRef.current)
+    // console.log('^^^ setPlayer:', playerRef.current)
     setPlayer(cctvIndex, playerRef.current);
-    // playerRef.current.addEventListener('loadedmetadata', onLoadDataHandler);
-    // eslint-disable-next-line consistent-return
-    // return () => {
-    //   if (playerRef.current === null) return;
-    //   playerRef.current.removeEventListener(
-    //     'loadedmetadata',
-    //     onLoadDataHandler,
-    //   );
-    // };
   }, [cctvIndex, setPlayer]);
 
   //neet to reload player method
   React.useEffect(() => {
     // console.log('reload while get next player: ', lastLoaded, cctvIndex);
     // eslint-disable-next-line @typescript-eslint/no-shadow
-
     console.log('reload youtube js player', lastLoaded);
     setReloadTrigger((reloadTrigger) => {
       return !reloadTrigger;
