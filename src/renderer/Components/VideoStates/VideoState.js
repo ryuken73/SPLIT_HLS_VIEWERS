@@ -86,7 +86,7 @@ function VideoState(props) {
     setVideoStates,
     playerStatus,
     moveToSlide,
-    setCCTVsSelectedAray
+    setCCTVsSelectedAray,
   } = props;
   // console.log(cctv, cctvIndex, playerStatus)
   // const [playerStatus, setPlayerStatus] = React.useState(PLAYER_STATUS.pause);
@@ -105,7 +105,6 @@ function VideoState(props) {
     // console.log('player event captured:', cctvIndex, type);
     if (type === PLAYER_EVENTS.playing) {
       // console.log('player is playing!');
-      // setPlayerStatus(PLAYER_STATUS.normal);
       setVideoStates((videoStates) => {
         return {
           ...videoStates,
@@ -116,7 +115,6 @@ function VideoState(props) {
     }
     if (type === PLAYER_EVENTS.pause || type === PLAYER_EVENTS.ended) {
       // console.log('player is paused!');
-      // setPlayerStatus(PLAYER_STATUS.pause);
       setVideoStates((videoStates) => {
         return {
           ...videoStates,
@@ -126,7 +124,6 @@ function VideoState(props) {
       return;
     }
     // console.log('player is stalled!');
-    // setPlayerStatus(PLAYER_STATUS.stalled);
     setVideoStates((videoStates) => {
       return {
         ...videoStates,
@@ -158,7 +155,6 @@ function VideoState(props) {
     player.addEventListener('playing', handlePlayerEvent);
     player.addEventListener('pause', handlePlayerEvent);
     player.addEventListener('stalled', handlePlayerEvent);
-    // player.addEventListener('suspend', handlePlayerEvent);
     player.addEventListener('error', handlePlayerEvent);
     player.addEventListener('waiting', handlePlayerEvent);
     player.addEventListener('ended', handlePlayerEvent);
@@ -173,7 +169,6 @@ function VideoState(props) {
         player.removeEventListener('playing', handlePlayerEvent);
         player.removeEventListener('pause', handlePlayerEvent);
         player.removeEventListener('stalled', handlePlayerEvent);
-        // player.removeEventListener('suspend', handlePlayerEvent);
         player.removeEventListener('error', handlePlayerEvent);
         player.removeEventListener('waiting', handlePlayerEvent);
         player.removeEventListener('ended', handlePlayerEvent);
@@ -190,10 +185,6 @@ function VideoState(props) {
 
   const onClick = React.useCallback(() => {
     moveToSlide(cctvIndex);
-    // if (cctvPlayersRef.current[cctvIndex].puase === undefined) {
-    //   return;
-    // }
-    // cctvPlayersRef.current[cctvIndex].pause();
   }, [cctvIndex, moveToSlide]);
 
   const getBackgroundColor = React.useCallback(() => {
@@ -212,6 +203,7 @@ function VideoState(props) {
     }
     return idle[950];
   }, [autoPlay, isActive, isPaused, isStalled])
+
   const getTitleColor = React.useCallback(() => {
     if (isActive){
       return 'yellow';
@@ -221,35 +213,26 @@ function VideoState(props) {
   }, [isActive]);
   const removeItem = React.useCallback(() => {
     setCCTVsSelectedAray((cctvs) => {
-      // cctvPlayersRef.current = remove(cctvPlayersRef.current).fromIndex(
-      //   cctvIndex,
-      // );
       cctvPlayersRef.current = [
         ...cctvPlayersRef.current.slice(0, cctvIndex),
-        ...cctvPlayersRef.current.slice(cctvIndex+1)
+        ...cctvPlayersRef.current.slice(cctvIndex + 1),
       ]
-      console.log(cctvPlayersRef.current)
+      // console.log(cctvPlayersRef.current)
       return remove(cctvs).fromIndex(cctvIndex)
     });
-    // setTimeout(() => {
-      // window.electron.ipcRenderer.sendMessage('reload');
-    // }, 500)
   }, [cctvIndex, cctvPlayersRef, setCCTVsSelectedAray]);
 
   const bgColor = getBackgroundColor();
   const titleColor = getTitleColor();
   // eslint-disable-next-line no-nested-ternary
-  const statusString = isPaused ? '[Paused]': isStalled ? '[Fail]' : '';
-
   // console.log('player state =', playerStatus, isStalled, bgColor, cctv.title)
 
   return (
     <Container isActive={isActive} bgcolor={bgColor} onClick={onClick}>
-      <Title disabled={disabled} color={titleColor}>{cctv.title}</Title>
-      <SubTitle disabled={disabled}>
-        {/* {statusString} Reset Count [{numberOfReset}] */}
-        Reset Count [{numberOfReset}]
-      </SubTitle>
+      <Title disabled={disabled} color={titleColor}>
+        {cctv.title}
+      </Title>
+      <SubTitle disabled={disabled}>Reset Count [{numberOfReset}]</SubTitle>
       <TimeDisplay disabled={disabled}>
         {currentTime} / {duration} <StyledSpan onClick={removeItem}>[del]</StyledSpan>
       </TimeDisplay>
