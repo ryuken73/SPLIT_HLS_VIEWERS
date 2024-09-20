@@ -427,6 +427,7 @@ function App() {
           maxNumberOfResets={maxNumberOfResets}
           moveToSlide={moveToSlide}
           setCCTVsSelectedAray={setCCTVsSelectedArrayNSave}
+          setNumberOfResets={setNumberOfResets}
         />
       </TopPanel>
       <MiddlePanel autoPlay={autoPlay}>

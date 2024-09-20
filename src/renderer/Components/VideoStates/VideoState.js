@@ -87,7 +87,9 @@ function VideoState(props) {
     playerStatus,
     moveToSlide,
     setCCTVsSelectedAray,
+    setNumberOfResets,
   } = props;
+  console.log('&&', setNumberOfResets)
   // console.log(cctv, cctvIndex, playerStatus)
   // const [playerStatus, setPlayerStatus] = React.useState(PLAYER_STATUS.pause);
   const [currentTime, setCurrentTime] = React.useState(secondToHHMMSS(0));
@@ -220,7 +222,11 @@ function VideoState(props) {
       // console.log(cctvPlayersRef.current)
       return remove(cctvs).fromIndex(cctvIndex)
     });
-  }, [cctvIndex, cctvPlayersRef, setCCTVsSelectedAray]);
+    // eslint-disable-next-line @typescript-eslint/no-shadow
+    setNumberOfResets((numberOfResets) => {
+      return remove(numberOfResets).fromIndex(cctvIndex)
+    });
+  }, [cctvIndex, cctvPlayersRef, setCCTVsSelectedAray, setNumberOfResets]);
 
   const bgColor = getBackgroundColor();
   const titleColor = getTitleColor();
