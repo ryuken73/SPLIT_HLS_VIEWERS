@@ -41,20 +41,6 @@ function AddManualUrl(props) {
   const allCCTVs = React.useMemo(() => {
     return [...cctvsNotSelected, ...cctvsSelected];
   }, [cctvsNotSelected, cctvsSelected]);
-  // const titleRef = React.useRef('');
-
-  // React.useEffect(() => {
-  //   if(checkedCCTVId){
-  //     const checkedCCTV = allCCTVs.find(cctv => cctv.cctvId === checkedCCTVId);
-  //     if(checkedCCTV){
-  //       setUrl(checkedCCTV.url || 'https://localhost');
-  //       setTitle(checkedCCTV.title || '');
-  //     }
-  //   } else {
-  //     setUrl('https://-');
-  //     setTitle('');
-  //   }
-  // },[allCCTVs, checkedCCTVId])
 
   const setPlayer = React.useCallback(() => {
     return null;
@@ -104,7 +90,14 @@ function AddManualUrl(props) {
     setUrl('');
     setTitle('');
     setErrorMessage(null);
-  }, [allCCTVs, url, title, setCCTVsSelectedArray, cctvsSelected]);
+  }, [
+    title,
+    url,
+    allCCTVs,
+    setCCTVsSelectedArray,
+    cctvsSelected,
+    setNumberOfResets,
+  ]);
 
   return (
     <Container>
