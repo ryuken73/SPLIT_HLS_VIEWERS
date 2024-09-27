@@ -6,9 +6,22 @@ const Container = styled.div`
   flex-direction: column;
   height: 100%;
 `
+const Rows = styled.div`
+  padding-right: 3px;
+  overflow-y: scroll;
+  &::-webkit-scrollbar {
+    width: 10px;
+  };
+  &::-webkit-scrollbar-thumb {
+    background-color: black;
+  }
+  &::-webkit-scrollbar-track {
+    background-color: #9b6a2f;
+  }
+`
 const RowContainer = styled.div`
-  background-color: black;
   padding: 3px;
+  background-color: black;
   margin-bottom: 3px;
 `
 const CCTV = styled.div`
@@ -106,24 +119,26 @@ function HistoryShow(props) {
   return (
     <Container>
       <ReloadButton onClick={reloadHistory}>refresh</ReloadButton>
-      {cctvHistory.map((cctv) => (
-        <RowContainer>
-          <CCTV key={cctv.create_dttm}>
-            {/* <Action>[{cctv.action}]</Action> */}
-            <Title
-              id={cctv.create_dttm}
-              onClick={loadInfo}
-              action={cctv.action}
-            >
-              {cctv.json.title}
-            </Title>
-            <DelButton id={cctv.create_dttm} onClick={handleDelete}>
-              [Del]
-            </DelButton>
-          </CCTV>
-          <TimeStamp>{cctv.create_dttm}</TimeStamp>
-        </RowContainer>
-      ))}
+      <Rows>
+        {cctvHistory.map((cctv) => (
+          <RowContainer>
+            <CCTV key={cctv.create_dttm}>
+              {/* <Action>[{cctv.action}]</Action> */}
+              <Title
+                id={cctv.create_dttm}
+                onClick={loadInfo}
+                action={cctv.action}
+              >
+                {cctv.json.title}
+              </Title>
+              <DelButton id={cctv.create_dttm} onClick={handleDelete}>
+                [Del]
+              </DelButton>
+            </CCTV>
+            <TimeStamp>{cctv.create_dttm}</TimeStamp>
+          </RowContainer>
+        ))}
+      </Rows>
     </Container>
   )
 }

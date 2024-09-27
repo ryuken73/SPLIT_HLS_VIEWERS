@@ -94,12 +94,22 @@ const AbsoluteBox = styled.div`
 const AbsoluteBoxForHistory = styled(AbsoluteBox)`
   top: 250px;
   height: 500px;
-  overflow-y: auto;
+  /* overflow-y: scroll;
+  &::-webkit-scrollbar {
+    width: 10px;
+  };
+  &::-webkit-scrollbar-thumb {
+    background-color: black;
+  }
+  &::-webkit-scrollbar-track {
+    background-color: #9b6a2f;
+  } */
 `
 const RightArea = styled(LeftArea)`
   margin-left: auto;
   padding-right: 10px;
 `;
+
 const BottomPanel = styled.div`
   margin-top: auto;
   min-height: 20px;
