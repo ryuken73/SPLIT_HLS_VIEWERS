@@ -94,6 +94,7 @@ const AbsoluteBox = styled.div`
 const AbsoluteBoxForHistory = styled(AbsoluteBox)`
   top: 250px;
   height: 500px;
+  overflow-y: auto;
 `
 const RightArea = styled(LeftArea)`
   margin-left: auto;
