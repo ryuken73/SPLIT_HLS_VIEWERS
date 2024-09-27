@@ -19,6 +19,7 @@ import SetTitleBlur from './Components/SideComponents/SetTitleBlur';
 import SetMaxNumberOfResets from './Components/SideComponents/SetMaxNumberOfResets';
 import ShowProgress from './Components/SideComponents/ShowProgress';
 import QuickAddUrl from './QuickAddUrl';
+import HistoryShow from './HistoryShow';
 import 'swiper/css';
 import { SmallButton } from './template/smallComponents';
 
@@ -90,6 +91,10 @@ const AbsoluteBox = styled.div`
   background: maroon;
   width: 150px;
 `;
+const AbsoluteBoxForHistory = styled(AbsoluteBox)`
+  top: 250px;
+  height: 500px;
+`
 const RightArea = styled(LeftArea)`
   margin-left: auto;
   padding-right: 10px;
@@ -164,6 +169,8 @@ function App() {
   const [titleOpacity, setTitleOpacity] = React.useState(0.9);
   const [titleBlur, setTitleBlur] = React.useState(0);
   const [maxNumberOfResets, setMaxNumberOfResets] = React.useState(50);
+  const [quickUrl, setQuickUrl] = React.useState('');
+  const [quickTitle, setQuickTitle] = React.useState('');
 
   // console.log('stopped:', videoStates)
   useHotkeys('c', () => setDialogOpen(true));
@@ -445,12 +452,22 @@ function App() {
           </AbsoluteBox>
           <AbsoluteBox showStat={!showStat}>
             <QuickAddUrl
+              quickUrl={quickUrl}
+              setQuickUrl={setQuickUrl}
+              quickTitle={quickTitle}
+              setQuickTitle={setQuickTitle}
               cctvsNotSelected={cctvsNotSelectedArray}
               cctvsSelected={cctvsSelectedArray}
               setCCTVsSelectedArray={setCCTVsSelectedArrayNSave}
               setNumberOfResets={setNumberOfResets}
             />
           </AbsoluteBox>
+          <AbsoluteBoxForHistory showStat={!showStat}>
+            <HistoryShow
+              setQuickUrl={setQuickUrl}
+              setQuickTitle={setQuickTitle}
+            />
+          </AbsoluteBoxForHistory>
         </LeftArea>
         <CenterArea>
           {cctvsSelectedArray.length === 0 ? (
