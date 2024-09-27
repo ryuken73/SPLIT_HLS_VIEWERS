@@ -6,24 +6,32 @@ const Container = styled.div`
   flex-direction: column;
   height: 100%;
 `
+const RowContainer = styled.div`
+  background-color: black;
+  padding: 3px;
+  margin-bottom: 3px;
+`
 const CCTV = styled.div`
   display: flex;
   font-size: 12px;
   font-weight: 100;
-  color: yellow;
+  color: gold;
 `
 const Action = styled.div`
+  margin-left: 3px;
 `
 const Title = styled(Action)`
-  margin-left: 3px;
+  color: ${(props) => props.action === 'del' && 'red'};
   cursor: pointer;
   width: 100%;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
   &:hover {
     color: white;
   };
 `
 const DelButton = styled(Action)`
-  margin-left: 3px;
   color: red;
   margin-left: auto;
   font-weight: 200;
@@ -32,8 +40,12 @@ const DelButton = styled(Action)`
     color: white;
   };
 `
+const TimeStamp = styled(Action)`
+  font-size: 10px;
+  color: #d73232;
+`
 const ReloadButton = styled.button`
-  margin-top: auto;
+  margin-bottom: 5px;
 `
 
 function HistoryShow(props) {
@@ -79,16 +91,39 @@ function HistoryShow(props) {
     window.electron.ipcRenderer.sendMessage('deleteHistory', createDttm);
   }, []);
 
+  const loadInfo = React.useCallback(
+    (event) => {
+      const createDttm = event.target.id;
+      const clickedCCTV = cctvHistory.find(
+        (cctv) => cctv.create_dttm === createDttm,
+      );
+      setQuickUrl(clickedCCTV.json.url);
+      setQuickTitle(clickedCCTV.json.title);
+    },
+    [cctvHistory, setQuickTitle, setQuickUrl],
+  );
+
   return (
     <Container>
-      {cctvHistory.map((cctv) => (
-        <CCTV key={cctv.json.cctvId}>
-          <Action>[{cctv.action}]</Action>
-          <Title>{cctv.json.title}</Title>
-          <DelButton id={cctv.create_dttm} onClick={handleDelete}>[Del]</DelButton>
-        </CCTV>
-      ))}
       <ReloadButton onClick={reloadHistory}>refresh</ReloadButton>
+      {cctvHistory.map((cctv) => (
+        <RowContainer>
+          <CCTV key={cctv.create_dttm}>
+            {/* <Action>[{cctv.action}]</Action> */}
+            <Title
+              id={cctv.create_dttm}
+              onClick={loadInfo}
+              action={cctv.action}
+            >
+              {cctv.json.title}
+            </Title>
+            <DelButton id={cctv.create_dttm} onClick={handleDelete}>
+              [Del]
+            </DelButton>
+          </CCTV>
+          <TimeStamp>{cctv.create_dttm}</TimeStamp>
+        </RowContainer>
+      ))}
     </Container>
   )
 }
