@@ -29,13 +29,17 @@ const ErrorMessage = styled.div`
 function AddManualUrl(props) {
   // eslint-disable-next-line react/prop-types
   const {
+    quickUrl: url,
+    setQuickUrl: setUrl,
+    quickTitle: title,
+    setQuickTitle: setTitle,
     cctvsNotSelected,
     cctvsSelected,
     setCCTVsSelectedArray,
     setNumberOfResets,
   } = props;
-  const [url, setUrl] = React.useState('');
-  const [title, setTitle] = React.useState('');
+  // const [url, setUrl] = React.useState('');
+  // const [title, setTitle] = React.useState('');
   const [errorMessage, setErrorMessage] = React.useState(null);
 
   const allCCTVs = React.useMemo(() => {
@@ -90,6 +94,11 @@ function AddManualUrl(props) {
     setUrl('');
     setTitle('');
     setErrorMessage(null);
+    window.electron.ipcRenderer.sendMessage(
+      'addHistoryDB',
+      'add',
+      JSON.stringify(newCCTV),
+    );
   }, [
     title,
     url,
