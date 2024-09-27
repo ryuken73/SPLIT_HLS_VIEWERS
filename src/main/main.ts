@@ -14,6 +14,27 @@ import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
+import {
+  dropHistoryTable,
+  createHistoryTable,
+  showNow,
+  insertHistory,
+  deleteHistory,
+  deleteAllHistory,
+  selectAll,
+  selectAllAsJson
+} from './HistoryManager';
+
+try {
+  // dropHistoryTable();
+  // console.log(deleteAllHistory())
+  createHistoryTable();
+  // console.log(insertHistory('add', '{url: http://a.b.c.d}'))
+  console.log(selectAll())
+  // console.log(selectAllAsJson()) 
+} catch(err){
+  console.error(err);
+}
 
 class AppUpdater {
   constructor() {
@@ -22,7 +43,6 @@ class AppUpdater {
     // autoUpdater.checkForUpdatesAndNotify();
   }
 }
-
 let mainWindow: BrowserWindow | null = null;
 
 ipcMain.on('ipc-example', async (event, arg) => {
@@ -42,6 +62,24 @@ ipcMain.on('reload', async (event) => {
 
 ipcMain.handle('getVerion', () => {
   return Promise.resolve(app.getVersion());
+});
+
+ipcMain.on('addHistoryDB', (event, action, data) => {
+  console.log(action, data)
+  const result = insertHistory(action, data);
+  event.reply('reloadNeeded');
+  return result;
+});
+
+ipcMain.on('deleteHistory', (event, createDttm) => {
+  const result = deleteHistory(createDttm);
+  event.reply('reloadNeeded');
+  return result;
+});
+
+ipcMain.on('loadHistoryDB', (event) => {
+  const result = selectAll();
+  event.reply('loadDone', result);
 });
 
 if (process.env.NODE_ENV === 'production') {
