@@ -89,8 +89,6 @@ function VideoState(props) {
     setCCTVsSelectedAray,
     setNumberOfResets,
   } = props;
-  console.log('&&', setNumberOfResets)
-  // console.log(cctv, cctvIndex, playerStatus)
   // const [playerStatus, setPlayerStatus] = React.useState(PLAYER_STATUS.pause);
   const [currentTime, setCurrentTime] = React.useState(secondToHHMMSS(0));
   const [duration, setDuration] = React.useState(secondToHHMMSS(0));
@@ -213,7 +211,13 @@ function VideoState(props) {
     return autoRun[50];
 
   }, [isActive]);
+
   const removeItem = React.useCallback(() => {
+    window.electron.ipcRenderer.sendMessage(
+      'addHistoryDB',
+      'del',
+      JSON.stringify(cctv),
+    );
     setCCTVsSelectedAray((cctvs) => {
       cctvPlayersRef.current = [
         ...cctvPlayersRef.current.slice(0, cctvIndex),
@@ -226,7 +230,13 @@ function VideoState(props) {
     setNumberOfResets((numberOfResets) => {
       return remove(numberOfResets).fromIndex(cctvIndex)
     });
-  }, [cctvIndex, cctvPlayersRef, setCCTVsSelectedAray, setNumberOfResets]);
+  }, [
+    cctv,
+    cctvIndex,
+    cctvPlayersRef,
+    setCCTVsSelectedAray,
+    setNumberOfResets,
+  ]);
 
   const bgColor = getBackgroundColor();
   const titleColor = getTitleColor();
