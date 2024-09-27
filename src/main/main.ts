@@ -65,21 +65,33 @@ ipcMain.handle('getVerion', () => {
 });
 
 ipcMain.on('addHistoryDB', (event, action, data) => {
-  console.log(action, data)
-  const result = insertHistory(action, data);
-  event.reply('reloadNeeded');
-  return result;
+  try {
+    console.log(action, data)
+    const result = insertHistory(action, data);
+    event.reply('reloadNeeded');
+    return result;
+  } catch (err) {
+    console.error(err);
+  }
 });
 
 ipcMain.on('deleteHistory', (event, createDttm) => {
-  const result = deleteHistory(createDttm);
-  event.reply('reloadNeeded');
-  return result;
+  try {
+    const result = deleteHistory(createDttm);
+    event.reply('reloadNeeded');
+    return result;
+  } catch (err) {
+    console.error(err);
+  }
 });
 
 ipcMain.on('loadHistoryDB', (event) => {
-  const result = selectAll();
-  event.reply('loadDone', result);
+  try {
+    const result = selectAll();
+    event.reply('loadDone', result);
+  } catch (err) {
+    console.error(err)
+  }
 });
 
 if (process.env.NODE_ENV === 'production') {
