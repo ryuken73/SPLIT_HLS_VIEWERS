@@ -78,7 +78,11 @@ function AddManualUrl(props) {
     if (ALREADY_INDEX >= 0) {
       const alreadyCCTV = allCCTVs[ALREADY_INDEX];
       // alert(`URL already exists! - [${alreadyCCTV.title}]`);
-      setErrorMessage(`[ERROR]already exists! - [${alreadyCCTV.title}]`);
+      // setErrorMessage(`[ERROR]already exists! - [${alreadyCCTV.title}]`);
+      setErrorMessage(`[ERROR]already exists!`);
+      setTimeout(() => {
+        setErrorMessage('');
+      }, 2000);
       return;
     }
     const newCCTV = {
