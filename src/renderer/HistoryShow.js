@@ -28,13 +28,13 @@ const CCTV = styled.div`
   display: flex;
   font-size: 12px;
   font-weight: 100;
-  color: gold;
+  color: yellow;
 `
 const Action = styled.div`
   margin-left: 3px;
 `
 const Title = styled(Action)`
-  color: ${(props) => props.action === 'del' && 'red'};
+  color: ${(props) => props.action === 'del' && 'lightgrey'};
   cursor: pointer;
   width: 100%;
   white-space: nowrap;
@@ -62,8 +62,13 @@ const ReloadButton = styled.button`
 `
 
 function HistoryShow(props) {
+  // eslint-disable-next-line react/prop-types
   const { setQuickUrl, setQuickTitle } = props;
   const [cctvHistory, setHistory] = React.useState([]);
+
+  React.useEffect(() => {
+    window.electron.ipcRenderer.sendMessage('loadHistoryDB');
+  }, []);
 
   const handleLoadDone = React.useCallback((results) => {
     try {
