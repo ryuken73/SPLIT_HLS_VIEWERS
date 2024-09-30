@@ -21,6 +21,10 @@ const SubContainer = styled.div`
   padding-top: 10px;
   justify-content: space-between;
 `;
+const Buttons = styled.div`
+  display: flex;
+  margin-top: 5px;
+`
 const ErrorMessage = styled.div`
   margin-top: 5px;
   font-size: 12px;
@@ -66,8 +70,15 @@ function AddManualUrl(props) {
   const isYoutube = youtubeRegExtp.test(source.url);
 
   const setTitleValue = React.useCallback((event) => {
-    setTitle(event.target.value);
-  }, []);
+      setTitle(event.target.value);
+    },
+    [setTitle],
+  );
+
+  const onClickClear = React.useCallback(() => {
+    setTitle('');
+    setUrl('');
+  }, [setTitle, setUrl]);
 
   const onClickAdd = React.useCallback(() => {
     if (title.length === 0 || url.length === 0) {
@@ -82,6 +93,8 @@ function AddManualUrl(props) {
       setErrorMessage(`[ERROR]already exists!`);
       setTimeout(() => {
         setErrorMessage('');
+        setTitle('');
+        setUrl('');
       }, 2000);
       return;
     }
@@ -110,7 +123,12 @@ function AddManualUrl(props) {
     setCCTVsSelectedArray,
     cctvsSelected,
     setNumberOfResets,
+    setUrl,
+    setTitle,
   ]);
+
+  const addButtonDisabled = url.trim() === '' || title.trim() === '';
+  const clearButtonDisabled = url.trim() === '' && title.trim() === '';
 
   return (
     <Container>
@@ -148,9 +166,19 @@ function AddManualUrl(props) {
           onChange={onChangeUrl}
           value={url}
         />
-        <button style={{ marginTop: '5px' }} onClick={onClickAdd}>
-          add url
-        </button>
+        <Buttons>
+          <button
+            disabled={addButtonDisabled}
+            onClick={onClickAdd}
+            style={{width: '100%'}}
+          >
+            add url
+          </button>
+          <button
+            onClick={onClickClear}
+            disabled={clearButtonDisabled}
+          >clear</button>
+        </Buttons>
         <ErrorMessage>{errorMessage}</ErrorMessage>
       </SubContainer>
     </Container>
