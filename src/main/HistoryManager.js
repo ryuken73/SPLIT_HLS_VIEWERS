@@ -75,6 +75,25 @@ export const selectAll = () => {
   }
 }
 
+export const selectByDateUnit = (unit = 'W') => {
+  try {
+    const whereClauses = {
+      W: '-7 days',
+      M: '-1 month',
+      Y: '-1 year',
+      F: '-10 year'
+    }
+    const stmt = db.prepare(
+      `select * from history where create_dttm >= date('now', ?) order by create_dttm desc`,
+    );
+    const result = stmt.all(whereClauses[unit]);
+    return result;
+  } catch(err) {
+    console.error(err); 
+    throw err;
+  }
+}
+
 export const selectAllAsJson = () => {
   try {
     const stmt = db.prepare(

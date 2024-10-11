@@ -22,6 +22,7 @@ import {
   deleteHistory,
   deleteAllHistory,
   selectAll,
+  selectByDateUnit,
   selectAllAsJson
 } from './HistoryManager';
 
@@ -88,6 +89,15 @@ ipcMain.on('deleteHistory', (event, createDttm) => {
 ipcMain.on('loadHistoryDB', (event) => {
   try {
     const result = selectAll();
+    event.reply('loadDone', result);
+  } catch (err) {
+    console.error(err)
+  }
+});
+
+ipcMain.on('loadHistoryByUnit', (event, unit) => {
+  try {
+    const result = selectByDateUnit(unit);
     event.reply('loadDone', result);
   } catch (err) {
     console.error(err)

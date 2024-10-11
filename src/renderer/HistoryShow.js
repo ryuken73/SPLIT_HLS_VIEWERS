@@ -6,6 +6,11 @@ const Container = styled.div`
   flex-direction: column;
   height: 100%;
 `
+const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`
 const Rows = styled.div`
   padding-right: 3px;
   overflow-y: scroll;
@@ -59,15 +64,21 @@ const TimeStamp = styled(Action)`
 `
 const ReloadButton = styled.button`
   margin-bottom: 5px;
+  background-color: ${(props) =>
+    props.dateUnit === props.currentDateUnit ? 'yellow' : 'black'};
+  color: ${(props) =>
+    props.dateUnit === props.currentDateUnit ? 'black' : 'white'};
 `
 
 function HistoryShow(props) {
   // eslint-disable-next-line react/prop-types
   const { setQuickUrl, setQuickTitle } = props;
   const [cctvHistory, setHistory] = React.useState([]);
+  const [currentDateUnit, setCurrentDateUnit] = React.useState('M');
 
   React.useEffect(() => {
-    window.electron.ipcRenderer.sendMessage('loadHistoryDB');
+    // window.electron.ipcRenderer.sendMessage('loadHistoryDB');
+    window.electron.ipcRenderer.sendMessage('loadHistoryByUnit', 'M');
   }, []);
 
   const handleLoadDone = React.useCallback((results) => {
@@ -88,8 +99,12 @@ function HistoryShow(props) {
   }, []);
 
   const handleReloadNeeded = React.useCallback(() => {
-    window.electron.ipcRenderer.sendMessage('loadHistoryDB');
-  }, []);
+    // window.electron.ipcRenderer.sendMessage('loadHistoryDB');
+    window.electron.ipcRenderer.sendMessage(
+      'loadHistoryByUnit',
+      currentDateUnit,
+    );
+  }, [currentDateUnit]);
 
   React.useEffect(() => {
     window.electron.ipcRenderer.on('reloadNeeded', handleReloadNeeded);
@@ -100,8 +115,10 @@ function HistoryShow(props) {
     }
   }, [handleLoadDone, handleReloadNeeded]);
 
-  const reloadHistory = React.useCallback(() => {
-    window.electron.ipcRenderer.sendMessage('loadHistoryDB');
+  const reloadHistory = React.useCallback((event) => {
+    const unit = event.target.id;
+    window.electron.ipcRenderer.sendMessage('loadHistoryByUnit', unit);
+    setCurrentDateUnit(unit);
   }, []);
 
   const handleDelete = React.useCallback((event) => {
@@ -123,7 +140,40 @@ function HistoryShow(props) {
 
   return (
     <Container>
-      <ReloadButton onClick={reloadHistory}>refresh</ReloadButton>
+      <ButtonContainer>
+        <ReloadButton
+          id="W"
+          dateUnit="W"
+          currentDateUnit={currentDateUnit}
+          onClick={reloadHistory}
+        >
+          1W
+        </ReloadButton>
+        <ReloadButton
+          id="M"
+          dateUnit="M"
+          currentDateUnit={currentDateUnit}
+          onClick={reloadHistory}
+        >
+          1M
+        </ReloadButton>
+        <ReloadButton
+          id="Y"
+          dateUnit="Y"
+          currentDateUnit={currentDateUnit}
+          onClick={reloadHistory}
+        >
+          1Y
+        </ReloadButton>
+        <ReloadButton
+          id="F"
+          dateUnit="F"
+          currentDateUnit={currentDateUnit}
+          onClick={reloadHistory}
+        >
+          Full
+        </ReloadButton>
+      </ButtonContainer>
       <Rows>
         {cctvHistory.map((cctv) => (
           <RowContainer>
