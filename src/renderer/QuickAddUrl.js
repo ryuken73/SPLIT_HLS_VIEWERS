@@ -104,8 +104,12 @@ function AddManualUrl(props) {
       cctvId: Date.now(),
       num: Date.now(),
     };
-    setCCTVsSelectedArray([...cctvsSelected, newCCTV]);
-    setNumberOfResets(numberOfResets => {
+    // setCCTVsSelectedArray([...cctvsSelected, newCCTV]);
+    // eslint-disable-next-line @typescript-eslint/no-shadow
+    setCCTVsSelectedArray((cctvsSelected) => {
+      return [...cctvsSelected, newCCTV]
+    });
+    setNumberOfResets((numberOfResets) => {
       return [...numberOfResets, 0];
     });
     setUrl('');
@@ -116,15 +120,16 @@ function AddManualUrl(props) {
       'add',
       JSON.stringify(newCCTV),
     );
+    console.log('length:',cctvsSelected.length);
   }, [
     title,
     url,
     allCCTVs,
     setCCTVsSelectedArray,
-    cctvsSelected,
     setNumberOfResets,
     setUrl,
     setTitle,
+    cctvsSelected.length,
   ]);
 
   const addButtonDisabled = url.trim() === '' || title.trim() === '';
