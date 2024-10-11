@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import MiniSearch from 'minisearch';
 import HistoryShowButtons from './HistoryShowButtons';
 
 const Container = styled.div`
@@ -7,8 +8,11 @@ const Container = styled.div`
   flex-direction: column;
   height: 100%;
 `
+const FilterTitle = styled.input`
+  margin-bottom: 5px;
+`
 const Rows = styled.div`
-  height: 90%;
+  height: 100%;
   padding-right: 3px;
   overflow-y: scroll;
   &::-webkit-scrollbar {
@@ -62,15 +66,24 @@ const TimeStamp = styled(Action)`
 const HistoryCount = styled.div`
   font-size: 12px;
   margin-top: auto;
+  padding: 5px;
   color: yellow;
   font-weight: 200;
 `
+
+const SEARCH_OPTION = {
+  prefix: true,
+  fields: ['title'],
+}
 
 function HistoryShow(props) {
   // eslint-disable-next-line react/prop-types
   const { setQuickUrl, setQuickTitle } = props;
   const [cctvHistory, setHistory] = React.useState([]);
+  const [cctvHistoryFiltered, setHistoryFiltered] = React.useState([]);
   const [currentDateUnit, setCurrentDateUnit] = React.useState('M');
+  const miniSearchRef = React.useRef(null);
+  const filterRef = React.useRef(null);
 
   React.useEffect(() => {
     // window.electron.ipcRenderer.sendMessage('loadHistoryDB');
@@ -78,16 +91,31 @@ function HistoryShow(props) {
   }, []);
 
   const handleLoadDone = React.useCallback((results) => {
-    try {
+    try { 
       console.log('load done:', results);
       const cctvHistory = results.map((result) => {
+        const jsonParsed = JSON.parse(result.json_string);
         return {
           ...result,
-          json: JSON.parse(result.json_string)
+          title: jsonParsed.title,
+          json: jsonParsed
         }
       });
       console.log('cctvHistory:', cctvHistory);
       setHistory(cctvHistory)
+      miniSearchRef.current = new MiniSearch({
+        // fields: ['json.title'],
+        fields: ['title'],
+        storeFields: ['create_dttm', 'action', 'json', 'json_string'],
+        idField: 'create_dttm',
+      });
+      miniSearchRef.current.addAll(cctvHistory);
+      const searchPattern = filterRef.current.value.trim() || MiniSearch.wildcard;
+      const filteredHistory = miniSearchRef.current.search(
+        searchPattern,
+        SEARCH_OPTION,
+      );
+      setHistoryFiltered(filteredHistory);
     } catch(err) {
       console.error(err);
       setHistory([{ title: 'LOAD ERROR' }]);
@@ -133,15 +161,27 @@ function HistoryShow(props) {
     },
     [cctvHistory, setQuickTitle, setQuickUrl],
   );
+  const handleKeyUp = React.useCallback((event) => {
+    const filterKeyword = event.target.value;
+    const searchPattern = filterKeyword.trim() || MiniSearch.wildcard;
+    const searchResults = miniSearchRef.current.search(
+      searchPattern,
+      SEARCH_OPTION,
+    );
+    // const result = miniSearchRef.current.search(MiniSearch.wildcard);
+    console.log(searchResults)
+    setHistoryFiltered(searchResults)
+  }, []);
 
   return (
     <Container>
+      <FilterTitle ref={filterRef} placeholder="search" onKeyUp={handleKeyUp} />
       <HistoryShowButtons
         currentDateUnit={currentDateUnit}
         reloadHistory={reloadHistory}
       />
       <Rows>
-        {cctvHistory.map((cctv) => (
+        {cctvHistoryFiltered.map((cctv) => (
           <RowContainer>
             <CCTV key={cctv.create_dttm}>
               {/* <Action>[{cctv.action}]</Action> */}
@@ -160,7 +200,9 @@ function HistoryShow(props) {
           </RowContainer>
         ))}
       </Rows>
-      <HistoryCount>{cctvHistory.length} selected</HistoryCount>
+      <HistoryCount>
+        {cctvHistory.length} selected [{cctvHistoryFiltered.length} searched]
+      </HistoryCount>
     </Container>
   )
 }
