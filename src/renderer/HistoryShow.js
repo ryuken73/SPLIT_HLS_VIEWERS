@@ -12,6 +12,7 @@ const ButtonContainer = styled.div`
   align-items: center;
 `
 const Rows = styled.div`
+  height: 90%;
   padding-right: 3px;
   overflow-y: scroll;
   &::-webkit-scrollbar {
@@ -68,6 +69,12 @@ const ReloadButton = styled.button`
     props.dateUnit === props.currentDateUnit ? 'yellow' : 'black'};
   color: ${(props) =>
     props.dateUnit === props.currentDateUnit ? 'black' : 'white'};
+`
+const HistoryCount = styled.div`
+  font-size: 12px;
+  margin-top: auto;
+  color: yellow;
+  font-weight: 200;
 `
 
 function HistoryShow(props) {
@@ -194,6 +201,7 @@ function HistoryShow(props) {
           </RowContainer>
         ))}
       </Rows>
+      <HistoryCount>{cctvHistory.length} selected</HistoryCount>
     </Container>
   )
 }
