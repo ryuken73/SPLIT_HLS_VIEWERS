@@ -73,8 +73,8 @@ const HistoryCount = styled.div`
 
 const SEARCH_OPTION = {
   prefix: true,
-  fields: ['title'],
-}
+  fields: ['json.title'],
+};
 
 function HistoryShow(props) {
   // eslint-disable-next-line react/prop-types
@@ -91,23 +91,28 @@ function HistoryShow(props) {
   }, []);
 
   const handleLoadDone = React.useCallback((results) => {
-    try { 
+    try {
       console.log('load done:', results);
       const cctvHistory = results.map((result) => {
         const jsonParsed = JSON.parse(result.json_string);
         return {
           ...result,
-          title: jsonParsed.title,
-          json: jsonParsed
+          // title: jsonParsed.title,
+          json: jsonParsed,
         }
       });
       console.log('cctvHistory:', cctvHistory);
       setHistory(cctvHistory)
       miniSearchRef.current = new MiniSearch({
-        // fields: ['json.title'],
-        fields: ['title'],
+        fields: ['json.title'],
         storeFields: ['create_dttm', 'action', 'json', 'json_string'],
         idField: 'create_dttm',
+        extractField: (document, fieldName) => {
+          // Access nested fields
+          return fieldName
+            .split('.')
+            .reduce((doc, key) => doc && doc[key], document);
+        },
       });
       miniSearchRef.current.addAll(cctvHistory);
       const searchPattern = filterRef.current.value.trim() || MiniSearch.wildcard;
