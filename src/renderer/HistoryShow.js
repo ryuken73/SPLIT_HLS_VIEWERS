@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import MiniSearch from 'minisearch';
+import hangul from 'hangul-js';
 import HistoryShowButtons from './HistoryShowButtons';
 
 const Container = styled.div`
@@ -74,7 +75,9 @@ const HistoryCount = styled.div`
 const SEARCH_OPTION = {
   prefix: true,
   fields: ['json.title'],
+  fuzzy: 0.3
 };
+
 
 function HistoryShow(props) {
   // eslint-disable-next-line react/prop-types
@@ -88,6 +91,12 @@ function HistoryShow(props) {
   React.useEffect(() => {
     // window.electron.ipcRenderer.sendMessage('loadHistoryDB');
     window.electron.ipcRenderer.sendMessage('loadHistoryByUnit', 'M');
+  }, []);
+
+  const searchTitle = React.useCallback((title) => {
+    const searchPattern =
+      hangul.disassemble(title).join('') || MiniSearch.wildcard;
+    return miniSearchRef.current.search(searchPattern, SEARCH_OPTION);
   }, []);
 
   const handleLoadDone = React.useCallback((results) => {
@@ -109,18 +118,18 @@ function HistoryShow(props) {
         idField: 'create_dttm',
         extractField: (document, fieldName) => {
           // Access nested fields
-          return fieldName
+          const value = fieldName
             .split('.')
             .reduce((doc, key) => doc && doc[key], document);
+          if (fieldName === 'json.title') {
+            return hangul.disassemble(value).join('');
+          }
+          return value;
         },
       });
       miniSearchRef.current.addAll(cctvHistory);
-      const searchPattern = filterRef.current.value.trim() || MiniSearch.wildcard;
-      const filteredHistory = miniSearchRef.current.search(
-        searchPattern,
-        SEARCH_OPTION,
-      );
-      setHistoryFiltered(filteredHistory);
+      const searchResults = searchTitle(filterRef.current.value);
+      setHistoryFiltered(searchResults);
     } catch(err) {
       console.error(err);
       setHistory([{ title: 'LOAD ERROR' }]);
@@ -168,12 +177,8 @@ function HistoryShow(props) {
   );
   const handleKeyUp = React.useCallback((event) => {
     const filterKeyword = event.target.value;
-    const searchPattern = filterKeyword.trim() || MiniSearch.wildcard;
-    const searchResults = miniSearchRef.current.search(
-      searchPattern,
-      SEARCH_OPTION,
-    );
     // const result = miniSearchRef.current.search(MiniSearch.wildcard);
+    const searchResults = searchTitle(filterKeyword);
     console.log(searchResults)
     setHistoryFiltered(searchResults)
   }, []);
