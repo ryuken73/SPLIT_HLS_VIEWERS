@@ -29,3 +29,5 @@ npm-debug.log.*
 *.scss.d.ts
 
 demo_table.db*
+
+config.json
