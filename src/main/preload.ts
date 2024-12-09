@@ -4,6 +4,13 @@ import { contextBridge, ipcRenderer, IpcRendererEvent, webFrame } from 'electron
 
 export type Channels = 'ipc-example';
 
+const LOCAL_STORAGE_KEYS = ['selectedSavedCCTVs', 'notSelectedSavedCCTVs'];
+LOCAL_STORAGE_KEYS.map(key => {
+  console.log('in preload.js', window.localStorage.getItem(key));
+  JSON.parse(window.localStorage.getItem(key))
+});
+
+
 const electronHandler = {
   ipcRenderer: {
     sendMessage(channel: Channels, ...args: unknown[]) {
@@ -27,6 +34,10 @@ const electronHandler = {
     },
     getVersion() {
       return ipcRenderer.invoke('getVerion');
+    },
+    onResetLocalStorage: (callback) => {
+      console.log('###### setup resetLocalStorage handler')
+      ipcRenderer.on('resetLocalStorage', (event, key) => callback(key));
     },
   },
 };

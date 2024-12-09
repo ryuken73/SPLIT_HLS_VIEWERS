@@ -12,6 +12,12 @@
     <script src='min.js'></script> -->
     <title>CCTV</title>
   </head>
+  <script>
+    window.electron.ipcRenderer.onResetLocalStorage(key => {
+      alert(`local stoage key [${key}] is corrupt. clearing..`)
+      window.localStorage.setItem(key, '[]');
+    })
+  </script>
   <body style="margin:0; height: 100%">
     <div id="root" style="height: 100%"></div>
   </body>

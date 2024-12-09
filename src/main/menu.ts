@@ -246,6 +246,21 @@ export default class MenuBuilder {
                     this.mainWindow.webContents.toggleDevTools();
                   },
                 },
+                {
+                  label: 'Clear Local Storage',
+                  click: () => {
+                    const LOCAL_STORAGE_KEYS = [
+                      'selectedSavedCCTVs',
+                      'notSelectedSavedCCTVs',
+                    ];
+                    LOCAL_STORAGE_KEYS.forEach(key => {
+                      this.mainWindow.webContents.send(
+                        'resetLocalStorage',
+                        key,
+                      );
+                    });
+                  },
+                },
               ]
             : [
                 {
@@ -262,6 +277,21 @@ export default class MenuBuilder {
                   accelerator: 'Alt+Ctrl+I',
                   click: () => {
                     this.mainWindow.webContents.toggleDevTools();
+                  },
+                },
+                {
+                  label: 'Clear Local Storage',
+                  click: () => {
+                    const LOCAL_STORAGE_KEYS = [
+                      'selectedSavedCCTVs',
+                      'notSelectedSavedCCTVs',
+                    ];
+                    LOCAL_STORAGE_KEYS.forEach(key => {
+                      this.mainWindow.webContents.send(
+                        'resetLocalStorage',
+                        key,
+                      );
+                    });
                   },
                 },
               ],
