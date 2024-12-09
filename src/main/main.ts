@@ -15,6 +15,7 @@ import log from 'electron-log';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
 import {
+  initDBFile,
   dropHistoryTable,
   createHistoryTable,
   showNow,
@@ -29,6 +30,8 @@ import {
 try {
   // dropHistoryTable();
   // console.log(deleteAllHistory())
+  const DB_PATH = app.getPath('userData');
+  initDBFile(DB_PATH);
   createHistoryTable();
   // console.log(insertHistory('add', '{url: http://a.b.c.d}'))
   console.log(selectAll())

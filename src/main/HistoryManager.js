@@ -1,7 +1,12 @@
-import db from './DBManager';
+import { initialize } from './DBManager';
 
 
 // eslint-disable-next-line import/prefer-default-export
+let db;
+
+export const initDBFile = (path) => {
+  db = initialize(path)
+}
 export const dropHistoryTable = () => {
   const dropSql = `drop table history`;
   db.exec(dropSql);
