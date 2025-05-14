@@ -107,7 +107,10 @@ export const getYoutubePlaylistUrl = (videoId) => {
 };
 
 export const isPlayerPlaying = (player, cctvIndex, checkType = 'none') => {
-  // console.log('isPlayerPlaying:', player, cctvIndex, checkType )
+  // console.log('isPlayerPlaying:', player, player.tagName, cctvIndex, checkType )
+  if(player.tagName === 'WEBVIEW'){
+    return true;
+  }
   if (player.player !== undefined){ // youtube player
     return player.player.isPlaying;
   }

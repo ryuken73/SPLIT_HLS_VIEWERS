@@ -5,6 +5,7 @@ import { useHotkeys } from 'react-hotkeys-hook';
 import { EffectFade, EffectFlip, EffectCube } from 'swiper/modules';
 import styled from 'styled-components';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import WebPagePlayer from './WebPagePlayer';
 import MP4Player from './MP4Player';
 import SwiperControl from './SwiperControl';
 import HLSJSPlayer from './HLSJSPlayer';
@@ -73,7 +74,26 @@ function GridVideos(props) {
         <SwiperControl cctvsSelected={cctvsSelected} swiperRef={swiperRef} />
         {cctvsSelected.map((cctv, cctvIndex) => (
           <SwiperSlide key={cctv.cctvId}>
-            {mp4RegExp.test(cctv.url) ? (
+            {cctv.type === 'web' ? (
+              <WebPagePlayer
+                key={cctv.cctvId}
+                source={cctv}
+                setPlayer={setCCTVPlayerRef}
+                lastLoaded={cctvLastLoadedTime[cctvIndex]}
+                cctvIndex={cctvIndex}
+                currentCCTVIndex={currentCCTVIndex}
+                onDrag={handleTitleDrag}
+                position={titlePosition}
+                alignBy={alignBy}
+                titleFontSize={titleFontSize}
+                titleOpacity={titleOpacity}
+                titleBlur={titleBlur}
+                showTitle={showTitle}
+                autoInterval={autoInterval}
+                autoPlay={autoPlay}
+                showProgress={showProgress}
+              />
+            ) : mp4RegExp.test(cctv.url) ? (
               <MP4Player
                 key={cctv.cctvId}
                 source={cctv}
