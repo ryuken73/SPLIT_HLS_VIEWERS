@@ -80,7 +80,8 @@ function AddManualUrl(props) {
     setUrl('');
   }, [setTitle, setUrl]);
 
-  const onClickAdd = React.useCallback(() => {
+  const onClickAdd = React.useCallback((e) => {
+    const {id} = e.target;
     if (title.length === 0 || url.length === 0) {
       setErrorMessage('[ERROR]title or url is empty');
       return;
@@ -103,6 +104,7 @@ function AddManualUrl(props) {
       title,
       cctvId: Date.now(),
       num: Date.now(),
+      type: id
     };
     // setCCTVsSelectedArray([...cctvsSelected, newCCTV]);
     // eslint-disable-next-line @typescript-eslint/no-shadow
@@ -173,11 +175,20 @@ function AddManualUrl(props) {
         />
         <Buttons>
           <button
+            id="stream"
             disabled={addButtonDisabled}
             onClick={onClickAdd}
             style={{width: '100%'}}
           >
-            add url
+            url +
+          </button>
+          <button
+            id="web"
+            disabled={addButtonDisabled}
+            onClick={onClickAdd}
+            style={{width: '100%'}}
+          >
+           web +
           </button>
           <button
             onClick={onClickClear}

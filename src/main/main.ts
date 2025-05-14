@@ -32,7 +32,7 @@ try {
   createHistoryTable();
   // console.log(insertHistory('add', '{url: http://a.b.c.d}'))
   console.log(selectAll())
-  // console.log(selectAllAsJson()) 
+  // console.log(selectAllAsJson())
 } catch(err){
   console.error(err);
 }
@@ -148,6 +148,8 @@ const createWindow = async () => {
     height: 728,
     icon: getAssetPath('icon.png'),
     webPreferences: {
+      nodeIntegration: true,
+      webviewTag: true,
       webSecurity: false,
       preload: app.isPackaged
         ? path.join(__dirname, 'preload.js')
