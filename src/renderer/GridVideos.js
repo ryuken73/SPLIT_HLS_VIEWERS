@@ -61,6 +61,7 @@ function GridVideos(props) {
     });
   }, []);
 
+
   return (
     <Container>
       <Swiper
@@ -71,15 +72,13 @@ function GridVideos(props) {
         fadeEffect={{ crossFade: true }}
         modules={[EffectFade, EffectCube, EffectFlip]}
       >
-        <SwiperControl cctvsSelected={cctvsSelected} swiperRef={swiperRef} />
+        <SwiperControl swiperRef={swiperRef} />
         {cctvsSelected.map((cctv, cctvIndex) => (
           <SwiperSlide key={cctv.cctvId}>
             {cctv.type === 'web' ? (
               <WebPagePlayer
-                key={cctv.cctvId}
                 source={cctv}
                 setPlayer={setCCTVPlayerRef}
-                lastLoaded={cctvLastLoadedTime[cctvIndex]}
                 cctvIndex={cctvIndex}
                 currentCCTVIndex={currentCCTVIndex}
                 onDrag={handleTitleDrag}
@@ -95,7 +94,6 @@ function GridVideos(props) {
               />
             ) : mp4RegExp.test(cctv.url) ? (
               <MP4Player
-                key={cctv.cctvId}
                 source={cctv}
                 setPlayer={setCCTVPlayerRef}
                 lastLoaded={cctvLastLoadedTime[cctvIndex]}
@@ -114,7 +112,6 @@ function GridVideos(props) {
               />
             ) : youtubeRegExtp.test(cctv.url) ? (
               <YoutubeJSPlayer
-                key={cctv.cctvId}
                 source={cctv}
                 setPlayer={setCCTVPlayerRef}
                 lastLoaded={cctvLastLoadedTime[cctvIndex]}
@@ -134,7 +131,6 @@ function GridVideos(props) {
                />
             ) : (
               <HLSJSPlayer
-                key={cctv.cctvId}
                 source={cctv}
                 setPlayer={setCCTVPlayerRef}
                 lastLoaded={cctvLastLoadedTime[cctvIndex]}

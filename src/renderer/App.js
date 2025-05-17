@@ -227,6 +227,7 @@ function App() {
   }, []);
 
   const moveToSlide = React.useCallback((index) => {
+    console.log('swiperRef moveToSlide', swiperRef.current)
     swiperRef.current.slideTo(index);
   }, []);
 
@@ -446,6 +447,7 @@ function App() {
           moveToSlide={moveToSlide}
           setCCTVsSelectedAray={setCCTVsSelectedArrayNSave}
           setNumberOfResets={setNumberOfResets}
+          swiperRef={swiperRef}
         />
       </TopPanel>
       <MiddlePanel autoPlay={autoPlay}>
