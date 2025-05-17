@@ -3,6 +3,9 @@ import React from 'react';
 function Webview(props) {
   // eslint-disable-next-line react/prop-types
   const { url, cctvIndex, setPlayer } = props;
+  React.useEffect(() => {
+    console.log('cctvIndex changed', cctvIndex)
+  }, [cctvIndex])
   console.log('in Webview:', cctvIndex);
   const playerRef = React.useRef(null);
   React.useLayoutEffect(() => {

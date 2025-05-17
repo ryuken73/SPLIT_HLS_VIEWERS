@@ -1,15 +1,14 @@
+/* eslint-disable no-return-assign */
+/* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable react/prop-types */
 import React from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
-import { EffectFade, EffectFlip, EffectCube } from 'swiper/modules';
+// import { EffectFade, EffectFlip, EffectCube } from 'swiper/modules';
 import styled from 'styled-components';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import WebPagePlayer from './WebPagePlayer';
-import MP4Player from './MP4Player';
-import SwiperControl from './SwiperControl';
-import HLSJSPlayer from './HLSJSPlayer';
-import YoutubeJSPlayer from './YoutubeJSPlayer';
+// import { Swiper, SwiperSlide } from 'swiper/react';
+// import SwiperControl from './SwiperControl';
+import AssetComponent from './AssetComponent';
 import 'swiper/css/effect-fade';
 import 'swiper/css/effect-flip';
 import 'swiper/css/effect-cube';
@@ -17,6 +16,15 @@ import 'swiper/css/effect-cube';
 const Container = styled.div`
   height: auto;
   width: 75vw;
+`;
+const AssetContainer = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  opacity: 1;
+  z-index: ${props => props.cctvIndex * -1};
 `;
 function GridVideos(props) {
   const {
@@ -35,14 +43,12 @@ function GridVideos(props) {
     showTitle,
     autoInterval,
     showProgress,
-    setVideoStates
+    setVideoStates,
+    assetsRef,
   } = props;
 
   const [titlePosition, setTitlePosition] = React.useState({ x: 0, y: 0 });
   // console.log('#!Players',cctvPlayersRef.current, cctvsSelected, enableOverlayGlobal, currentIndexRef.current)
-
-  const mp4RegExp = /.*\.mp4.*/;
-  const youtubeRegExtp = /.*youtube.com\/.*/;
 
   useHotkeys('a', () => toggleAutoPlay(), [toggleAutoPlay]);
   useHotkeys('t', () => toggleOverlayGlobal(), [toggleOverlayGlobal]);
@@ -57,101 +63,37 @@ function GridVideos(props) {
   const handleTitleDrag = React.useCallback((event, draggableData) => {
     setTitlePosition({
       x: draggableData.x,
-      y: draggableData.y
+      y: draggableData.y,
     });
   }, []);
 
-
   return (
     <Container>
-      <Swiper
-        loop
-        speed={500}
-        effect="fade"
-        noSwipingClass="react-draggable"
-        fadeEffect={{ crossFade: true }}
-        modules={[EffectFade, EffectCube, EffectFlip]}
-      >
-        <SwiperControl swiperRef={swiperRef} />
-        {cctvsSelected.map((cctv, cctvIndex) => (
-          <SwiperSlide key={cctv.cctvId}>
-            {cctv.type === 'web' ? (
-              <WebPagePlayer
-                source={cctv}
-                setPlayer={setCCTVPlayerRef}
-                cctvIndex={cctvIndex}
-                currentCCTVIndex={currentCCTVIndex}
-                onDrag={handleTitleDrag}
-                position={titlePosition}
-                alignBy={alignBy}
-                titleFontSize={titleFontSize}
-                titleOpacity={titleOpacity}
-                titleBlur={titleBlur}
-                showTitle={showTitle}
-                autoInterval={autoInterval}
-                autoPlay={autoPlay}
-                showProgress={showProgress}
-              />
-            ) : mp4RegExp.test(cctv.url) ? (
-              <MP4Player
-                source={cctv}
-                setPlayer={setCCTVPlayerRef}
-                lastLoaded={cctvLastLoadedTime[cctvIndex]}
-                cctvIndex={cctvIndex}
-                currentCCTVIndex={currentCCTVIndex}
-                onDrag={handleTitleDrag}
-                position={titlePosition}
-                alignBy={alignBy}
-                titleFontSize={titleFontSize}
-                titleOpacity={titleOpacity}
-                titleBlur={titleBlur}
-                showTitle={showTitle}
-                autoInterval={autoInterval}
-                autoPlay={autoPlay}
-                showProgress={showProgress}
-              />
-            ) : youtubeRegExtp.test(cctv.url) ? (
-              <YoutubeJSPlayer
-                source={cctv}
-                setPlayer={setCCTVPlayerRef}
-                lastLoaded={cctvLastLoadedTime[cctvIndex]}
-                cctvIndex={cctvIndex}
-                currentCCTVIndex={currentCCTVIndex}
-                onDrag={handleTitleDrag}
-                position={titlePosition}
-                alignBy={alignBy}
-                titleFontSize={titleFontSize}
-                titleOpacity={titleOpacity}
-                titleBlur={titleBlur}
-                showTitle={showTitle}
-                autoInterval={autoInterval}
-                autoPlay={autoPlay}
-                showProgress={showProgress}
-                setVideoStates={setVideoStates}
-               />
-            ) : (
-              <HLSJSPlayer
-                source={cctv}
-                setPlayer={setCCTVPlayerRef}
-                lastLoaded={cctvLastLoadedTime[cctvIndex]}
-                cctvIndex={cctvIndex}
-                currentCCTVIndex={currentCCTVIndex}
-                aspectRatio="4/3"
-                onDrag={handleTitleDrag}
-                position={titlePosition}
-                alignBy={alignBy}
-                titleFontSize={titleFontSize}
-                titleOpacity={titleOpacity}
-                titleBlur={titleBlur}
-                showTitle={showTitle}
-                autoInterval={autoInterval}
-                autoPlay={autoPlay}
-                showProgress={showProgress}
-              />
-            )}
-          </SwiperSlide>
-        ))}
-      </Swiper>
+      {cctvsSelected.map((cctv, cctvIndex) => (
+        <AssetContainer
+          key={cctv.cctvId}
+          cctvIndex={cctvIndex}
+          ref={(el) => (assetsRef.current[cctvIndex] = el)}
+        >
+          <AssetComponent
+            source={cctv}
+            setPlayer={setCCTVPlayerRef}
+            cctvIndex={cctvIndex}
+            currentCCTVIndex={currentCCTVIndex}
+            onDrag={handleTitleDrag}
+            position={titlePosition}
+            alignBy={alignBy}
+            titleFontSize={titleFontSize}
+            titleOpacity={titleOpacity}
+            titleBlur={titleBlur}
+            showTitle={showTitle}
+            autoInterval={autoInterval}
+            autoPlay={autoPlay}
+            showProgress={showProgress}
+            setVideoStates={setVideoStates}
+          />
+        </AssetContainer>
+      ))}
     </Container>
   );
 }

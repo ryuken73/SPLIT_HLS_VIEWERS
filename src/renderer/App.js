@@ -22,6 +22,10 @@ import QuickAddUrl from './QuickAddUrl';
 import HistoryShow from './HistoryShow';
 import 'swiper/css';
 import { SmallButton } from './template/smallComponents';
+import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
+gsap.registerPlugin(useGSAP);
+// import gsapEffect from './lib/gsapEffects';
 
 const KEY_OPTIONS = 'hlsCCTVOptions';
 const KEY_SELECT_SAVED = 'selectedSavedCCTVs';
@@ -76,6 +80,9 @@ const CenterArea = styled.div`
   transform: translate(50%, -50%);
   border: 5px solid white;
   box-sizing: border-box;
+  width: 75vw;
+  height: auto;
+  aspect-ratio: 16/9;
 `;
 const LeftArea = styled.div`
   color: white;
@@ -104,7 +111,7 @@ const AbsoluteBoxForHistory = styled(AbsoluteBox)`
   &::-webkit-scrollbar-track {
     background-color: #9b6a2f;
   } */
-`
+`;
 const RightArea = styled(LeftArea)`
   margin-left: auto;
   padding-right: 10px;
@@ -191,7 +198,7 @@ function App() {
   const modalOpenRef = React.useRef(modalOpen);
   const activeIndexRef = React.useRef(activeIndex);
   const cctvPlayersRef = React.useRef([]);
-  const swiperRef = React.useRef(null);
+  // const swiperRef = React.useRef(null);
 
   const totalVideos = cctvsSelectedArray.length;
   const numberOfStoppedVideos = Object.values(videoStates).filter(
@@ -200,36 +207,74 @@ function App() {
   const videoStatesString = `${numberOfStoppedVideos}/${totalVideos}`;
   const numberOfLIveStream = totalVideos - numberOfStoppedVideos;
 
-  React.useEffect(() => {
-    const timer = setInterval(() => {
-      setElapsed(() => {
-        const diff = Date.now() - appStartTimestamp;
-        return {
-          num: diff,
-          str: new Date(diff).toISOString().slice(11, 19),
-        };
-      });
-    }, 1000);
-    return () => {
-      clearInterval(timer);
-    };
-  }, [appStartTimestamp]);
+  const assetsRef = React.useRef([]);
+  const { contextSafe } = useGSAP();
 
-  React.useEffect(() => {
-    if (swiperRef.current === null) return;
-    swiperRef.current.on('realIndexChange', (e) => {
-      // console.log('real index change: ',e)
-      const { realIndex } = e;
-      // const realIndex = e.detail.activeIndex;
-      setActiveIndex(realIndex);
-      activeIndexRef.current = realIndex;
-    });
-  }, []);
+  // React.useEffect(() => {
+  //   const timer = setInterval(() => {
+  //     setElapsed(() => {
+  //       const diff = Date.now() - appStartTimestamp;
+  //       return {
+  //         num: diff,
+  //         str: new Date(diff).toISOString().slice(11, 19),
+  //       };
+  //     });
+  //   }, 1000);
+  //   return () => {
+  //     clearInterval(timer);
+  //   };
+  // }, [appStartTimestamp]);
 
-  const moveToSlide = React.useCallback((index) => {
-    console.log('swiperRef moveToSlide', swiperRef.current)
-    swiperRef.current.slideTo(index);
-  }, []);
+  // React.useEffect(() => {
+  //   if (swiperRef.current === null) return;
+  //   swiperRef.current.on('realIndexChange', (e) => {
+  //     // console.log('real index change: ',e)
+  //     const { realIndex } = e;
+  //     // const realIndex = e.detail.activeIndex;
+  //     setActiveIndex(realIndex);
+  //     activeIndexRef.current = realIndex;
+  //   });
+  // }, []);
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const hideAnimation = React.useCallback(
+    contextSafe((ele, to) => {
+      console.log('hide', ele);
+      const end = to || { opacity: 0, duration: 1, zIndex: 1 };
+      gsap.to(ele, end);
+    }),
+    [],
+  );
+  const showAnimation = React.useCallback(
+    contextSafe((ele, to) => {
+      console.log('show', ele);
+      const end = to || { opacity: 1, duration: 1, zIndex: 10 };
+      gsap.to(ele, end);
+    }),
+    [],
+  );
+  // const showAnimation = contextSafe((ref, to) => {
+  //   console.log('show')
+  //   const end = to || { opacity: 1, duration: 1};
+  //   gsap.to(ref.current, end);
+  // });
+
+  console.log('re-render')
+  const moveToSlide = React.useCallback(
+    (index, fromIndex) => {
+      // console.log('swiperRef moveToSlide', swiperRef.current)
+      // swiperRef.current.slideTo(index);
+      const prevIndex = fromIndex === undefined ? activeIndex : fromIndex;
+      const prevAsset = assetsRef.current[prevIndex];
+      const targetAsset = assetsRef.current[index];
+      console.log(prevIndex, index, prevAsset, targetAsset);
+      hideAnimation(prevAsset);
+      showAnimation(targetAsset)
+      setActiveIndex(index)
+      activeIndexRef.current = index;
+    },
+    [activeIndex, hideAnimation, showAnimation],
+  );
 
   const handlePressKeyboard = React.useCallback(
     (_, handler) => {
@@ -311,9 +356,10 @@ function App() {
               break;
             }
           }
-          // swiperRef.current.slideNext();
-          swiperRef.current.slideToLoop(nextPlayerIndex);
           // console.log('!!! nextIndex=', nextIndex, cctvPlayersRef.current[nextIndex].paused())
+          // swiperRef.current.slideToLoop(nextPlayerIndex);
+          // swiperRef.current.slideNext();
+          moveToSlide(nextPlayerIndex, activeIndexRef.current)
         }, autoInterval * 1000);
       } else {
         document.title = 'CCTV';
@@ -447,7 +493,7 @@ function App() {
           moveToSlide={moveToSlide}
           setCCTVsSelectedAray={setCCTVsSelectedArrayNSave}
           setNumberOfResets={setNumberOfResets}
-          swiperRef={swiperRef}
+          // swiperRef={swiperRef}
         />
       </TopPanel>
       <MiddlePanel autoPlay={autoPlay}>
@@ -490,7 +536,7 @@ function App() {
               modalOpen={modalOpen}
               modalOpenRef={modalOpenRef}
               setModalOpen={setModalOpen}
-              swiperRef={swiperRef}
+              // swiperRef={swiperRef}
               setPlayer={setLeftSmallPlayerRef.current}
               cctvsSelected={cctvsSelectedArray}
               preLoadMapRef={preLoadMapRef}
@@ -512,6 +558,7 @@ function App() {
               autoInterval={autoInterval}
               showProgress={showProgress}
               setVideoStates={setVideoStates}
+              assetsRef={assetsRef}
             />
           )}
           <ConfigDialog
