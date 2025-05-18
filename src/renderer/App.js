@@ -238,30 +238,28 @@ function App() {
   // }, []);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const hideAnimation = React.useCallback(
-    contextSafe((ele, to) => {
-      console.log('hide', ele);
-      const end = to || {
-        opacity: 0,
-        duration: 0.3,
-        zIndex: 1,
-      };
-      gsap.to(ele, end);
-    }),
-    [],
-  );
-  const showAnimation = React.useCallback(
-    contextSafe((ele, to) => {
-      console.log('show', ele);
-      const end = to || {
-        opacity: 1,
-        duration: 0.4,
-        zIndex: 10,
-      };
-      gsap.to(ele, end);
-    }),
-    [],
-  );
+  const hideAnimation = contextSafe((ele, to) => {
+    console.log('hide', ele);
+    const end = to || {
+      opacity: 0,
+      duration: 0.3,
+      zIndex: 1,
+      transformOrighin: 'center center'
+    };
+    gsap.to(ele, end);
+  })
+  const showAnimation = contextSafe((ele, to) => {
+    console.log('show', ele);
+    const end = to || {
+      scale: 1,
+      opacity: 1,
+      duration: 0.4,
+      zIndex: 10,
+      transformOrighin: 'center center',
+      ease: "bounceOut"
+    };
+    gsap.to(ele, end);
+  })
   // const showAnimation = contextSafe((ref, to) => {
   //   console.log('show')
   //   const end = to || { opacity: 1, duration: 1};
