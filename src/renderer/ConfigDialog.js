@@ -85,7 +85,7 @@ const ConfigDialog = props => {
 
     const onCloseFilterDialog = () => {
       setDialogOpen(false);
-      window.electron.ipcRenderer.sendMessage('reload');
+      // window.electron.ipcRenderer.sendMessage('reload');
     }
 
     const onDragEnd = React.useCallback(result => {
