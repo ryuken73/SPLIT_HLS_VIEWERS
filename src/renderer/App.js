@@ -24,6 +24,7 @@ import 'swiper/css';
 import { SmallButton } from './template/smallComponents';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
+import { height } from '@mui/system';
 gsap.registerPlugin(useGSAP);
 // import gsapEffect from './lib/gsapEffects';
 
@@ -79,7 +80,7 @@ const CenterArea = styled.div`
   right: 50%;
   transform: translate(50%, -50%);
   border: 5px solid white;
-  box-sizing: border-box;
+  /* box-sizing: border-box; */
   width: 75vw;
   height: auto;
   aspect-ratio: 16/9;
@@ -240,7 +241,11 @@ function App() {
   const hideAnimation = React.useCallback(
     contextSafe((ele, to) => {
       console.log('hide', ele);
-      const end = to || { opacity: 0, duration: 1, zIndex: 1 };
+      const end = to || {
+        opacity: 0,
+        duration: 0.3,
+        zIndex: 1,
+      };
       gsap.to(ele, end);
     }),
     [],
@@ -248,7 +253,11 @@ function App() {
   const showAnimation = React.useCallback(
     contextSafe((ele, to) => {
       console.log('show', ele);
-      const end = to || { opacity: 1, duration: 1, zIndex: 10 };
+      const end = to || {
+        opacity: 1,
+        duration: 0.4,
+        zIndex: 10,
+      };
       gsap.to(ele, end);
     }),
     [],
