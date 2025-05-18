@@ -212,7 +212,8 @@ function VideoState(props) {
 
   }, [isActive]);
 
-  const removeItem = React.useCallback(() => {
+  const removeItem = React.useCallback((e) => {
+    e.stopPropagation();
     window.electron.ipcRenderer.sendMessage(
       'addHistoryDB',
       'del',

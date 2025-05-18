@@ -180,7 +180,7 @@ function AddManualUrl(props) {
             onClick={onClickAdd}
             style={{width: '100%'}}
           >
-            url +
+            video+
           </button>
           <button
             id="web"
@@ -188,7 +188,7 @@ function AddManualUrl(props) {
             onClick={onClickAdd}
             style={{width: '100%'}}
           >
-           web +
+           web+
           </button>
           <button
             onClick={onClickClear}
