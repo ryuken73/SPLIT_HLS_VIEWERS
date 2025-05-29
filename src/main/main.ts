@@ -9,7 +9,7 @@
  * `./src/main.js` using webpack. This gives us some performance wins.
  */
 import path from 'path';
-import { app, BrowserWindow, shell, ipcMain } from 'electron';
+import { app, BrowserWindow, shell, ipcMain, powerSaveBlocker } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
@@ -48,6 +48,9 @@ class AppUpdater {
   }
 }
 let mainWindow: BrowserWindow | null = null;
+
+const id = powerSaveBlocker.start('prevent-app-suspension');
+console.log(`powerSaveBlocker started:`, powerSaveBlocker.isStarted(id));
 
 ipcMain.on('ipc-example', async (event, arg) => {
   const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
@@ -151,6 +154,7 @@ const createWindow = async () => {
     height: 728,
     icon: getAssetPath('icon.png'),
     webPreferences: {
+      backgroundThrottling: false,
       nodeIntegration: true,
       webviewTag: true,
       webSecurity: false,

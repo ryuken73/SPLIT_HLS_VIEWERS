@@ -274,7 +274,7 @@ function App() {
       const prevIndex = fromIndex === undefined ? activeIndex : fromIndex;
       const prevAsset = assetsRef.current[prevIndex];
       const targetAsset = assetsRef.current[index];
-      console.log(prevIndex, index, prevAsset, targetAsset);
+      console.log('moveToSlide', prevIndex, index, fromIndex, prevAsset, targetAsset);
       hideAnimation(prevAsset);
       showAnimation(targetAsset)
       setActiveIndex(index)
@@ -340,11 +340,13 @@ function App() {
         autoplayTimer.current = setInterval(() => {
           let nextPlayerIndex =
             (activeIndexRef.current + 1) % cctvPlayersRef.current.length;
+          console.log(`nextPlayerIndex=${nextPlayerIndex}, activeIndexRef=${activeIndexRef.current} length=${cctvPlayersRef.current.length}`)
           let loopingCount = 0;
           // eslint-disable-next-line no-constant-condition
           while (true) {
             const nextPlayer = cctvPlayersRef.current[nextPlayerIndex];
             if (isPlayerPlaying(nextPlayer, nextPlayerIndex)) {
+              console.log('next player is playing. nextPlayerIndex=', nextPlayerIndex)
               break;
             } else {
               const newEvent = new Event('error');
@@ -366,6 +368,7 @@ function App() {
           // console.log('!!! nextIndex=', nextIndex, cctvPlayersRef.current[nextIndex].paused())
           // swiperRef.current.slideToLoop(nextPlayerIndex);
           // swiperRef.current.slideNext();
+          console.log('inside setInterval nextPlayIndex=', nextPlayerIndex, activeIndexRef.current)
           moveToSlide(nextPlayerIndex, activeIndexRef.current)
         }, autoInterval * 1000);
       } else {
