@@ -91,6 +91,7 @@ function GridVideos(props) {
             autoPlay={autoPlay}
             showProgress={showProgress}
             setVideoStates={setVideoStates}
+            lastLoaded={cctvLastLoadedTime[cctvIndex]}
           />
         </AssetContainer>
       ))}
