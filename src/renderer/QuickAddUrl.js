@@ -44,6 +44,9 @@ function AddManualUrl(props) {
   } = props;
   // const [url, setUrl] = React.useState('');
   // const [title, setTitle] = React.useState('');
+  const [centerName, setCenterName] = React.useState('');
+  const [idFromITS, setIdFromITS] = React.useState('');
+  const [location, setLocation] = React.useState({});
   const [errorMessage, setErrorMessage] = React.useState(null);
 
   const allCCTVs = React.useMemo(() => {
@@ -56,7 +59,9 @@ function AddManualUrl(props) {
 
   const onChangeUrl = React.useCallback((event) => {
     setUrl(event.target.value);
-  }, []);
+    },
+    [setUrl],
+  );
 
   const source = React.useMemo(() => {
     return {
@@ -103,6 +108,9 @@ function AddManualUrl(props) {
       url,
       title,
       cctvId: Date.now(),
+      idFromITS,
+      centerName,
+      location,
       num: Date.now(),
       type: id
     };
@@ -116,6 +124,9 @@ function AddManualUrl(props) {
     });
     setUrl('');
     setTitle('');
+    setCenterName('');
+    setIdFromITS('');
+    setLocation(null);
     setErrorMessage(null);
     window.electron.ipcRenderer.sendMessage(
       'addHistoryDB',
@@ -123,22 +134,53 @@ function AddManualUrl(props) {
       JSON.stringify(newCCTV),
     );
     console.log('length:',cctvsSelected.length);
-  }, [
-    title,
-    url,
-    allCCTVs,
-    setCCTVsSelectedArray,
-    setNumberOfResets,
-    setUrl,
-    setTitle,
-    cctvsSelected.length,
-  ]);
+    },
+    [
+      title,
+      url,
+      allCCTVs,
+      centerName,
+      location,
+      idFromITS,
+      setCCTVsSelectedArray,
+      setNumberOfResets,
+      setUrl,
+      setTitle,
+      cctvsSelected.length,
+    ],
+  );
 
+  const onDrop = React.useCallback((e) => {
+    const data = e.dataTransfer.getData('text/plain');
+    try {
+      const jsonData = JSON.parse(data);
+      const {cctv_id, cctv_name, cctv_url, center_name, xcoord, ycoord} = jsonData;
+      setTitle(cctv_name)
+      setUrl(cctv_url)
+      setCenterName(center_name)
+      setLocation({xcoord, ycoord})
+      setIdFromITS(cctv_id)
+    } catch (err) {
+      console.error(err);
+    }
+    },
+    [setTitle, setUrl],
+  );
+
+  const onDragOver = React.useCallback((e) => {
+    e.preventDefault();
+  }, [])
+
+
+  console.log('url, title', url, title)
   const addButtonDisabled = url.trim() === '' || title.trim() === '';
   const clearButtonDisabled = url.trim() === '' && title.trim() === '';
 
   return (
-    <Container>
+    <Container 
+      onDrop={onDrop}
+      onDragOver={onDragOver}
+    >
       <Box width="150px">
         {isMP4 ? (
           <MP4Player
