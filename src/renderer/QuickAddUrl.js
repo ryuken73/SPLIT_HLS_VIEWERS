@@ -30,7 +30,7 @@ const ErrorMessage = styled.div`
   font-size: 12px;
 `;
 
-function AddManualUrl(props) {
+function QuickAddUrl(props) {
   // eslint-disable-next-line react/prop-types
   const {
     quickUrl: url,
@@ -151,6 +151,7 @@ function AddManualUrl(props) {
   );
 
   const onDrop = React.useCallback((e) => {
+    console.log(e)
     const data = e.dataTransfer.getData('text/plain');
     try {
       const jsonData = JSON.parse(data);
@@ -243,4 +244,4 @@ function AddManualUrl(props) {
   );
 }
 
-export default React.memo(AddManualUrl);
+export default React.memo(QuickAddUrl);
