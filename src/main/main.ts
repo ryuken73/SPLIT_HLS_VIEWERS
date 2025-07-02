@@ -67,6 +67,10 @@ ipcMain.on('reload', async (event) => {
   mainWindow?.reload()
 });
 
+ipcMain.on('openExtLink', async (event, url) => {
+  shell.openExternal(url);
+})
+
 ipcMain.handle('getVerion', () => {
   return Promise.resolve(app.getVersion());
 });

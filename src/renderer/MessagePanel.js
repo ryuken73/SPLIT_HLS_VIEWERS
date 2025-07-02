@@ -23,6 +23,11 @@ const RightSide = styled.div`
   margin-right: 10px;
   font-weight: bold;
 `
+const LinkText = styled.div`
+  text-decoration: underline;
+  cursor: pointer;
+  color: lightblue;
+`
 const Version = styled.div`
   /* margin-right: 10px; */
 `
@@ -96,6 +101,13 @@ function MessagePanel(props) {
     setMemUsage(usagePercent)
   }, [usagePercent]);
 
+  const openCCTVWeb = React.useCallback(() => {
+    window.electron.ipcRenderer.sendMessage(
+      'openExtLink',
+      'http://10.10.16.168:3020'
+    );
+  }, []);
+
   return (
     <Container>
       {autoPlayStartedTimestamp ? (
@@ -108,6 +120,7 @@ function MessagePanel(props) {
         <MemUsage>
           [{currentMem}MB ({usagePercent}%)]
         </MemUsage>
+        <LinkText onClick={openCCTVWeb}>[Open CCTV WEB]</LinkText>
       </RightSide>
     </Container>
   )
