@@ -17,6 +17,7 @@ import SetTitleFont from './Components/SideComponents/SetTitleFont';
 import SetTitleOpacity from './Components/SideComponents/SetTitleOpacity';
 import SetTitleBlur from './Components/SideComponents/SetTitleBlur';
 import SetMaxNumberOfResets from './Components/SideComponents/SetMaxNumberOfResets';
+import ToggleFourByFour from './Components/SideComponents/ToggleFourByFour';
 import ShowProgress from './Components/SideComponents/ShowProgress';
 import QuickAddUrl from './QuickAddUrl';
 import HistoryShow from './HistoryShow';
@@ -84,6 +85,7 @@ const CenterArea = styled.div`
   width: 75vw;
   height: auto;
   aspect-ratio: 16/9;
+  background: ${(props) => props.gridEnabled && 'white'};
 `;
 const LeftArea = styled.div`
   color: white;
@@ -190,6 +192,7 @@ function App() {
   const [maxNumberOfResets, setMaxNumberOfResets] = React.useState(50);
   const [quickUrl, setQuickUrl] = React.useState('');
   const [quickTitle, setQuickTitle] = React.useState('');
+  const [fourBy4Enabled, setFourBy4Enabled] = React.useState(false)
 
   // console.log('stopped:', videoStates)
   useHotkeys('c', () => setDialogOpen(true));
@@ -500,6 +503,7 @@ function App() {
           moveToSlide={moveToSlide}
           setCCTVsSelectedAray={setCCTVsSelectedArrayNSave}
           setNumberOfResets={setNumberOfResets}
+          gridEnabled={fourBy4Enabled}
           // swiperRef={swiperRef}
         />
       </TopPanel>
@@ -535,7 +539,7 @@ function App() {
             />
           </AbsoluteBoxForHistory>
         </LeftArea>
-        <CenterArea>
+        <CenterArea gridEnabled={fourBy4Enabled}>
           {cctvsSelectedArray.length === 0 ? (
             <div>use keyboard "c" to config HLS player to show.</div>
           ) : (
@@ -566,6 +570,7 @@ function App() {
               showProgress={showProgress}
               setVideoStates={setVideoStates}
               assetsRef={assetsRef}
+              fourBy4Enabled={fourBy4Enabled}
             />
           )}
           <ConfigDialog
@@ -602,6 +607,12 @@ function App() {
             setTitleOpacity={setTitleOpacity}
           />
           <SetTitleBlur titleBlur={titleBlur} setTitleBlur={setTitleBlur} />
+          <ToggleFourByFour
+            fourBy4Enabled={fourBy4Enabled}
+            setFourBy4Enabled={setFourBy4Enabled}
+            runAutoPlay={runAutoPlay}
+            setShowTitle={setShowTitle}
+           />
           <SetMaxNumberOfResets
             maxNumberOfResets={maxNumberOfResets}
             setMaxNumberOfResets={setMaxNumberOfResets}

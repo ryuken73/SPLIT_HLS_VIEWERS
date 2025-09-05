@@ -88,6 +88,7 @@ function VideoState(props) {
     moveToSlide,
     setCCTVsSelectedAray,
     setNumberOfResets,
+    gridEnabled
   } = props;
   // const [playerStatus, setPlayerStatus] = React.useState(PLAYER_STATUS.pause);
   const [currentTime, setCurrentTime] = React.useState(secondToHHMMSS(0));
@@ -184,8 +185,9 @@ function VideoState(props) {
   ]);
 
   const onClick = React.useCallback(() => {
+    if(gridEnabled) return;
     moveToSlide(cctvIndex);
-  }, [cctvIndex, moveToSlide]);
+  }, [cctvIndex, gridEnabled, moveToSlide]);
 
   const getBackgroundColor = React.useCallback(() => {
     if (isActive) {

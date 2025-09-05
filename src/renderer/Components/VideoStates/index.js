@@ -35,6 +35,7 @@ function VideoStates(props) {
     moveToSlide,
     setCCTVsSelectedAray,
     setNumberOfResets,
+    gridEnabled
   } = props;
   // console.log(videoStates)
   return (
@@ -55,6 +56,7 @@ function VideoStates(props) {
             moveToSlide={moveToSlide}
             setCCTVsSelectedAray={setCCTVsSelectedAray}
             setNumberOfResets={setNumberOfResets}
+            gridEnabled={gridEnabled}
           />
         ))}
       </Container>

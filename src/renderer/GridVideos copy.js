@@ -14,20 +14,20 @@ import 'swiper/css/effect-flip';
 import 'swiper/css/effect-cube';
 
 const Container = styled.div`
-  display: ${(props) => props.gridEnabled && 'grid'};
-  grid-template-columns: ${(props) => props.gridEnabled && '1fr 1fr'};
-  grid-gap: ${(props) => props.gridEnabled && '0.4rem'};
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 0.5rem;
   height: auto;
   width: 75vw;
 `;
 const AssetContainer = styled.div`
-  position: ${(props) => !props.gridEnabled && 'absolute'};
-  top: ${(props) => !props.gridEnabled && 0};
-  left: ${(props) => !props.gridEnabled && 0};
+  /* position: absolute;
+  top: 0;
+  left: 0; */
   height: 100%;
   width: 100%;
   opacity: 1;
-  z-index: ${(props) => (!props.gridEnabled ? -10 : props.cctvIndex * -1)};
+  z-index: ${props => props.cctvIndex * -1};
 `;
 function GridVideos(props) {
   const {
@@ -48,20 +48,12 @@ function GridVideos(props) {
     showProgress,
     setVideoStates,
     assetsRef,
-    fourBy4Enabled
   } = props;
 
   const [titlePosition, setTitlePosition] = React.useState({ x: 0, y: 0 });
   // console.log('#!Players',cctvPlayersRef.current, cctvsSelected, enableOverlayGlobal, currentIndexRef.current)
 
-  useHotkeys(
-    'a',
-    () => {
-      if (fourBy4Enabled) return;
-      toggleAutoPlay();
-    },
-    [toggleAutoPlay],
-  );
+  useHotkeys('a', () => toggleAutoPlay(), [toggleAutoPlay]);
   useHotkeys('t', () => toggleOverlayGlobal(), [toggleOverlayGlobal]);
 
   const setCCTVPlayerRef = React.useCallback(
@@ -78,18 +70,13 @@ function GridVideos(props) {
     });
   }, []);
 
-  const cctvsToShow = fourBy4Enabled
-    ? cctvsSelected.slice(0, 4)
-    : cctvsSelected;
-
   return (
-    <Container gridEnabled={fourBy4Enabled}>
-      {cctvsToShow.map((cctv, cctvIndex) => (
+    <Container>
+      {cctvsSelected.map((cctv, cctvIndex) => (
         <AssetContainer
           key={cctv.cctvId}
           cctvIndex={cctvIndex}
           ref={(el) => (assetsRef.current[cctvIndex] = el)}
-          gridEnabled={fourBy4Enabled}
         >
           <AssetComponent
             source={cctv}
