@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
 import styled from 'styled-components';
-import {remove} from '../../lib/arrayUtil';
+import { remove } from '../../lib/arrayUtil';
 import colors from '../../lib/colors';
 
 const { autoRun, idle } = colors;
@@ -23,8 +23,8 @@ const Container = styled.div`
 const Title = styled.div`
   padding-left: 10px;
   padding-right: 10px;
-  /* color: ${props => props.color || 'white'}; */
-  color: ${props => props.color || 'white'};
+  /* color: ${(props) => props.color || 'white'}; */
+  color: ${(props) => props.color || 'white'};
   font-size: clamp(1rem, 2vw, 1.5rem);
   /* font-size: 2vw; */
   overflow: hidden;
@@ -46,7 +46,7 @@ const TimeDisplay = styled(SubTitle)`
   font-size: 0.7rem;
   line-height: 0.7rem;
   text-decoration: ${(props) => props.disabled && 'line-through'};
-`
+`;
 const StyledSpan = styled.span`
   color: red;
   cursor: pointer;
@@ -68,10 +68,9 @@ const PLAYER_EVENTS = {
   ended: 'ended',
 };
 
-const secondToHHMMSS = seconds => {
-  return new Date(seconds*1000).toISOString().slice(11, 19);
+const secondToHHMMSS = (seconds) => {
+  return new Date(seconds * 1000).toISOString().slice(11, 19);
 };
-
 
 function VideoState(props) {
   // eslint-disable-next-line react/prop-types
@@ -101,36 +100,37 @@ function VideoState(props) {
   const disabled = numberOfReset > maxNumberOfResets;
   const { url } = cctv;
   // eslint-disable-next-line react/prop-types
-  const handlePlayerEvent = React.useCallback((event) => {
-    const { type } = event;
-    // console.log('player event captured:', cctvIndex, type);
-    if (type === PLAYER_EVENTS.playing) {
-      // console.log('player is playing!');
+  const handlePlayerEvent = React.useCallback(
+    (event) => {
+      const { type } = event;
+      // console.log('player event captured:', cctvIndex, type);
+      if (type === PLAYER_EVENTS.playing) {
+        // console.log('player is playing!');
+        setVideoStates((videoStates) => {
+          return {
+            ...videoStates,
+            [url]: PLAYER_STATUS.normal,
+          };
+        });
+        return;
+      }
+      if (type === PLAYER_EVENTS.pause || type === PLAYER_EVENTS.ended) {
+        // console.log('player is paused!');
+        setVideoStates((videoStates) => {
+          return {
+            ...videoStates,
+            [url]: PLAYER_STATUS.pause,
+          };
+        });
+        return;
+      }
+      // console.log('player is stalled!');
       setVideoStates((videoStates) => {
         return {
           ...videoStates,
-          [url]: PLAYER_STATUS.normal,
+          [url]: PLAYER_STATUS.stalled,
         };
       });
-      return;
-    }
-    if (type === PLAYER_EVENTS.pause || type === PLAYER_EVENTS.ended) {
-      // console.log('player is paused!');
-      setVideoStates((videoStates) => {
-        return {
-          ...videoStates,
-          [url]: PLAYER_STATUS.pause,
-        };
-      });
-      return;
-    }
-    // console.log('player is stalled!');
-    setVideoStates((videoStates) => {
-      return {
-        ...videoStates,
-        [url]: PLAYER_STATUS.stalled,
-      };
-    });
     },
     [setVideoStates, url],
   );
@@ -152,7 +152,7 @@ function VideoState(props) {
     // eslint-disable-next-line react/prop-types
     if (player.addEventListener === undefined) {
       return;
-    };
+    }
     player.addEventListener('playing', handlePlayerEvent);
     player.addEventListener('pause', handlePlayerEvent);
     player.addEventListener('stalled', handlePlayerEvent);
@@ -204,42 +204,38 @@ function VideoState(props) {
       return idle[950];
     }
     return idle[950];
-  }, [autoPlay, isActive, isPaused, isStalled])
+  }, [autoPlay, isActive, isPaused, isStalled]);
 
   const getTitleColor = React.useCallback(() => {
-    if (isActive){
+    if (isActive) {
       return 'yellow';
     }
     return autoRun[50];
-
   }, [isActive]);
 
-  const removeItem = React.useCallback((e) => {
-    e.stopPropagation();
-    window.electron.ipcRenderer.sendMessage(
-      'addHistoryDB',
-      'del',
-      JSON.stringify(cctv),
-    );
-    setCCTVsSelectedAray((cctvs) => {
-      cctvPlayersRef.current = [
-        ...cctvPlayersRef.current.slice(0, cctvIndex),
-        ...cctvPlayersRef.current.slice(cctvIndex + 1),
-      ]
-      // console.log(cctvPlayersRef.current)
-      return remove(cctvs).fromIndex(cctvIndex)
-    });
-    // eslint-disable-next-line @typescript-eslint/no-shadow
-    setNumberOfResets((numberOfResets) => {
-      return remove(numberOfResets).fromIndex(cctvIndex)
-    });
-  }, [
-    cctv,
-    cctvIndex,
-    cctvPlayersRef,
-    setCCTVsSelectedAray,
-    setNumberOfResets,
-  ]);
+  const removeItem = React.useCallback(
+    (e) => {
+      e.stopPropagation();
+      window.electron.ipcRenderer.sendMessage(
+        'addHistoryDB',
+        'del',
+        JSON.stringify(cctv),
+      );
+      setCCTVsSelectedAray((cctvs) => {
+        cctvPlayersRef.current = [
+          ...cctvPlayersRef.current.slice(0, cctvIndex),
+          ...cctvPlayersRef.current.slice(cctvIndex + 1),
+        ];
+        // console.log(cctvPlayersRef.current)
+        return remove(cctvs).fromIndex(cctvIndex);
+      });
+      // eslint-disable-next-line @typescript-eslint/no-shadow
+      setNumberOfResets((numberOfResets) => {
+        return remove(numberOfResets).fromIndex(cctvIndex);
+      });
+    },
+    [cctv, cctvIndex, cctvPlayersRef, setCCTVsSelectedAray, setNumberOfResets],
+  );
 
   const bgColor = getBackgroundColor();
   const titleColor = getTitleColor();
@@ -253,7 +249,8 @@ function VideoState(props) {
       </Title>
       <SubTitle disabled={disabled}>Reset Count [{numberOfReset}]</SubTitle>
       <TimeDisplay disabled={disabled}>
-        {currentTime} / {duration} <StyledSpan onClick={removeItem}>[del]</StyledSpan>
+        {currentTime} / {duration}{' '}
+        <StyledSpan onClick={removeItem}>[del]</StyledSpan>
       </TimeDisplay>
     </Container>
   );
