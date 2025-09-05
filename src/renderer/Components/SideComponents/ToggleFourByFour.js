@@ -8,14 +8,23 @@ const Container = styled.fieldset`
 
 function ToggleFourByFour(props) {
   // eslint-disable-next-line react/prop-types
-  const { fourBy4Enabled, setFourBy4Enabled, runAutoPlay, setShowTitle } = props;
+  const {
+    fourBy4Enabled,
+    setFourBy4Enabled,
+    setAutoPlay,
+    runAutoPlay,
+    setShowTitle,
+  } = props;
   const onChange = React.useCallback((e) => {
       const { checked } = e.target;
-      runAutoPlay(false);
       setShowTitle(!checked);
+      if (checked) {
+        runAutoPlay(false);
+        setAutoPlay(false);
+      }
       setFourBy4Enabled(checked);
     },
-    [runAutoPlay, setFourBy4Enabled, setShowTitle],
+    [runAutoPlay, setAutoPlay, setFourBy4Enabled, setShowTitle],
   );
   return (
     <Container onChange={onChange}>

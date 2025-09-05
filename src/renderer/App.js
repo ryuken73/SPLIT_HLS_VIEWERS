@@ -613,6 +613,7 @@ function App() {
           <ToggleFourByFour
             fourBy4Enabled={fourBy4Enabled}
             setFourBy4Enabled={setFourBy4Enabled}
+            setAutoPlay={setAutoPlay}
             runAutoPlay={runAutoPlay}
             setShowTitle={setShowTitle}
            />

@@ -26,8 +26,9 @@ const AssetContainer = styled.div`
   left: ${(props) => !props.gridEnabled && 0};
   height: 100%;
   width: 100%;
-  opacity: 1;
-  z-index: ${(props) => (!props.gridEnabled ? -10 : props.cctvIndex * -1)};
+  opacity: ${(props) => props.gridEnabled && '1 !important'};
+  z-index: ${(props) =>
+    props.gridEnabled ? '10 !important' : props.cctvIndex * -1};
 `;
 function GridVideos(props) {
   const {
