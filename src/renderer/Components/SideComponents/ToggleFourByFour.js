@@ -28,7 +28,7 @@ function ToggleFourByFour(props) {
   );
   return (
     <Container onChange={onChange}>
-      <legend>Toggle 4X4</legend>
+      <legend>Toggle 2X2</legend>
       <div>
         <input
           type="checkbox"
@@ -36,7 +36,7 @@ function ToggleFourByFour(props) {
           name="toggleFourByFor"
           checked={fourBy4Enabled}
         />
-        <label for="showProgress">Enable 4X4</label>
+        <label for="showProgress">Enable 2X2</label>
       </div>
     </Container>
   )
